@@ -1,7 +1,6 @@
 POX Cluster Utility
 
-Scince POX doesn't support sending master selection messages, this is a JGroups-based utility to support
-cluster model with POX. It uses no OpenFlow protocol or paradigm, only synchronization between controllers.
+Scince POX doesn't support sending master selection messages, this is a JGroups-based utility to support cluster model with POX. It uses no OpenFlow protocol or paradigm, only synchronization between controllers.
 
 Requires: Java 1.7+, JGroups
 
