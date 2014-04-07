@@ -27,14 +27,15 @@ public class ControllerWrapper implements Runnable {
 		}
 	}
 	
-	public void Start() throws Exception {
+	public void start() throws Exception {
 		
 		try {
 			channel = new JChannel();
 			//TODO
 			//add url props when initializong JChannel
 			channel.setName(pName);
-			channel.connect(groupName);		//handle exception
+			channel.connect(groupName);	//handle exception
+			isActive = true;
 		} catch (Exception e) {
 			throw new Exception("ControllerWrapper.Start(), message:" + e.toString());
 		} finally {
@@ -43,7 +44,7 @@ public class ControllerWrapper implements Runnable {
 			} catch (Exception e) {};
 		}
 		//TODO
-		//add listener
+		//add listeners
 		
 	}
 	
@@ -52,14 +53,43 @@ public class ControllerWrapper implements Runnable {
 	private InetAddress groupAddress;
 	private String groupName;
 	private String pName;
-	private boolean active = false;
+	private boolean isActive = false;
+	private boolean isMaster = false;	//master-controller node node
 	private int poxPort;
 	private String poxPath;
 	
+	public String getpName() {
+		return pName;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public boolean isMaster() {
+		return isMaster;
+	}
+
+	public int getPoxPort() {
+		return poxPort;
+	}
+
+	public void setPoxPort(int poxPort) {
+		this.poxPort = poxPort;
+	}
+
+	public String getPoxPath() {
+		return poxPath;
+	}
+
+	public void setPoxPath(String poxPath) {
+		this.poxPath = poxPath;
+	}
+
 	@Override
 	public void run() {
 		try {
-			this.Start();
+			this.start();
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			System.exit(1);
