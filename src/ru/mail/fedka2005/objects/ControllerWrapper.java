@@ -1,6 +1,12 @@
 package ru.mail.fedka2005.objects;
 import java.net.InetAddress;
+
+import org.jgroups.Message;
+import org.jgroups.ReceiverAdapter;
 import org.jgroups.JChannel;
+import org.jgroups.View;
+
+import com.sun.jndi.cosnaming.IiopUrl.Address;
 /**
  * Class represents a domain in the cluster of controllers
  * A group of ControllerWrapper instances gives a cluster.
@@ -33,9 +39,26 @@ public class ControllerWrapper implements Runnable {
 			channel = new JChannel();
 			//TODO
 			//add url props when initializong JChannel
+			
 			channel.setName(pName);
-			channel.connect(groupName);	//handle exception
+			channel.connect(groupName);
 			isActive = true;
+			channel.setReceiver(new ReceiverAdapter() {
+				public void recieve(Message mesg) {
+					//TODO
+					//process message
+				}
+				public void viewAccepted(View new_view) {
+					clView = new_view;
+				}
+				public void suspect(Address addr) {
+					System.out.println("Member:" + addr.toString() + " may have crushed.");
+					//TODO
+					//process this suspicious event
+				}
+			});
+			
+			
 		} catch (Exception e) {
 			throw new Exception("ControllerWrapper.Start(), message:" + e.toString());
 		} finally {
@@ -50,6 +73,7 @@ public class ControllerWrapper implements Runnable {
 	
 	private JChannel channel = null;
 	//private UUID uuid;	//unique identifier of the node
+	private View clView;
 	private InetAddress groupAddress;
 	private String groupName;
 	private String pName;
@@ -85,7 +109,8 @@ public class ControllerWrapper implements Runnable {
 	public void setPoxPath(String poxPath) {
 		this.poxPath = poxPath;
 	}
-
+	
+	@Deprecated
 	@Override
 	public void run() {
 		try {
