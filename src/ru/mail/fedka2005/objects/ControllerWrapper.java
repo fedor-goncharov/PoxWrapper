@@ -1,5 +1,6 @@
 package ru.mail.fedka2005.objects;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
@@ -33,14 +34,15 @@ public class ControllerWrapper implements Runnable {
 	}
 	
 	public void start() throws Exception {
-		
 		try {
 			channel = new JChannel(groupAddress);
 			channel.setName(pName);
 			lock_service = new LockService(channel);
 			id_service = new CounterService(channel);
 			channel.connect(groupName); isActive = true;
-			
+			/*
+			 * process received messages, new connections
+			 */
 			channel.setReceiver(new ReceiverAdapter() {
 				public void receive(Message mesg) {
 					//TODO - logging
@@ -51,6 +53,7 @@ public class ControllerWrapper implements Runnable {
 				}
 				public void viewAccepted(View newView) {
 					clView = newView;
+					//update mapping Map<address, id>
 				}
 				public void suspect(Address addr) {
 					System.out.println("Member:" + addr.toString() + " may have crushed.");
@@ -60,8 +63,10 @@ public class ControllerWrapper implements Runnable {
 				}
 			});
 			masterIDCounter = id_service.getOrCreateCounter("master_id", id);	//try node as master
-			if (masterID == 0) {
-				//get master address
+			//cpu-load notification for the whole cluster
+			while (masterIDCounter.get() == id) {
+				channel.send(new Message(null, new CPULoadMessage()));
+				TimeUnit.SECONDS.sleep(DELAY);
 			}
 			//
 			
@@ -106,9 +111,12 @@ public class ControllerWrapper implements Runnable {
 	private String groupName;
 	private String pName;
 	private boolean isActive = false;
-	private boolean isMaster = false;			//master-controller node node
 	private int poxPort;
 	private String poxPath;
+	/**
+	 * DELAY - each DELAY seconds master broadcasts cpu load
+	 */
+	public static int DELAY = 2;
 	
 	public String getpName() {
 		return pName;
@@ -116,10 +124,6 @@ public class ControllerWrapper implements Runnable {
 
 	public boolean isActive() {
 		return isActive;
-	}
-
-	public boolean isMaster() {
-		return isMaster;
 	}
 
 	public int getPoxPort() {

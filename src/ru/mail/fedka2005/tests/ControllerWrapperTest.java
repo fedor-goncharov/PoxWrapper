@@ -7,9 +7,9 @@ public class ControllerWrapperTest {
 	@Test public void testControllerWrapper() {
 		try {
 			Thread client1 = new Thread(new ControllerWrapper("test", "",
-					"client1", "", 1));
+					"client1",1, "", 1));
 			Thread client2 = new Thread(new ControllerWrapper("test", "",
-					"client2", "", 1));
+					"client2",2, "", 1));
 			client1.start();
 			client2.start();
 			
