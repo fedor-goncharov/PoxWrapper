@@ -1,12 +1,10 @@
 package ru.mail.fedka2005.objects;
-import java.net.InetAddress;
 
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.JChannel;
 import org.jgroups.View;
-
-import com.sun.jndi.cosnaming.IiopUrl.Address;
+import org.jgroups.Address;
 /**
  * Class represents a domain in the cluster of controllers
  * A group of ControllerWrapper instances gives a cluster.
@@ -19,12 +17,11 @@ import com.sun.jndi.cosnaming.IiopUrl.Address;
  */
 
 public class ControllerWrapper implements Runnable {
-	public ControllerWrapper(String groupName, String address, String pName,
-			String poxPath, int poxPort) 
-			throws Exception {
+	public ControllerWrapper(String groupName, String groupAddress, String pName,
+			String poxPath, int poxPort) throws Exception {
 		try {
 			this.groupName = groupName;
-			this.groupAddress = InetAddress.getByName(address);
+			this.groupAddress = groupAddress;
 			this.pName = pName;
 			this.poxPath = poxPath;
 			this.poxPort = poxPort;
@@ -36,7 +33,7 @@ public class ControllerWrapper implements Runnable {
 	public void start() throws Exception {
 		
 		try {
-			channel = new JChannel();
+			channel = new JChannel(groupAddress);
 			//TODO
 			//add url props when initializong JChannel
 			
@@ -44,7 +41,9 @@ public class ControllerWrapper implements Runnable {
 			channel.connect(groupName);
 			isActive = true;
 			channel.setReceiver(new ReceiverAdapter() {
-				public void recieve(Message mesg) {
+				public void receive(Message mesg) {
+					System.out.println("NodeID:" + channel.getAddressAsUUID() + 
+							"\nMessage:" + mesg.toString());
 					//TODO
 					//process message
 				}
@@ -57,10 +56,11 @@ public class ControllerWrapper implements Runnable {
 					//process this suspicious event
 				}
 			});
-			
-			
+			while (true) {
+				channel.send(new Message(null, null, "HelloWorld"));
+			}
 		} catch (Exception e) {
-			throw new Exception("ControllerWrapper.Start(), message:" + e.toString());
+			throw new Exception("ControllerWrapper.start(), message:" + e.toString());
 		} finally {
 			try {
 				if (channel != null) {channel.close();}
@@ -74,7 +74,7 @@ public class ControllerWrapper implements Runnable {
 	private JChannel channel = null;
 	//private UUID uuid;	//unique identifier of the node
 	private View clView;
-	private InetAddress groupAddress;
+	private String groupAddress;
 	private String groupName;
 	private String pName;
 	private boolean isActive = false;
