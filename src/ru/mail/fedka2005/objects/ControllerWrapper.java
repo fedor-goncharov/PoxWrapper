@@ -40,9 +40,7 @@ public class ControllerWrapper implements Runnable {
 			lock_service = new LockService(channel);
 			id_service = new CounterService(channel);
 			channel.connect(groupName); isActive = true;
-			/*
-			 * process received messages, new connections
-			 */
+
 			channel.setReceiver(new ReceiverAdapter() {
 				public void receive(Message mesg) {
 					//TODO - logging
@@ -62,17 +60,17 @@ public class ControllerWrapper implements Runnable {
 						//check if it was master
 				}
 			});
-			masterIDCounter = id_service.getOrCreateCounter("master_id", id);	//try node as master
-			//cpu-load notification for the whole cluster
+			masterIDCounter = id_service.getOrCreateCounter("master", id);	//master_id reference
+			//cpu-load notification for the cluster
 			while (masterIDCounter.get() == id) {
 				channel.send(new Message(null, new CPULoadMessage()));
 				TimeUnit.SECONDS.sleep(DELAY);
 			}
-			//
+			while (masterIDCounter.get() != id) {
+				//monitor the master, wait for incoming messages
+				//update timer, if time exceeds then - change master
+			}
 			
-			
-			//TODO
-			//choose master
 		} catch (Exception e) {
 			throw new Exception("ControllerWrapper.start(), message:" + e.toString());
 		} finally {
@@ -80,9 +78,6 @@ public class ControllerWrapper implements Runnable {
 				if (channel != null) {channel.close();}
 			} catch (Exception e) {};
 		}
-		//TODO
-		//add listeners
-		
 	}
 	
 	private void replaceMaster() {
@@ -103,7 +98,6 @@ public class ControllerWrapper implements Runnable {
 	private LockService lock_service = null;
 	private CounterService id_service = null;
 	private Counter  masterIDCounter = null;
-	private long masterID = 0;	
 	private long id;							//node id
 	
 	//config, static variables
@@ -113,10 +107,7 @@ public class ControllerWrapper implements Runnable {
 	private boolean isActive = false;
 	private int poxPort;
 	private String poxPath;
-	/**
-	 * DELAY - each DELAY seconds master broadcasts cpu load
-	 */
-	public static int DELAY = 2;
+	public static int DELAY = 2;	//delay between cpu-load notification
 	
 	public String getpName() {
 		return pName;

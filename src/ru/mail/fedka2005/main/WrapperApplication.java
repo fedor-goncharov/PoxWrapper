@@ -11,7 +11,6 @@ public class WrapperApplication {
 	public static void main(String[] args) {
 		//TODO
 		//connect gui and wrapper application
-
 	}
 
 }
