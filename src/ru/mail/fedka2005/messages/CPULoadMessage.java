@@ -1,4 +1,4 @@
-package ru.mail.fedka2005.objects;
+package ru.mail.fedka2005.messages;
 import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 
@@ -6,7 +6,7 @@ import com.sun.management.OperatingSystemMXBean;
 
 /**
  * Class intended for monitoring purposes of the master-controller.
- * Sends only cpu-usage on the node
+ * Sends only cpu-load on the node.
  * @author fedor
  *
  */
