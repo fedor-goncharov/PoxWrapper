@@ -28,7 +28,7 @@ import ru.mail.fedka2005.messages.*;
 
 public class ControllerWrapper implements Runnable {
 	/**
-	 * method starts the channel and connect process to the cluster
+	 * method creates the channel and connect process to the cluster
 	 * performs monitoring of the master-node, and changes it's state
 	 * if cpu-load there exceeds the specified limit.
 	 * 
@@ -51,7 +51,10 @@ public class ControllerWrapper implements Runnable {
 			throw new Exception("ControllerWrapper constructor");
 		}
 	}
-	
+	/**
+	 * Creates 
+	 * @throws Exception
+	 */
 	public void start() throws Exception {
 		try {
 			channel = new JChannel(groupAddress);
@@ -107,18 +110,18 @@ public class ControllerWrapper implements Runnable {
 	private void eventLoop(JChannel channel, Counter masterID) throws Exception {
 		boolean rewrite = false;	//to switch: ovs-vsctl set-controller (me)
 		LockService lock_service = new LockService(channel);
-		Lock switchRewriteLock = lock_service.getLock("rewrite_controller_lock");
+		Lock masterLock = lock_service.getLock("change_master_lock");
 		while (isActive) {
 			while (masterID.get() == id) {	//cpu-load notification for the cluster
 				if (!rewrite) {
-					switchRewriteLock.lock();
+					masterLock.lock();
 						if (masterID.get() == id) {
 							//TODO
 							//for all ovs's
 							//set-controller id(me)
 							rewrite = true;
 						}
-					switchRewriteLock.unlock();
+					masterLock.unlock();
 				}
 				channel.send(new Message(null, new CPULoadMessage()));
 				TimeUnit.SECONDS.sleep(DELAY);
@@ -132,12 +135,12 @@ public class ControllerWrapper implements Runnable {
 			
 		}
 	}
+	//private void replaceMaster() {};
 	
 	//dynamic variables
 	private JChannel channel = null;
-	private View clView;
+	private View clView;						//will be required later
 	private CounterService id_service = null;
-	private Counter  masterIDCounter = null;
 	private long id;							//node id
 	
 	//config, static variables

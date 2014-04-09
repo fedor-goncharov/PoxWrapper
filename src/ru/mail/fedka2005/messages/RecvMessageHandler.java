@@ -18,7 +18,7 @@ public class RecvMessageHandler {
 		}
 		return UNKNOWN;
 	}
-	public double getCPULoad(Message msg) throws ClassCastException {
-		return ((CPULoadMessage)msg.getObject()).cpuLoad;
+	public CPULoadRecord getCPULoad(Message msg) throws ClassCastException {
+		return new CPULoadRecord(msg.getSrc(),((CPULoadMessage)msg.getObject()).cpuLoad);
 	}
 }
