@@ -67,8 +67,8 @@ public class ControllerWrapper implements Runnable {
 			channel.setName(pName);
 			id_service = new CounterService(channel);
 			channel.connect(groupName); isActive = true;
-			LockService lock_service = new LockService(channel);
-			Lock masterLock = lock_service.getLock("change_master_lock");
+			lock_service = new LockService(channel);
+			masterLock = lock_service.getLock("change_master_lock");
 
 			channel.setReceiver(new ReceiverAdapter() {
 				public void receive(Message msg) {
@@ -145,12 +145,12 @@ public class ControllerWrapper implements Runnable {
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
 			rewrite = false;
-			boolean wait_stack = true;
+			boolean wait_stack = true;	//wait one iteration to get notification from master controller
 			while (masterID.get() != id) {
 				try {
 					CPULoadRecord record = mNotifications.pop();
 					if (record.getCPULoad() > cpuThreshold) {	//if cpu-load is too-high -> replace master
-						replaceMaster();
+						replaceMaster(masterID, masterLock, CPU_LOAD);
 						wait_stack = true;
 						continue;
 					}
@@ -160,13 +160,10 @@ public class ControllerWrapper implements Runnable {
 						wait_stack = false;
 						continue;
 					} else {
-						replaceMaster();
+						replaceMaster(masterID, masterLock, CPU_LOAD);
 						continue;
 					}
 				}
-				//TODO
-				//monitor the master, wait for incoming messages
-				//update timer, if time exceeds then - change master
 			}
 		}
 	}
@@ -179,7 +176,7 @@ public class ControllerWrapper implements Runnable {
 	 */
 	private void replaceMaster(Counter masterID, Lock masterLock, int code) {
 		switch (code) {
-		case EXCEEDTIME :
+		case EXCEEDTIME :	
 			break;
 		case CPU_LOAD : 
 			break;
@@ -202,12 +199,12 @@ public class ControllerWrapper implements Runnable {
 	private long id;							//node id
 	private Stack<CPULoadRecord> mNotifications = null;
 	private LockService lock_service = null;
-	private Lock masterLock = null;
+	private Lock masterLock = null;				//lock when changing controller
 	
 	//config
 	private String groupAddress;
-	private String groupName;
-	private String pName;
+	private String groupName;				//cluster unique idendifier
+	private String pName;					//personal name
 	private boolean isActive = false;
 	private int poxPort;
 	private String poxPath;
