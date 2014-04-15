@@ -1,5 +1,8 @@
 package ru.mail.fedka2005.objects;
 import java.util.EmptyStackException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -48,7 +51,7 @@ public class ControllerWrapper implements Runnable {
 	 * @param poxPort
 	 * @throws Exception
 	 */
-	public ControllerWrapper(String groupName, String groupAddress, String pName, long id,
+	public ControllerWrapper(String groupName, String groupAddress, String pName, int id,
 			String poxPath, int poxPort, double cpuThreshold) throws Exception {
 		try {
 			this.groupName = groupName;
@@ -70,11 +73,11 @@ public class ControllerWrapper implements Runnable {
 				 */
 				@Override	//called after cpu-load request
 				public Object handle(Message msg) throws Exception {
-					if (msg.getObject() instanceof RequestCPULoadMessage) {
+					if (msg.getObject() instanceof RequestCPULoadMessage)
 						return new CPULoadMessage();
-					} else {
-						return null;
-					}
+					if (msg.getObject() instanceof IDRequestMessage)
+						return new IDResponseMessage(ControllerWrapper.this.id);	//buggy line
+					return null;
 				}
 			});
 			channel.setReceiver(new ReceiverAdapter() {
@@ -99,6 +102,8 @@ public class ControllerWrapper implements Runnable {
 				}
 				public void viewAccepted(View newView) {
 					clView = newView;
+					//TODO
+					//if a new member added, ask him for id in the seperate threads
 					//update mapping Map<address, id>
 				}
 				public void suspect(Address addr) {
@@ -106,6 +111,7 @@ public class ControllerWrapper implements Runnable {
 					//TODO
 					//process this suspicious event
 						//check if it was master and replace if required
+					//remove from cluster_mapping
 				}
 			});
 		} catch (Exception e) {
@@ -113,16 +119,19 @@ public class ControllerWrapper implements Runnable {
 		}
 	}
 	/**
-	 * Creates 
+	 * Dives current thread into loop, selecting monitoring and managing cluster model for
+	 * a set of hosts with controllers activated on them.
 	 * @throws Exception
 	 */
 	public void start() throws Exception {
 		try {
 			channel.connect(groupName); 
-			isActive = true;	//init connection 
+			isActive = true;								//init connection 
 			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
+			cluster_mapping = generateMapping();			//Map<id,Address>
+			masterID = id_service.getOrCreateCounter(master_counter, id);
+			eventLoop();
 			
-			eventLoop(channel, id_service.getOrCreateCounter("master", id), masterLock);
 		} catch (Exception e) {
 			throw new Exception("ControllerWrapper.start(), message:" + e.toString());
 		} finally {
@@ -139,7 +148,7 @@ public class ControllerWrapper implements Runnable {
 	 * @param masterLock
 	 * @throws Exception
 	 */
-	private void eventLoop(JChannel channel, Counter masterID, Lock masterLock) 
+	private void eventLoop() 
 			throws Exception {
 		boolean rewrite = false;	//to switch: ovs-vsctl set-controller (me)
 		while (isActive) {
@@ -163,7 +172,7 @@ public class ControllerWrapper implements Runnable {
 				try {
 					CPULoadRecord record = mNotifications.pop();
 					if (record.getCPULoad() > cpuThreshold) {	//if cpu-load is too-high -> replace master
-						replaceMaster(masterID, masterLock, CPU_LOAD);
+						replaceMaster(CPU_LOAD, (int)masterID.get());
 						wait_stack = true;
 						continue;
 					}
@@ -173,7 +182,7 @@ public class ControllerWrapper implements Runnable {
 						wait_stack = false;
 						continue;
 					} else {
-						replaceMaster(masterID, masterLock, CPU_LOAD);
+						replaceMaster(EXCEEDTIME, (int)masterID.get());
 						continue;
 					}
 				}
@@ -187,29 +196,60 @@ public class ControllerWrapper implements Runnable {
 	 * @param masterLock - 
 	 * @param code - reason of 
 	 */
-	private void replaceMaster(Counter masterID, Lock masterLock, int code) throws Exception {
+	private void replaceMaster(int code, int master_id) throws Exception {
 		try {
 			masterLock.lock();	//lock access, write controller addr - synchronized
-			RspList<CPULoadMessage> rsp_list = msg_disp.castMessage(null,	//list of responses
-					new Message(null, null, new RequestCPULoadMessage()),
-					new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(/*exclude master*/));
+			if (master_id == masterID.get()) {	//synchronized event
+				
+			Address master = null;
+			for (Map.Entry<Address, Integer> entry : cluster_mapping.entrySet()) {
+				if (master_id == entry.getValue()) {
+					master = entry.getKey();
+					break;
+				}
+			}
+				RspList<CPULoadMessage> rsp_list = msg_disp.castMessage(null,	//list of responses
+						new Message(null, null, new RequestCPULoadMessage()),
+						new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(master)
+						);
+				Address new_master = findMaster(rsp_list);
+				masterID.set(cluster_mapping.get(new_master));
+			}
 		} catch (Exception e) {
-			throw new Exception();	//failed to send cpu-load request 
+			throw new Exception("failed to replace master");	//failed to send cpu-load request 
 		} finally {
 			masterLock.unlock();
 		}
-		switch (code) {
-			case EXCEEDTIME :	
-				break;
-			case CPU_LOAD : 
-				break;
-			case CRASH_SUSPECT : 
-				break;
-			default : //throw UnknowTypeofReplacement
-		masterLock.unlock();
+	}
+	/**
+	 * blocks current thread and asks other members for their ID and JGroups.Address
+	 * @return HashMap<Integer,Address> 
+	 * @throws Exception
+	 */
+	private Map<Address, Integer> generateMapping() throws Exception {
+		try {
+			RspList<IDResponseMessage> id_rsp = msg_disp.castMessage(null, //request for id's
+					new Message(null, new IDRequestMessage()), 
+					new RequestOptions(ResponseMode.GET_ALL, 0));
+			Map<Address, Integer> output = new HashMap<Address, Integer>();
+			for (Address address : (Set<Address>)id_rsp.keySet()) {
+				output.put(
+						address,
+						((IDResponseMessage)id_rsp.getValue(address)).id
+						);
+			}
+			output.put(channel.getAddress(), id);	//put self address
+			return output;
+		} catch (Exception e) {
+			throw new Exception("failed to generate mapping");
 		}
 	}
-			
+	
+	//TODO
+	//implement findMaster
+	private Address findMaster(RspList<CPULoadMessage> rsp_list) {
+		return null;
+	}
 	//static
 	private static final int EXCEEDTIME = 200;
 	private static final int CPU_LOAD = 201;
@@ -220,7 +260,9 @@ public class ControllerWrapper implements Runnable {
 	private JChannel channel = null;
 	private View clView;						//will be required later
 	private CounterService id_service = null;
-	private long id;							//node id
+	private Counter masterID = null;
+	private Integer id;					//node id
+	private Map<Address, Integer> cluster_mapping = null;
 	private Stack<CPULoadRecord> mNotifications = null;
 	private LockService lock_service = null;
 	private Lock masterLock = null;				//lock when change controller
@@ -234,7 +276,8 @@ public class ControllerWrapper implements Runnable {
 	private boolean isActive = false;
 	private int poxPort;
 	private String poxPath;
-	private static final String master_lock = "MASTER_LOCK"; 
+	private static final String master_lock = "MASTER_LOCK";
+	private static final String master_counter = "MASTER";
 	public static final int SEND_DELAY = 2;	//send delay in seconds between cpu-load notifications
 	public static final int RECV_DELAY = 3; //recieve delay in seconds between cpu-load notifications
 	
