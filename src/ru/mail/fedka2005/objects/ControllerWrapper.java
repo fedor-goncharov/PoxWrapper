@@ -9,18 +9,22 @@ import org.jgroups.ReceiverAdapter;
 import org.jgroups.JChannel;
 import org.jgroups.View;
 import org.jgroups.Address;
+import org.jgroups.blocks.MessageDispatcher;
+import org.jgroups.blocks.RequestHandler;
+import org.jgroups.blocks.RequestOptions;
+import org.jgroups.blocks.ResponseMode;
 import org.jgroups.blocks.atomic.Counter;
 import org.jgroups.blocks.atomic.CounterService;
 import org.jgroups.blocks.locking.LockService;
+import org.jgroups.util.RspList;
 
 import ru.mail.fedka2005.messages.*;
 /**
- * Class represents a domain in the cluster of controllers
- * A group of ControllerWrapper instances gives a cluster.
+ * Class represents a node in the cluster of controllers
+ * ghjA group of ControllerWrapper instances is a cluster.
  * Target - synchronize a number of pox-controllers, choose
  * the master, and return address of the master controller.
- * Another task, when controller is chosen, one must monitor it's
- * state.
+ * When controller is chosen, others must monitor it's state.
  * @author fedor.goncharov.ol@gmail.com
  *
  */
@@ -28,7 +32,7 @@ import ru.mail.fedka2005.messages.*;
 //TODO
 //add log4j for logging all events
 //replace sleeping with time-scheduler
-//generate mapping between addresses and id's
+//generate mapping between addresses and id's - Map<id, Address>
 
 public class ControllerWrapper implements Runnable {
 	/**
@@ -36,11 +40,11 @@ public class ControllerWrapper implements Runnable {
 	 * performs monitoring of the master-node, and changes it's state
 	 * if cpu-load there exceeds the specified limit.
 	 * 
-	 * @param groupName	cluster name
-	 * @param groupAddress	cluster absolute address
-	 * @param pName	process unique name
-	 * @param id
-	 * @param poxPath
+	 * @param groupName - cluster name
+	 * @param groupAddress - cluster absolute address
+	 * @param pName	- node unique name
+	 * @param id - node unique identifier
+	 * @param poxPath - path to pox-binary
 	 * @param poxPort
 	 * @throws Exception
 	 */
@@ -53,43 +57,38 @@ public class ControllerWrapper implements Runnable {
 			this.poxPath = poxPath; this.poxPort = poxPort;
 			this.mNotifications = new Stack<CPULoadRecord>();
 			ControllerWrapper.cpuThreshold = cpuThreshold;
-		} catch (Exception e) {
-			throw new Exception("ControllerWrapper constructor");
-		}
-	}
-	/**
-	 * Creates 
-	 * @throws Exception
-	 */
-	public void start() throws Exception {
-		try {
+			
 			channel = new JChannel(groupAddress);
 			channel.setName(pName);
-			id_service = new CounterService(channel);
-			channel.connect(groupName); isActive = true;
+			id_service = new CounterService(channel);	//master id atomic service
 			lock_service = new LockService(channel);
-			masterLock = lock_service.getLock("change_master_lock");
+			msg_disp = new MessageDispatcher(channel, null, null, new RequestHandler() {
 
+				/**
+				 * request type - RequestCPULoadMessage -> new CPULoadMessage
+				 * request type - unknown -> null
+				 */
+				@Override	//called after cpu-load request
+				public Object handle(Message msg) throws Exception {
+					if (msg.getObject() instanceof RequestCPULoadMessage) {
+						return new CPULoadMessage();
+					} else {
+						return null;
+					}
+				}
+			});
 			channel.setReceiver(new ReceiverAdapter() {
 				public void receive(Message msg) {
-					//TODO - logging
 					switch (RecvMessageHandler.getMessageType(msg)) {
 						case RecvMessageHandler.CPU_NOTIFICATION : {
 							if (mNotifications.size() > 0) mNotifications.clear();
 							mNotifications.push(RecvMessageHandler.getCPULoad(msg));
 							break;
 						}
-						case RecvMessageHandler.CPU_REQUEST :  {
-							//TODO
-							//measure own cpu and send reply
-							//look for dispatcher
-						}
 						case RecvMessageHandler.UNKNOWN : {
 							//TODO
+							//print message - UNKNOWN type of message
 							//throw Exception
-						}
-						default : {
-							//throw unknow type of message
 						}
 					}
 					
@@ -109,6 +108,20 @@ public class ControllerWrapper implements Runnable {
 						//check if it was master and replace if required
 				}
 			});
+		} catch (Exception e) {
+			throw new Exception("Client constructor exception.");
+		}
+	}
+	/**
+	 * Creates 
+	 * @throws Exception
+	 */
+	public void start() throws Exception {
+		try {
+			channel.connect(groupName); 
+			isActive = true;	//init connection 
+			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
+			
 			eventLoop(channel, id_service.getOrCreateCounter("master", id), masterLock);
 		} catch (Exception e) {
 			throw new Exception("ControllerWrapper.start(), message:" + e.toString());
@@ -135,8 +148,8 @@ public class ControllerWrapper implements Runnable {
 					masterLock.lock();		//concurrent rewriting excluded
 						if (masterID.get() == id) {
 							//TODO
-							//for all ovs's
-							//set-controller id(me)
+							//for all ovs's set-controller id(me)
+							//send message to 
 							rewrite = true;
 						}
 					masterLock.unlock();
@@ -170,19 +183,30 @@ public class ControllerWrapper implements Runnable {
 	/**
 	 * replaces the master controller, depends on the reason of replacement:
 	 * exeeded notification await time, suspected for crush, high cpu-load on the node.
-	 * @param masterID
-	 * @param masterLock
-	 * @param code
+	 * @param masterID - service for atomic master-controller change
+	 * @param masterLock - 
+	 * @param code - reason of 
 	 */
-	private void replaceMaster(Counter masterID, Lock masterLock, int code) {
+	private void replaceMaster(Counter masterID, Lock masterLock, int code) throws Exception {
+		try {
+			masterLock.lock();	//lock access, write controller addr - synchronized
+			RspList<CPULoadMessage> rsp_list = msg_disp.castMessage(null,	//list of responses
+					new Message(null, null, new RequestCPULoadMessage()),
+					new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(/*exclude master*/));
+		} catch (Exception e) {
+			throw new Exception();	//failed to send cpu-load request 
+		} finally {
+			masterLock.unlock();
+		}
 		switch (code) {
-		case EXCEEDTIME :	
-			break;
-		case CPU_LOAD : 
-			break;
-		case CRASH_SUSPECT : 
-			break;
-		default : //throw UnknowTypeofReplacement
+			case EXCEEDTIME :	
+				break;
+			case CPU_LOAD : 
+				break;
+			case CRASH_SUSPECT : 
+				break;
+			default : //throw UnknowTypeofReplacement
+		masterLock.unlock();
 		}
 	}
 			
@@ -190,7 +214,7 @@ public class ControllerWrapper implements Runnable {
 	private static final int EXCEEDTIME = 200;
 	private static final int CPU_LOAD = 201;
 	private static final int CRASH_SUSPECT = 203;
-	private static double cpuThreshold = 90;	//maximum cpu load for master
+	private static double cpuThreshold = 90;	//maximum cpu load% for master
 	
 	//dynamic
 	private JChannel channel = null;
@@ -199,15 +223,18 @@ public class ControllerWrapper implements Runnable {
 	private long id;							//node id
 	private Stack<CPULoadRecord> mNotifications = null;
 	private LockService lock_service = null;
-	private Lock masterLock = null;				//lock when changing controller
+	private Lock masterLock = null;				//lock when change controller
+	private MessageDispatcher msg_disp = null;	//synchrounous req-response cpu-load
+	
 	
 	//config
-	private String groupAddress;
+	private String groupAddress;			//cluster absolute address
 	private String groupName;				//cluster unique idendifier
 	private String pName;					//personal name
 	private boolean isActive = false;
 	private int poxPort;
 	private String poxPath;
+	private static final String master_lock = "MASTER_LOCK"; 
 	public static final int SEND_DELAY = 2;	//send delay in seconds between cpu-load notifications
 	public static final int RECV_DELAY = 3; //recieve delay in seconds between cpu-load notifications
 	
