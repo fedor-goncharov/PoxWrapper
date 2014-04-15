@@ -208,12 +208,15 @@ public class ControllerWrapper implements Runnable {
 					break;
 				}
 			}
-				RspList<CPULoadMessage> rsp_list = msg_disp.castMessage(null,	//list of responses
-						new Message(null, null, new RequestCPULoadMessage()),
-						new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(master)
-						);
-				Address new_master = findMaster(rsp_list);
-				masterID.set(cluster_mapping.get(new_master));
+			RspList<CPULoadMessage> rsp_list = msg_disp.castMessage(null,	//list of responses
+					new Message(null, null, new RequestCPULoadMessage()),
+					new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(master)
+					);
+			//TODO -- add own cpu-load	
+			Address new_master = findMaster(rsp_list);
+			masterID.set(cluster_mapping.get(new_master));
+				//TODO
+				//update bindings
 			}
 		} catch (Exception e) {
 			throw new Exception("failed to replace master");	//failed to send cpu-load request 
@@ -228,7 +231,7 @@ public class ControllerWrapper implements Runnable {
 	 */
 	private Map<Address, Integer> generateMapping() throws Exception {
 		try {
-			RspList<IDResponseMessage> id_rsp = msg_disp.castMessage(null, //request for id's
+			RspList<IDResponseMessage> id_rsp = msg_disp.castMessage(null, //request all for id's
 					new Message(null, new IDRequestMessage()), 
 					new RequestOptions(ResponseMode.GET_ALL, 0));
 			Map<Address, Integer> output = new HashMap<Address, Integer>();
