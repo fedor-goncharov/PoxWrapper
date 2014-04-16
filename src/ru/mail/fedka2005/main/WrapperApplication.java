@@ -13,9 +13,9 @@ public class WrapperApplication {
 	public static void main(String[] args) {
 		try {
 			ControllerWrapper clientOne = new ControllerWrapper("test", "", "clientOne", 1, 
-					"", 0, 99);
+					"", 0, 0.99);
 			ControllerWrapper clientTwo = new ControllerWrapper("test", "", "clientTwo", 2,
-					"", 0, 99);
+					"", 0, 0.99);
 			Thread threadOne = new Thread(clientOne);
 			Thread threadTwo = new Thread(clientTwo);
 			threadOne.start();

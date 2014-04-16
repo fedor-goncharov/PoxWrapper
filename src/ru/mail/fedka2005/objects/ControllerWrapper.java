@@ -1,4 +1,6 @@
 package ru.mail.fedka2005.objects;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +9,9 @@ import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
+import org.jgroups.MembershipListener;
 import org.jgroups.Message;
+import org.jgroups.MessageListener;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.JChannel;
 import org.jgroups.View;
@@ -65,58 +69,76 @@ public class ControllerWrapper implements Runnable {
 			channel.setName(pName);
 			id_service = new CounterService(channel);	//master id atomic service
 			lock_service = new LockService(channel);
-			msg_disp = new MessageDispatcher(channel, null, null, new RequestHandler() {
-
-				/**
-				 * request type - RequestCPULoadMessage -> new CPULoadMessage
-				 * request type - unknown -> null
-				 */
-				@Override	//called after cpu-load request
-				public Object handle(Message msg) throws Exception {
-					if (msg.getObject() instanceof RequestCPULoadMessage)
-						return new CPULoadMessage();
-					if (msg.getObject() instanceof IDRequestMessage)
-						return new IDResponseMessage(ControllerWrapper.this.id);	//buggy line
-					return null;
+			msg_disp = new MessageDispatcher(channel, 
+				new MessageListener() {
+				
+				@Override
+				public void setState(InputStream arg0) throws Exception {
+					//empty method	
 				}
-			});
-			channel.setReceiver(new ReceiverAdapter() {
+				
+				@Override
 				public void receive(Message msg) {
-					System.out.println("Message recieved:" + msg.toString());
 					switch (RecvMessageHandler.getMessageType(msg)) {
-						case RecvMessageHandler.CPU_NOTIFICATION : {
+					case RecvMessageHandler.CPU_NOTIFICATION : {
 							if (mNotifications.size() > 0) mNotifications.clear();
 							mNotifications.push(RecvMessageHandler.getCPULoad(msg));
 							break;
 						}
-						case RecvMessageHandler.UNKNOWN : {
+					case RecvMessageHandler.UNKNOWN : {
 							System.out.println("[INFO]: Unknown message type");
 							//TODO
 							//print message - UNKNOWN type of message
 							//throw Exception
 						}
 					}
-					
 					System.out.println("NodeID:" + channel.getAddressAsUUID() + 
 							"\nMessage:" + msg.toString());
-					//TODO
-					//process message
 				}
-				public void viewAccepted(View newView) {
-					clView = newView;
-					cl_mapping_update = false;
-					System.out.println("newView action:" + newView.toString());
-					//TODO
-					//if a new member added, ask him for id in the seperate threads
-					//update mapping Map<address, id>
+				
+				@Override
+				public void getState(OutputStream arg0) throws Exception {
+					//empty method
 				}
-				public void suspect(Address addr) {
+			}, 
+				new MembershipListener() {
+				
+					@Override
+					public void viewAccepted(View newView) {
+						clView = newView;
+						cl_mapping_update = true;
+						System.out.println("newView action:" + newView.toString());	
+					}
+				
+				@Override
+					public void unblock() {
+					//empty method
+				}
+				
+				@Override
+					public void suspect(Address addr) {
 					System.out.println("Member:" + addr.toString() + " may have crushed.");
-					//TODO
-					//process this suspicious event
-						//check if it was master and replace if required
-					//remove from cluster_mapping
 				}
+				
+				@Override
+					public void block() {
+					//empty method
+				}
+				}, 
+				new RequestHandler() {
+
+					/**
+					 * request type - RequestCPULoadMessage -> new CPULoadMessage
+					 * request type - unknown -> null
+					 */
+					@Override	//called after cpu-load request
+					public Object handle(Message msg) throws Exception {
+						if (msg.getObject() instanceof RequestCPULoadMessage)
+							return new CPULoadMessage();
+						if (msg.getObject() instanceof IDRequestMessage)
+							return new IDResponseMessage(ControllerWrapper.this.id);	//buggy line
+						return null;
+					}
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -135,7 +157,9 @@ public class ControllerWrapper implements Runnable {
 			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
 			if (cl_mapping_update) {
 				cluster_mapping = generateMapping();			//Map<id,Address>
+				cl_mapping_update = false;
 			}
+			System.out.println(cluster_mapping);
 			masterID = id_service.getOrCreateCounter(master_counter, id);
 			eventLoop();
 			
@@ -194,8 +218,7 @@ public class ControllerWrapper implements Runnable {
 						wait_stack = false;
 						continue;
 					} else {
-						replaceMaster(EXCEEDTIME, (int)masterID.get());
-						continue;
+						replaceMaster(EXCEEDTIME, local_master);
 					}
 				}
 			}
@@ -283,7 +306,7 @@ public class ControllerWrapper implements Runnable {
 	private LockService lock_service = null;
 	private Lock masterLock = null;				//lock when change controller
 	private MessageDispatcher msg_disp = null;	//synchrounous req-response cpu-load
-	private boolean cl_mapping_update = false;
+	private boolean cl_mapping_update = true;
 	
 	
 	//config
