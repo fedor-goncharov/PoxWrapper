@@ -41,6 +41,8 @@ import ru.mail.fedka2005.messages.*;
 //replace sleeping with time-scheduler
 //generate mapping between addresses and id's - Map<id, Address>
 
+//TODO
+//bug in updating cluster_mapping
 public class ControllerWrapper implements Runnable {
 	/**
 	 * method creates the channel and connect process to the cluster
@@ -81,7 +83,6 @@ public class ControllerWrapper implements Runnable {
 				public void receive(Message msg) {
 					switch (RecvMessageHandler.getMessageType(msg)) {
 					case RecvMessageHandler.CPU_NOTIFICATION : {
-							if (mNotifications.size() > 0) mNotifications.clear();
 							mNotifications.push(RecvMessageHandler.getCPULoad(msg));
 							break;
 						}
@@ -93,7 +94,7 @@ public class ControllerWrapper implements Runnable {
 						}
 					}
 					System.out.println("NodeID:" + channel.getAddressAsUUID() + 
-							"\nMessage:" + msg.toString());
+							" Message:" + msg.toString());
 				}
 				
 				@Override
@@ -159,7 +160,6 @@ public class ControllerWrapper implements Runnable {
 				cluster_mapping = generateMapping();			//Map<id,Address>
 				cl_mapping_update = false;
 			}
-			System.out.println(cluster_mapping);
 			masterID = id_service.getOrCreateCounter(master_counter, id);
 			eventLoop();
 			
@@ -195,7 +195,6 @@ public class ControllerWrapper implements Runnable {
 					masterLock.unlock();
 				}
 				channel.send(new Message(null, new CPULoadMessage()));
-				System.out.println("master:Message sent");
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
 			rewrite = false;
@@ -210,6 +209,8 @@ public class ControllerWrapper implements Runnable {
 						wait_stack = true;
 						continue;
 					} else {
+						mNotifications.clear();
+						TimeUnit.SECONDS.sleep(RECV_DELAY);
 						continue;
 					}
 				} catch (EmptyStackException e) {
@@ -319,7 +320,7 @@ public class ControllerWrapper implements Runnable {
 	private static final String master_lock = "MASTER_LOCK";
 	private static final String master_counter = "MASTER";
 	public static final int SEND_DELAY = 2;	//send delay in seconds between cpu-load notifications
-	public static final int RECV_DELAY = 5; //recieve delay in seconds between cpu-load notifications
+	public static final int RECV_DELAY = 3; //recieve delay in seconds between cpu-load notifications
 	
 	//TODO
 	//add getters and setters, later
