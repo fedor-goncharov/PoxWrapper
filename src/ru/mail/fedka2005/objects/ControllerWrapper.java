@@ -61,7 +61,7 @@ public class ControllerWrapper implements Runnable {
 			this.mNotifications = new Stack<CPULoadRecord>();
 			ControllerWrapper.cpuThreshold = cpuThreshold;
 			
-			channel = new JChannel(groupAddress);
+			channel = new JChannel();
 			channel.setName(pName);
 			id_service = new CounterService(channel);	//master id atomic service
 			lock_service = new LockService(channel);
@@ -82,6 +82,7 @@ public class ControllerWrapper implements Runnable {
 			});
 			channel.setReceiver(new ReceiverAdapter() {
 				public void receive(Message msg) {
+					System.out.println("Message recieved:" + msg.toString());
 					switch (RecvMessageHandler.getMessageType(msg)) {
 						case RecvMessageHandler.CPU_NOTIFICATION : {
 							if (mNotifications.size() > 0) mNotifications.clear();
@@ -89,6 +90,7 @@ public class ControllerWrapper implements Runnable {
 							break;
 						}
 						case RecvMessageHandler.UNKNOWN : {
+							System.out.println("[INFO]: Unknown message type");
 							//TODO
 							//print message - UNKNOWN type of message
 							//throw Exception
@@ -102,6 +104,8 @@ public class ControllerWrapper implements Runnable {
 				}
 				public void viewAccepted(View newView) {
 					clView = newView;
+					cl_mapping_update = false;
+					System.out.println("newView action:" + newView.toString());
 					//TODO
 					//if a new member added, ask him for id in the seperate threads
 					//update mapping Map<address, id>
@@ -115,6 +119,7 @@ public class ControllerWrapper implements Runnable {
 				}
 			});
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new Exception("Client constructor exception.");
 		}
 	}
@@ -128,15 +133,17 @@ public class ControllerWrapper implements Runnable {
 			channel.connect(groupName); 
 			isActive = true;								//init connection 
 			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
-			cluster_mapping = generateMapping();			//Map<id,Address>
+			if (cl_mapping_update) {
+				cluster_mapping = generateMapping();			//Map<id,Address>
+			}
 			masterID = id_service.getOrCreateCounter(master_counter, id);
 			eventLoop();
 			
 		} catch (Exception e) {
-			throw new Exception("ControllerWrapper.start(), message:" + e.toString());
+			throw new Exception(pName +":ControllerWrapper.start(), message:" + e.toString());
 		} finally {
 			try {
-				if (channel != null) {channel.close();}
+				if (channel.isConnected()) {channel.close();}
 			} catch (Exception e) {};
 		}
 	}
@@ -148,8 +155,7 @@ public class ControllerWrapper implements Runnable {
 	 * @param masterLock
 	 * @throws Exception
 	 */
-	private void eventLoop() 
-			throws Exception {
+	private void eventLoop() throws Exception {
 		boolean rewrite = false;	//to switch: ovs-vsctl set-controller (me)
 		while (isActive) {
 			while (masterID.get() == id) {	//cpu-load notification for the cluster
@@ -159,21 +165,27 @@ public class ControllerWrapper implements Runnable {
 							//TODO
 							//for all ovs's set-controller id(me)
 							//send message to 
+							System.out.println(pName + ":Rewritten!");
 							rewrite = true;
 						}
 					masterLock.unlock();
 				}
 				channel.send(new Message(null, new CPULoadMessage()));
+				System.out.println("master:Message sent");
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
 			rewrite = false;
 			boolean wait_stack = true;	//wait one iteration to get notification from master controller
-			while (masterID.get() != id) {
+			int local_master;
+			while ((local_master = (int)masterID.get()) != id) {
 				try {
 					CPULoadRecord record = mNotifications.pop();
-					if (record.getCPULoad() > cpuThreshold) {	//if cpu-load is too-high -> replace master
-						replaceMaster(CPU_LOAD, (int)masterID.get());
+					if (cluster_mapping.get(record.getAddress()) == local_master 
+							&& record.getCPULoad() > cpuThreshold) {	//if cpu-load is too-high -> replace master
+						replaceMaster(CPU_LOAD, local_master);
 						wait_stack = true;
+						continue;
+					} else {
 						continue;
 					}
 				} catch (EmptyStackException e) {
@@ -194,9 +206,10 @@ public class ControllerWrapper implements Runnable {
 	 * exeeded notification await time, suspected for crush, high cpu-load on the node.
 	 * @param masterID - service for atomic master-controller change
 	 * @param masterLock - 
-	 * @param code - reason of 
+	 * @param code - reason of replacement @deprecated
 	 */
 	private void replaceMaster(int code, int master_id) throws Exception {
+		System.out.println(pName + "replaceMaster invoked:" + code);
 		try {
 			masterLock.lock();	//lock access, write controller addr - synchronized
 			if (master_id == masterID.get()) {	//synchronized event
@@ -270,6 +283,7 @@ public class ControllerWrapper implements Runnable {
 	private LockService lock_service = null;
 	private Lock masterLock = null;				//lock when change controller
 	private MessageDispatcher msg_disp = null;	//synchrounous req-response cpu-load
+	private boolean cl_mapping_update = false;
 	
 	
 	//config
@@ -282,7 +296,7 @@ public class ControllerWrapper implements Runnable {
 	private static final String master_lock = "MASTER_LOCK";
 	private static final String master_counter = "MASTER";
 	public static final int SEND_DELAY = 2;	//send delay in seconds between cpu-load notifications
-	public static final int RECV_DELAY = 3; //recieve delay in seconds between cpu-load notifications
+	public static final int RECV_DELAY = 5; //recieve delay in seconds between cpu-load notifications
 	
 	//TODO
 	//add getters and setters, later
@@ -293,7 +307,7 @@ public class ControllerWrapper implements Runnable {
 		try {
 			this.start();
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}
