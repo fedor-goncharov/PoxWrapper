@@ -23,6 +23,7 @@ import org.jgroups.blocks.ResponseMode;
 import org.jgroups.blocks.atomic.Counter;
 import org.jgroups.blocks.atomic.CounterService;
 import org.jgroups.blocks.locking.LockService;
+import org.jgroups.util.Rsp;
 import org.jgroups.util.RspList;
 
 import ru.mail.fedka2005.messages.*;
@@ -253,7 +254,7 @@ public class ControllerWrapper implements Runnable {
 					new Message(null, null, new RequestCPULoadMessage()),
 					new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(master)
 					);
-			//TODO -- add own cpu-load	
+			rsp_list.addRsp(channel.getAddress(), new CPULoadMessage());
 			Address new_master = findMaster(rsp_list);
 			masterID.set(cluster_mapping.get(new_master));
 				//TODO
@@ -276,13 +277,13 @@ public class ControllerWrapper implements Runnable {
 					new Message(null, new IDRequestMessage()), 
 					new RequestOptions(ResponseMode.GET_ALL, 0));
 			Map<Address, Integer> output = new HashMap<Address, Integer>();
-			for (Address address : (Set<Address>)id_rsp.keySet()) {
+			for (Address address : id_rsp.keySet()) {
 				output.put(
 						address,
 						((IDResponseMessage)id_rsp.getValue(address)).id
 						);
 			}
-			output.put(channel.getAddress(), id);	//put self address
+			output.put(channel.getAddress(), id);	//put own address
 			return output;
 		} catch (Exception e) {
 			throw new Exception("failed to generate mapping");
@@ -290,10 +291,16 @@ public class ControllerWrapper implements Runnable {
 	}
 	
 	
-	//TODO
-	//implement findMaster
 	private Address findMaster(RspList<CPULoadMessage> rsp_list) {
-		return null;
+		Address next_master = channel.getAddress();
+		double cpu_load = ((CPULoadMessage)rsp_list.getValue(next_master)).cpuLoad;
+		for (Address address : rsp_list.keySet()) {
+			if (((CPULoadMessage)rsp_list.getValue(address)).cpuLoad < cpu_load) {
+				next_master = address;
+				cpu_load = ((CPULoadMessage)rsp_list.getValue(address)).cpuLoad;
+			}
+		}
+		return next_master;
 	}
 	//static
 	private static final int EXCEEDTIME = 200;
