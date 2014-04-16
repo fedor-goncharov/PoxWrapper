@@ -108,7 +108,6 @@ public class ControllerWrapper implements Runnable {
 					public void viewAccepted(View newView) {
 						clView = newView;
 						cl_mapping_update = true;
-						System.out.println("newView action:" + newView.toString());	
 					}
 				
 				@Override
@@ -184,6 +183,10 @@ public class ControllerWrapper implements Runnable {
 		while (isActive) {
 			rewrite = false;
 			while (masterID.get() == id) {	//cpu-load notification for the cluster
+				if (cl_mapping_update) {
+					cluster_mapping = generateMapping();
+					cl_mapping_update = false;
+				}
 				if (!rewrite) {
 					masterLock.lock();		//concurrent rewriting excluded
 						if (masterID.get() == id) {
@@ -201,6 +204,10 @@ public class ControllerWrapper implements Runnable {
 			boolean wait_stack = true;	//wait one iteration to get notification from master controller
 			int local_master;
 			while ((local_master = (int)masterID.get()) != id) {
+				if (cl_mapping_update) {
+					cluster_mapping = generateMapping();
+					cl_mapping_update = false;
+				}
 				try {
 					CPULoadRecord record = mNotifications.pop();
 					if (cluster_mapping.get(record.getAddress()) == local_master 
@@ -231,7 +238,6 @@ public class ControllerWrapper implements Runnable {
 	 * @param code - reason of replacement @deprecated
 	 */
 	private void replaceMaster(int code, int master_id) throws Exception {
-		System.out.println(pName + "replaceMaster invoked:" + code);
 		try {
 			masterLock.lock();	//lock access, write controller addr - synchronized
 			if (master_id == masterID.get()) {	//synchronized event
@@ -282,6 +288,7 @@ public class ControllerWrapper implements Runnable {
 			throw new Exception("failed to generate mapping");
 		}
 	}
+	
 	
 	//TODO
 	//implement findMaster
