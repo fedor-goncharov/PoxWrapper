@@ -182,6 +182,7 @@ public class ControllerWrapper implements Runnable {
 	private void eventLoop() throws Exception {
 		boolean rewrite = false;	//to switch: ovs-vsctl set-controller (me)
 		while (isActive) {
+			rewrite = false;
 			while (masterID.get() == id) {	//cpu-load notification for the cluster
 				if (!rewrite) {
 					masterLock.lock();		//concurrent rewriting excluded
@@ -197,7 +198,6 @@ public class ControllerWrapper implements Runnable {
 				channel.send(new Message(null, new CPULoadMessage()));
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
-			rewrite = false;
 			boolean wait_stack = true;	//wait one iteration to get notification from master controller
 			int local_master;
 			while ((local_master = (int)masterID.get()) != id) {
@@ -207,11 +207,9 @@ public class ControllerWrapper implements Runnable {
 							&& record.getCPULoad() > cpuThreshold) {	//if cpu-load is too-high -> replace master
 						replaceMaster(CPU_LOAD, local_master);
 						wait_stack = true;
-						continue;
 					} else {
 						mNotifications.clear();
 						TimeUnit.SECONDS.sleep(RECV_DELAY);
-						continue;
 					}
 				} catch (EmptyStackException e) {
 					if (wait_stack) {
@@ -294,7 +292,7 @@ public class ControllerWrapper implements Runnable {
 	private static final int EXCEEDTIME = 200;
 	private static final int CPU_LOAD = 201;
 	private static final int CRASH_SUSPECT = 203;
-	private static double cpuThreshold = 90;	//maximum cpu load% for master
+	private static double cpuThreshold = 90;	//maximum cpu load % for master
 	
 	//dynamic
 	private JChannel channel = null;
@@ -307,7 +305,7 @@ public class ControllerWrapper implements Runnable {
 	private LockService lock_service = null;
 	private Lock masterLock = null;				//lock when change controller
 	private MessageDispatcher msg_disp = null;	//synchrounous req-response cpu-load
-	private boolean cl_mapping_update = true;
+	private boolean cl_mapping_update = true;	//cluster mapping shoudl be updated(yes/no?)
 	
 	
 	//config
