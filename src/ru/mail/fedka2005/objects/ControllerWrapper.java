@@ -4,7 +4,6 @@ import java.io.OutputStream;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -12,7 +11,6 @@ import java.util.concurrent.locks.Lock;
 import org.jgroups.MembershipListener;
 import org.jgroups.Message;
 import org.jgroups.MessageListener;
-import org.jgroups.ReceiverAdapter;
 import org.jgroups.JChannel;
 import org.jgroups.View;
 import org.jgroups.Address;
@@ -23,7 +21,6 @@ import org.jgroups.blocks.ResponseMode;
 import org.jgroups.blocks.atomic.Counter;
 import org.jgroups.blocks.atomic.CounterService;
 import org.jgroups.blocks.locking.LockService;
-import org.jgroups.util.Rsp;
 import org.jgroups.util.RspList;
 
 import ru.mail.fedka2005.messages.*;
@@ -40,7 +37,6 @@ import ru.mail.fedka2005.messages.*;
 //TODO
 //add log4j for logging all events
 //replace sleeping with time-scheduler
-//generate mapping between addresses and id's - Map<id, Address>
 
 //TODO
 //bug in updating cluster_mapping
@@ -89,6 +85,7 @@ public class ControllerWrapper implements Runnable {
 						}
 					case RecvMessageHandler.UNKNOWN : {
 							System.out.println("[INFO]: Unknown message type");
+							break;
 							//TODO
 							//print message - UNKNOWN type of message
 							//throw Exception
@@ -119,6 +116,8 @@ public class ControllerWrapper implements Runnable {
 				@Override
 					public void suspect(Address addr) {
 					System.out.println("Member:" + addr.toString() + " may have crushed.");
+					//TODO
+					//perform actions for member crash
 				}
 				
 				@Override
@@ -164,23 +163,23 @@ public class ControllerWrapper implements Runnable {
 			eventLoop();
 			
 		} catch (Exception e) {
-			throw new Exception(pName +":ControllerWrapper.start(), message:" + e.toString());
+			e.printStackTrace();
+			throw new Exception(pName +":ControllerWrapper.start() - Exception");
 		} finally {
 			try {
 				if (channel.isConnected()) {channel.close();}
-			} catch (Exception e) {};
+			} catch (Exception e) {e.printStackTrace();}
 		}
 	}
 	/**
-	 * Node main loop, monitoring messages, and switching master between nodes
-	 * appropirately.
+	 * Node main loop: monitoring messages, replace master actions
 	 * @param channel
 	 * @param masterID
 	 * @param masterLock
 	 * @throws Exception
 	 */
 	private void eventLoop() throws Exception {
-		boolean rewrite = false;	//to switch: ovs-vsctl set-controller (me)
+		boolean rewrite = false;			//to switch: ovs-vsctl set-controller (me)
 		while (isActive) {
 			rewrite = false;
 			while (masterID.get() == id) {	//cpu-load notification for the cluster
@@ -189,15 +188,16 @@ public class ControllerWrapper implements Runnable {
 					cl_mapping_update = false;
 				}
 				if (!rewrite) {
-					masterLock.lock();		//concurrent rewriting excluded
-						if (masterID.get() == id) {
-							//TODO
-							//for all ovs's set-controller id(me)
-							//send message to 
-							System.out.println(pName + ":Rewritten!");
-							rewrite = true;
-						}
-					masterLock.unlock();
+					try {						//handling deadlocking-exception event
+						masterLock.lock();		//concurrent rewriting excluded
+							if (masterID.get() == id) {
+								//TODO
+								//for all ovs's set-controller id(me)
+								//send message to 
+								System.out.println(pName + "->Master");
+								rewrite = true;
+							}
+					} finally {	masterLock.unlock(); }
 				}
 				channel.send(new Message(null, new CPULoadMessage()));
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
@@ -212,7 +212,7 @@ public class ControllerWrapper implements Runnable {
 				try {
 					CPULoadRecord record = mNotifications.pop();
 					if (cluster_mapping.get(record.getAddress()) == local_master 
-							&& record.getCPULoad() > cpuThreshold) {	//if cpu-load is too-high -> replace master
+							&& record.getCPULoad() > cpuThreshold) {	//cpu-load exceeds the threshold -> replace master
 						replaceMaster(CPU_LOAD, local_master);
 						wait_stack = true;
 					} else {
@@ -250,7 +250,7 @@ public class ControllerWrapper implements Runnable {
 					break;
 				}
 			}
-			RspList<CPULoadMessage> rsp_list = msg_disp.castMessage(null,	//list of responses
+			RspList<CPULoadMessage> rsp_list = msg_disp.castMessage(null,	//request cpu-load from nodes
 					new Message(null, null, new RequestCPULoadMessage()),
 					new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(master)
 					);
@@ -286,7 +286,8 @@ public class ControllerWrapper implements Runnable {
 			output.put(channel.getAddress(), id);	//put own address
 			return output;
 		} catch (Exception e) {
-			throw new Exception("failed to generate mapping");
+			throw new Exception("Exception : generateMapping() : failed to generate mapping : " +
+					e.toString());
 		}
 	}
 	
@@ -306,14 +307,14 @@ public class ControllerWrapper implements Runnable {
 	private static final int EXCEEDTIME = 200;
 	private static final int CPU_LOAD = 201;
 	private static final int CRASH_SUSPECT = 203;
-	private static double cpuThreshold = 90;	//maximum cpu load % for master
+	private static double cpuThreshold = 90;	//cpu-load threshold for node
 	
 	//dynamic
 	private JChannel channel = null;
-	private View clView;						//will be required later
+	private View clView;						//(currentView) will be required later
 	private CounterService id_service = null;
-	private Counter masterID = null;
-	private Integer id;					//node id
+	private Counter masterID = null;			//atomic service for managing master-id
+	private Integer id;							//node id
 	private Map<Address, Integer> cluster_mapping = null;
 	private Stack<CPULoadRecord> mNotifications = null;
 	private LockService lock_service = null;
@@ -323,9 +324,9 @@ public class ControllerWrapper implements Runnable {
 	
 	
 	//config
-	private String groupAddress;			//cluster absolute address
-	private String groupName;				//cluster unique idendifier
-	private String pName;					//personal name
+	private String groupAddress;				//cluster absolute address
+	private String groupName;					//cluster unique idendifier
+	private String pName;						//personal name
 	private boolean isActive = false;
 	private int poxPort;
 	private String poxPath;
@@ -334,8 +335,7 @@ public class ControllerWrapper implements Runnable {
 	public static final int SEND_DELAY = 2;	//send delay in seconds between cpu-load notifications
 	public static final int RECV_DELAY = 3; //recieve delay in seconds between cpu-load notifications
 	
-	//TODO
-	//add getters and setters, later
+	
 	
 	@Deprecated
 	@Override
