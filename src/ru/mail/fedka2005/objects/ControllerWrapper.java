@@ -173,10 +173,7 @@ public class ControllerWrapper implements Runnable {
 	}
 	/**
 	 * Node main loop: monitoring messages, replace master actions
-	 * @param channel
-	 * @param masterID
-	 * @param masterLock
-	 * @throws Exception
+	 * @throws Exception - to be done
 	 */
 	private void eventLoop() throws Exception {
 		boolean rewrite = false;			//to switch: ovs-vsctl set-controller (me)
@@ -194,7 +191,7 @@ public class ControllerWrapper implements Runnable {
 								//TODO
 								//for all ovs's set-controller id(me)
 								//send message to 
-								System.out.println(pName + "->Master");
+								System.out.println(pName + " -> Master");
 								rewrite = true;
 							}
 					} finally {	masterLock.unlock(); }
@@ -209,7 +206,7 @@ public class ControllerWrapper implements Runnable {
 					cluster_mapping = generateMapping();
 					cl_mapping_update = false;
 				}
-				try {
+				if (!mNotifications.empty()) {
 					CPULoadRecord record = mNotifications.pop();
 					if (cluster_mapping.get(record.getAddress()) == local_master 
 							&& record.getCPULoad() > cpuThreshold) {	//cpu-load exceeds the threshold -> replace master
@@ -219,28 +216,28 @@ public class ControllerWrapper implements Runnable {
 						mNotifications.clear();
 						TimeUnit.SECONDS.sleep(RECV_DELAY);
 					}
-				} catch (EmptyStackException e) {
+				} else {
 					if (wait_stack) {
 						TimeUnit.SECONDS.sleep(RECV_DELAY);
 						wait_stack = false;
-						continue;
 					} else {
 						replaceMaster(EXCEEDTIME, local_master);
 					}
 				}
 			}
+			
 		}
 	}
 	/**
 	 * replaces the master controller, depends on the reason of replacement:
-	 * exeeded notification await time, suspected for crush, high cpu-load on the node.
-	 * @param masterID - service for atomic master-controller change
+	 * exceeded notification await time, suspected for crush, high cpu-load on the node.
 	 * @param masterLock - 
-	 * @param code - reason of replacement @deprecated
+	 * @param code - reason of replacement(low perfomance, loss of connection, suspected)
+	 * @throws MasterReplaceException
 	 */
 	private void replaceMaster(int code, int master_id) throws Exception {
 		try {
-			masterLock.lock();	//lock access, write controller addr - synchronized
+			masterLock.lock();	//lock access, write controller addr - synchronized event
 			if (master_id == masterID.get()) {	//synchronized event
 				
 			Address master = null;
@@ -255,10 +252,8 @@ public class ControllerWrapper implements Runnable {
 					new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(master)
 					);
 			rsp_list.addRsp(channel.getAddress(), new CPULoadMessage());
-			Address new_master = findMaster(rsp_list);
+			Address new_master = chooseMaster(rsp_list);
 			masterID.set(cluster_mapping.get(new_master));
-				//TODO
-				//update bindings
 			}
 		} catch (Exception e) {
 			throw new Exception("failed to replace master");	//failed to send cpu-load request 
@@ -269,7 +264,7 @@ public class ControllerWrapper implements Runnable {
 	/**
 	 * blocks current thread and asks other members for their ID and JGroups.Address
 	 * @return HashMap<Integer,Address> 
-	 * @throws Exception
+	 * @throws GenerateMappingException
 	 */
 	private Map<Address, Integer> generateMapping() throws Exception {
 		try {
@@ -291,8 +286,13 @@ public class ControllerWrapper implements Runnable {
 		}
 	}
 	
-	
-	private Address findMaster(RspList<CPULoadMessage> rsp_list) {
+	/**
+	 * method sorts cpu-load from cluster nodes, the least loaded
+	 * node becomes the new master
+	 * @param rsp_list - list of responses from the nodes
+	 * @return	Address - Address class of the new master
+	 */
+	private Address chooseMaster(RspList<CPULoadMessage> rsp_list) {
 		Address next_master = channel.getAddress();
 		double cpu_load = ((CPULoadMessage)rsp_list.getValue(next_master)).cpuLoad;
 		for (Address address : rsp_list.keySet()) {
@@ -306,7 +306,7 @@ public class ControllerWrapper implements Runnable {
 	//static
 	private static final int EXCEEDTIME = 200;
 	private static final int CPU_LOAD = 201;
-	private static final int CRASH_SUSPECT = 203;
+	private static final int CRASH_SUSPECT = 203;	//now unused but maybe in future will be helpful
 	private static double cpuThreshold = 90;	//cpu-load threshold for node
 	
 	//dynamic
