@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 
 import ru.mail.fedka2005.main.Controller;
+import ru.mail.fedka2005.exceptions.MalformedInputException;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -58,8 +59,12 @@ public class ControllerWrapperGUI extends JFrame {
 					//in a seperate thread
 					btnStopClient.setEnabled(true);
 				} catch (NullPointerException ex) {
-					JOptionPane.showMessageDialog(new JFrame(), "",
-							"Input Error",
+					JOptionPane.showMessageDialog(new JFrame(), "Some fields where not defined",
+							"EmptyInput Error",
+							JOptionPane.ERROR_MESSAGE);
+				} catch (MalformedInputException ex) {
+					JOptionPane.showMessageDialog(new JFrame(), "Malformed input, check if you entered correct data",
+							"MalformedInput Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
