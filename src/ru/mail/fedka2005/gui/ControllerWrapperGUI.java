@@ -24,6 +24,7 @@ public class ControllerWrapperGUI extends JFrame {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	public ControllerWrapperGUI() {
+		setResizable(false);
 		setTitle("Cluster Monitoring Client");
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -31,7 +32,8 @@ public class ControllerWrapperGUI extends JFrame {
 		tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
 		JButton btnStartClient = new JButton("Start Client");
-		btnStartClient.setToolTipText("Connect to cluster with specified address and unique identifier name");
+		btnStartClient.setToolTipText("Connect to cluster with specified address and unique" +
+				" identifier name");
 		
 		JButton btnStopClient = new JButton("Stop Client");
 		btnStopClient.setToolTipText("Disconnects client from the cluster");
@@ -39,12 +41,12 @@ public class ControllerWrapperGUI extends JFrame {
 		textField = new JTextField();
 		textField.setColumns(10);
 		
-		JLabel lblNodeName = new JLabel("Node Name");
+		JLabel lblNodeName = new JLabel("Node Name:");
 		
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
 		
-		JLabel lblGroupName = new JLabel("Group Name");
+		JLabel lblGroupName = new JLabel("Group Name:");
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
@@ -52,9 +54,9 @@ public class ControllerWrapperGUI extends JFrame {
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
 		
-		JLabel lblPoxPath = new JLabel("POX Path");
+		JLabel lblPoxPath = new JLabel("POX Path:");
 		
-		JLabel lblAddress = new JLabel("Address");
+		JLabel lblAddress = new JLabel("Address:");
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
