@@ -1,9 +1,12 @@
 package ru.mail.fedka2005.main;
 
+import org.jgroups.Message;
+
 import ru.mail.fedka2005.exceptions.MalformedInputException;
 /**
  * Part of MVC(Model-View-Controller Application) -- binds graphical user
- * interface(ControllerWrapperGUI) and business logic(ControllerWrapper)
+ * interface(ControllerWrapperGUI) and business logic(ControllerWrapper).
+ * It's a singleton class.
  * @author fedor
  *
  */
@@ -27,7 +30,7 @@ public class Controller {
 	/**
 	 * Print a new message from the cluster to gui
 	 */
-	public void printMessage() {
+	public void printMessage(Message msg) {
 		//TODO
 		//call a method, invoking table data update and redrawing gui
 	}

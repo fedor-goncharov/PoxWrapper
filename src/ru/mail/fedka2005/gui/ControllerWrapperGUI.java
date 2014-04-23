@@ -24,6 +24,7 @@ import java.awt.event.MouseEvent;
 public class ControllerWrapperGUI extends JFrame {
 	
 	private Controller controller = null; //reference to controller object
+	private Object[][] data = null;		  //data printed in the table windows
 	private JTable messageTable;
 	private JTextField nodeNameTextField;
 	private JTextField groupNameTextField;
@@ -59,11 +60,13 @@ public class ControllerWrapperGUI extends JFrame {
 					//in a seperate thread
 					btnStopClient.setEnabled(true);
 				} catch (NullPointerException ex) {
-					JOptionPane.showMessageDialog(new JFrame(), "Some fields where not defined",
+					JOptionPane.showMessageDialog(new JFrame(),
+							"Some fields where not defined",
 							"EmptyInput Error",
 							JOptionPane.ERROR_MESSAGE);
 				} catch (MalformedInputException ex) {
-					JOptionPane.showMessageDialog(new JFrame(), "Malformed input, check if you entered correct data",
+					JOptionPane.showMessageDialog(new JFrame(), 
+							"Malformed input, check if you entered correct data",
 							"MalformedInput Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
@@ -104,7 +107,7 @@ public class ControllerWrapperGUI extends JFrame {
 		addressTextField = new JTextField();
 		addressTextField.setColumns(10);
 		
-		JLabel lblPoxPath = new JLabel("POX Path:");
+		JLabel lblPoxPath = new JLabel("POX Path:port:");
 		
 		JLabel lblAddress = new JLabel("Address:");
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -191,5 +194,11 @@ public class ControllerWrapperGUI extends JFrame {
 	}
 	public void setController(Controller controller) {
 		this.controller = controller;
+	}
+	/**
+	 * update data on 
+	 */
+	public void addRecord() {
+		
 	}
 }
