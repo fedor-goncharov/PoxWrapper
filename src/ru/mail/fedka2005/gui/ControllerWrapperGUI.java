@@ -3,26 +3,34 @@ package ru.mail.fedka2005.gui;
 import javax.swing.JFrame;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+
+import ru.mail.fedka2005.main.Controller;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ControllerWrapperGUI extends JFrame {
+	
+	private Controller controller = null; //reference to controller object
 	private JTable messageTable;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField nodeNameTextField;
+	private JTextField groupNameTextField;
+	private JTextField poxPathTextField;
+	private JTextField addressTextField;
+	
+	private JButton btnStartClient = null;	//buttons for actions
+	private JButton btnStopClient = null;
 	public ControllerWrapperGUI() {
 		setResizable(false);
 		setTitle("Cluster Monitoring Client");
@@ -31,28 +39,65 @@ public class ControllerWrapperGUI extends JFrame {
 		tabbedPane.setToolTipText("Cluster Messages");
 		tabbedPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
-		JButton btnStartClient = new JButton("Start Client");
+		btnStartClient = new JButton("Start Client");
+		btnStartClient.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//block input while invoking connection
+				try {
+					btnStartClient.setEnabled(false);
+					String nodeName = nodeNameTextField.getText();
+					nodeNameTextField.setEnabled(false);
+					String groupName = groupNameTextField.getText();
+					groupNameTextField.setEnabled(false);
+					String poxPath = poxPathTextField.getText();
+					poxPathTextField.setEnabled(false);
+					String address = addressTextField.getText();
+					addressTextField.setEnabled(false);
+					controller.startClient(nodeName, groupName, poxPath, address);	//start controller-client
+					//in a seperate thread
+					btnStopClient.setEnabled(true);
+				} catch (NullPointerException ex) {
+					JOptionPane.showMessageDialog(new JFrame(), "",
+							"Input Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		btnStartClient.setToolTipText("Connect to cluster with specified address and unique" +
 				" identifier name");
 		
-		JButton btnStopClient = new JButton("Stop Client");
+		btnStopClient = new JButton("Stop Client");
+		btnStopClient.setEnabled(false);
+		btnStopClient.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.stopClient();
+				nodeNameTextField.setEnabled(true);
+				groupNameTextField.setEnabled(true);
+				poxPathTextField.setEnabled(true);
+				addressTextField.setEnabled(true);
+
+				btnStartClient.setEnabled(true);
+			}
+		});
 		btnStopClient.setToolTipText("Disconnects client from the cluster");
 		
-		textField = new JTextField();
-		textField.setColumns(10);
+		nodeNameTextField = new JTextField();
+		nodeNameTextField.setColumns(10);
 		
 		JLabel lblNodeName = new JLabel("Node Name:");
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
+		groupNameTextField = new JTextField();
+		groupNameTextField.setColumns(10);
 		
 		JLabel lblGroupName = new JLabel("Group Name:");
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
+		poxPathTextField = new JTextField();
+		poxPathTextField.setColumns(10);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
+		addressTextField = new JTextField();
+		addressTextField.setColumns(10);
 		
 		JLabel lblPoxPath = new JLabel("POX Path:");
 		
@@ -75,17 +120,17 @@ public class ControllerWrapperGUI extends JFrame {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(groupNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
 									.addComponent(lblAddress)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(nodeNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
 									.addComponent(lblPoxPath)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
+									.addComponent(poxPathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -96,16 +141,16 @@ public class ControllerWrapperGUI extends JFrame {
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnStartClient)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(nodeNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNodeName)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(poxPathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblPoxPath))
 					.addGap(3)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnStopClient)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(groupNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblGroupName)
-						.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblAddress))
 					.addContainerGap())
 		);
@@ -138,5 +183,8 @@ public class ControllerWrapperGUI extends JFrame {
 		tabbedPane.addTab("Cluster Info", null, clusterInfoPanel, null);
 	
 		getContentPane().setLayout(groupLayout);
+	}
+	public void setController(Controller controller) {
+		this.controller = controller;
 	}
 }

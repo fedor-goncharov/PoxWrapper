@@ -11,7 +11,8 @@ public class Controller {
 	/**
 	 * Button generated event
 	 */
-	public void startClient() {
+	public void startClient(String nodeName, String groupName, 
+			String poxPath, String address) {
 		//TODO
 		//add action on event of connect from client Listener
 	}
