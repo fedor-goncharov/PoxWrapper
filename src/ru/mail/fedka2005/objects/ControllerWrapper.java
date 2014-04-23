@@ -179,7 +179,7 @@ public class ControllerWrapper implements Runnable {
 		boolean rewrite = false;			//to switch: ovs-vsctl set-controller (me)
 		while (isActive) {
 			rewrite = false;
-			while (masterID.get() == id) {	//cpu-load notification for the cluster
+			while (isActive && masterID.get() == id) {	//cpu-load notification for the cluster
 				if (cl_mapping_update) {
 					cluster_mapping = generateMapping();
 					cl_mapping_update = false;
@@ -201,7 +201,7 @@ public class ControllerWrapper implements Runnable {
 			}
 			boolean wait_stack = true;	//wait one iteration to get notification from master controller
 			int local_master;
-			while ((local_master = (int)masterID.get()) != id) {
+			while (isActive && (local_master = (int)masterID.get()) != id) {
 				if (cl_mapping_update) {
 					cluster_mapping = generateMapping();
 					cl_mapping_update = false;
