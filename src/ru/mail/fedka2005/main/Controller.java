@@ -15,8 +15,8 @@ import ru.mail.fedka2005.objects.ControllerWrapper;
  */
 public class Controller {
 
-	private ControllerWrapperGUI gui = null;
-	private ControllerWrapper instance = null;
+	private ControllerWrapperGUI gui = null;	//gui
+	private ControllerWrapper instance = null;	//business-logic
 	/**
 	 * Button generated event
 	 */
@@ -35,6 +35,7 @@ public class Controller {
 			Thread appProcess = new Thread(instance);
 			appProcess.start();		//process started in another thread
 		//TODO catch true exception
+		//from cluster
 		} catch (NumberFormatException ex) {
 			throw new MalformedInputException("malformed input, message: " + ex.getMessage());
 		}
@@ -48,14 +49,14 @@ public class Controller {
 		instance.stopClient();
 	}
 	/**
-	 * Print a new message from the cluster to gui
+	 * Prints a new message from the cluster to gui table
 	 */
 	public void printMessage(Message msg) {
 		gui.addRecord(msg);
-		//TODO
-		//call a method, invoking table data update and redrawing gui
 	}
-	//gui setter for controller
+	/**
+	 * binding gui and controller object
+	 */
 	public void setGUI(ControllerWrapperGUI gui) {
 		this.gui = gui;		
 	}
