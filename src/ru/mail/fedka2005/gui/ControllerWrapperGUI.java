@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
@@ -214,8 +215,13 @@ public class ControllerWrapperGUI extends JFrame {
 					.addGap(12))
 		);
 		
-		messageTable = new JTable(new DefaultTableModel(new Object[]{"Source","Destination","Message"}, 0));	//create empty table
-		tabbedPane.addTab("Cluster Messages", null, messageTable, null);		
+		messageTable = new JTable(new DefaultTableModel(new Object[]{"Source","Destination","Message"}, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		});
+		tabbedPane.addTab("Cluster Messages", null, new JScrollPane(messageTable), null);		
 		JPanel clusterInfoPanel = new JPanel();
 		tabbedPane.addTab("Cluster Info", null, clusterInfoPanel, null);
 	
@@ -239,10 +245,8 @@ public class ControllerWrapperGUI extends JFrame {
 	 */
 	public void addRecord(Message msg) {
 		DefaultTableModel model = (DefaultTableModel)messageTable.getModel();
-		System.out.println(model);
-		System.out.println(msg);
 		model.addRow(new Object[]{msg.getSrc(),
-				msg.getDest(),
+				(msg.getDest() == null ? "all" : msg.getDest()),
 				msg.getObject()});
 	}
 }

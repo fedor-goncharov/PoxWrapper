@@ -100,13 +100,12 @@ public class ControllerWrapper implements Runnable {
 						}
 					}
 					ControllerWrapper.this.controller.printMessage(msg.copy());	//print message to GUI
-					System.out.println("NodeID:" + channel.getAddressAsUUID() + 
-							" Message:" + msg.toString());
 				}
 				
 				@Override
 				public void getState(OutputStream arg0) throws Exception {
 					//empty method
+					//maybe useful in future
 				}
 			}, 
 				new MembershipListener() {
@@ -120,18 +119,20 @@ public class ControllerWrapper implements Runnable {
 				@Override
 					public void unblock() {
 					//empty method
+					//maybe useful in future
 				}
 				
 				@Override
 					public void suspect(Address addr) {
 					System.out.println("Member:" + addr.toString() + " may have crushed.");
 					//TODO
-					//perform actions for member crash
+					//perform actions for member suspected for crash
 				}
 				
 				@Override
 					public void block() {
 					//empty method
+					//maybe useful in future
 				}
 				}, 
 				new RequestHandler() {
@@ -315,7 +316,7 @@ public class ControllerWrapper implements Runnable {
 	private static final int EXCEEDTIME = 200;
 	private static final int CPU_LOAD = 201;
 	private static final int CRASH_SUSPECT = 203;	//now unused but maybe in future will be helpful
-	private static double cpuThreshold = 90;	//cpu-load threshold for node
+	private static double cpuThreshold = 90;		//cpu-load threshold for node
 	private Controller controller = null;
 	
 	//dynamic
