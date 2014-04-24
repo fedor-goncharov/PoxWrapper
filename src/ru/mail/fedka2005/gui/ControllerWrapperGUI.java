@@ -256,5 +256,6 @@ public class ControllerWrapperGUI extends JFrame {
 		e.getMessage(),
 		"Unexpected exception",
 		JOptionPane.ERROR_MESSAGE);
+		System.exit(1);
 	}
 }

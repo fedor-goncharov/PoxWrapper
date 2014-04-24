@@ -356,7 +356,7 @@ public class ControllerWrapper implements Runnable {
 			this.start();
 		} catch (Exception e) {	//catch any exception
 			controller.forwardException(e);
-			System.exit(1);
+			Thread.currentThread().interrupt();	//kill current thread
 		}
 	}
 }
