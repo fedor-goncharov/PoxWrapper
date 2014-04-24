@@ -41,6 +41,7 @@ import ru.mail.fedka2005.messages.*;
 
 //TODO
 //bug in updating cluster_mapping
+
 public class ControllerWrapper implements Runnable {
 	/**
 	 * method creates the channel and connect process to the cluster
@@ -72,7 +73,7 @@ public class ControllerWrapper implements Runnable {
 			
 			//TODO
 			//fix creating JChannel with initial address
-			channel = new JChannel();
+			channel = new JChannel();	//channel = new Channel(argumentAddress)
 			channel.setName(pName);
 			id_service = new CounterService(channel);	//master id atomic service
 			lock_service = new LockService(channel);
@@ -353,8 +354,8 @@ public class ControllerWrapper implements Runnable {
 	public void run() {
 		try {
 			this.start();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e) {	//catch any exception
+			controller.forwardException(e);
 			System.exit(1);
 		}
 	}

@@ -125,7 +125,7 @@ public class ControllerWrapperGUI extends JFrame {
 		addressTextField = new JTextField();
 		addressTextField.setColumns(10);
 		
-		JLabel lblPoxPath = new JLabel("POX Path:");
+		JLabel lblPoxPath = new JLabel("POX path:");
 		
 		JLabel lblAddress = new JLabel("Address:");
 		
@@ -134,7 +134,7 @@ public class ControllerWrapperGUI extends JFrame {
 		
 		JLabel lblCpuThreshold = new JLabel("CPU Threshold:");
 		
-		JLabel lblNewLabel = new JLabel("Port:");
+		JLabel lblNewLabel = new JLabel("POX port:");
 		
 		portTextField = new JTextField();
 		portTextField.setColumns(10);
@@ -248,5 +248,13 @@ public class ControllerWrapperGUI extends JFrame {
 		model.addRow(new Object[]{msg.getSrc(),
 				(msg.getDest() == null ? "all" : msg.getDest()),
 				msg.getObject()});
+	}
+	
+	public void handleInternalException(Exception e) {
+		JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
+		"Unexpected exception occured, see log file for details. Message: " + 
+		e.getMessage(),
+		"Unexpected exception",
+		JOptionPane.ERROR_MESSAGE);
 	}
 }

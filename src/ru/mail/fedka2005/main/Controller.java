@@ -28,7 +28,7 @@ public class Controller {
 					groupName, 
 					groupAddress, 
 					nodeName, 
-					1,	//TODO - generate identifier from nodeName
+					1,	//TODO - generate identifier from nodeName, or generate identifier from cluster
 					poxPath, 
 					Integer.parseInt(port), 
 					Double.parseDouble(cpuThreshold));
@@ -39,8 +39,6 @@ public class Controller {
 		} catch (NumberFormatException ex) {
 			throw new MalformedInputException("malformed input, message: " + ex.getMessage());
 		}
-		//TODO
-		//add action on event of connect from client Listener
 	}
 	/**
 	 * Button generated event
@@ -50,14 +48,23 @@ public class Controller {
 	}
 	/**
 	 * Prints a new message from the cluster to gui table
+	 * @param Message msg - JGroups class, containing destination, source, serialized object
 	 */
 	public void printMessage(Message msg) {
 		gui.addRecord(msg);
 	}
 	/**
 	 * binding gui and controller object
+	 * @param ControllerWrapperGUI - class instance
 	 */
 	public void setGUI(ControllerWrapperGUI gui) {
 		this.gui = gui;		
+	}
+	/**
+	 * forward exception from ControllerWrapper to gui
+	 * @param Exception to be forwarded to some GUI methods
+	 */
+	public void forwardException(Exception e) {
+		gui.handleInternalException(e);
 	}
 }
