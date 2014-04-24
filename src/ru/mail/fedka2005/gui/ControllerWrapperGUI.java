@@ -9,13 +9,16 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
+import org.jgroups.Message;
+
 import ru.mail.fedka2005.main.Controller;
+import ru.mail.fedka2005.exceptions.ClientConstructorException;
 import ru.mail.fedka2005.exceptions.MalformedInputException;
 
 import java.awt.event.MouseAdapter;
@@ -24,8 +27,7 @@ import java.awt.event.MouseEvent;
 public class ControllerWrapperGUI extends JFrame {
 	
 	private Controller controller = null; //reference to controller object
-	private Object[][] data = null;		  //data printed in the table windows
-	private JTable messageTable;
+	private JTable messageTable = null;
 	private JTextField nodeNameTextField;
 	private JTextField groupNameTextField;
 	private JTextField poxPathTextField;
@@ -33,8 +35,12 @@ public class ControllerWrapperGUI extends JFrame {
 	
 	private JButton btnStartClient = null;	//buttons for actions
 	private JButton btnStopClient = null;
+	private JTextField cpuThresholdTextField;
+	private JTextField portTextField;
 	public ControllerWrapperGUI() {
 		setResizable(false);
+		this.setSize(640, 480);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		setTitle("Cluster Monitoring Client");
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -47,27 +53,41 @@ public class ControllerWrapperGUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				//block input while invoking connection
 				try {
-					btnStartClient.setEnabled(false);
 					String nodeName = nodeNameTextField.getText();
-					nodeNameTextField.setEnabled(false);
 					String groupName = groupNameTextField.getText();
-					groupNameTextField.setEnabled(false);
 					String poxPath = poxPathTextField.getText();
-					poxPathTextField.setEnabled(false);
 					String address = addressTextField.getText();
-					addressTextField.setEnabled(false);
-					controller.startClient(nodeName, groupName, poxPath, address);	//start controller-client
+					String cpuThreshold = cpuThresholdTextField.getText();
+					String port = portTextField.getText();
+					if (nodeName.length() == 0 || groupName.length() == 0 || 
+							poxPath.length() == 0 || address.length() == 0 ||
+							cpuThreshold.length() == 0 || port.length() == 0) {
+						JOptionPane.showMessageDialog(ControllerWrapperGUI.this,
+								"Some fields where not defined",
+								"EmptyInput Error",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					btnStartClient.setEnabled(false);
+					textFieldsEnable(false);
+					
+					controller.startClient(nodeName, groupName, poxPath, address, cpuThreshold, port);	//start controller-client
 					//in a seperate thread
 					btnStopClient.setEnabled(true);
 				} catch (NullPointerException ex) {
-					JOptionPane.showMessageDialog(new JFrame(),
-							"Some fields where not defined",
-							"EmptyInput Error",
-							JOptionPane.ERROR_MESSAGE);
+					//TODO - throw exception
+					//happens when problems with gui components occure
 				} catch (MalformedInputException ex) {
-					JOptionPane.showMessageDialog(new JFrame(), 
+					JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
 							"Malformed input, check if you entered correct data",
 							"MalformedInput Error",
+							JOptionPane.ERROR_MESSAGE);
+					textFieldsEnable(true);
+					btnStartClient.setEnabled(true);
+				} catch (ClientConstructorException ex) {
+					JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
+							"Initialization of constructor failed, see log file for details.",
+							"Initialization Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -81,12 +101,9 @@ public class ControllerWrapperGUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				controller.stopClient();
-				nodeNameTextField.setEnabled(true);
-				groupNameTextField.setEnabled(true);
-				poxPathTextField.setEnabled(true);
-				addressTextField.setEnabled(true);
-
+				textFieldsEnable(true);
 				btnStartClient.setEnabled(true);
+				btnStopClient.setEnabled(false);
 			}
 		});
 		btnStopClient.setToolTipText("Disconnects client from the cluster");
@@ -107,98 +124,125 @@ public class ControllerWrapperGUI extends JFrame {
 		addressTextField = new JTextField();
 		addressTextField.setColumns(10);
 		
-		JLabel lblPoxPath = new JLabel("POX Path:port:");
+		JLabel lblPoxPath = new JLabel("POX Path:");
 		
 		JLabel lblAddress = new JLabel("Address:");
+		
+		cpuThresholdTextField = new JTextField();
+		cpuThresholdTextField.setColumns(10);
+		
+		JLabel lblCpuThreshold = new JLabel("CPU Threshold:");
+		
+		JLabel lblNewLabel = new JLabel("Port:");
+		
+		portTextField = new JTextField();
+		portTextField.setColumns(10);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(btnStopClient, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnStartClient, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGap(20)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblNodeName)
-								.addComponent(lblGroupName))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnStopClient, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+								.addComponent(btnStartClient, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
+							.addGap(14)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblNodeName)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(nodeNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblGroupName)
+									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(groupNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-									.addComponent(lblAddress)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED))
 								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(nodeNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+									.addComponent(lblCpuThreshold)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(cpuThresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)))
+							.addGap(38)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblPoxPath)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(poxPathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
+									.addComponent(poxPathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(lblNewLabel)
+										.addComponent(lblAddress))
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(portTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnStartClient)
 						.addComponent(nodeNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNodeName)
 						.addComponent(poxPathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblPoxPath))
-					.addGap(3)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnStopClient)
-						.addComponent(groupNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblGroupName)
-						.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblAddress))
-					.addContainerGap())
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+							.addComponent(btnStopClient)
+							.addPreferredGap(ComponentPlacement.UNRELATED))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblGroupName)
+								.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblAddress)
+								.addComponent(groupNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNewLabel)
+								.addComponent(portTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(cpuThresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblCpuThreshold))
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addGap(12))
 		);
 		
-		class MessageTableModel extends AbstractTableModel {
-			String[] columnNames = {"NodeID", 
-					"Source", 
-					"Adress",
-					"Message String"};
-			private Object[][] data = null;
-			
-			@Override
-			public int getColumnCount() {
-				return columnNames.length;
-			}
-
-			@Override
-			public int getRowCount() {
-				return data.length;
-			}
-
-			@Override
-			public Object getValueAt(int row, int col) {
-				return data[row][col];
-			}
-		}
-		messageTable = new JTable(new MessageTableModel());
+		messageTable = new JTable(new DefaultTableModel(new Object[]{"Source","Destination","Message"}, 0));	//create empty table
 		tabbedPane.addTab("Cluster Messages", null, messageTable, null);		
 		JPanel clusterInfoPanel = new JPanel();
 		tabbedPane.addTab("Cluster Info", null, clusterInfoPanel, null);
 	
 		getContentPane().setLayout(groupLayout);
+		this.setVisible(true);
 	}
+	private void textFieldsEnable(boolean bool) {
+		nodeNameTextField.setEnabled(bool);
+		groupNameTextField.setEnabled(bool);
+		poxPathTextField.setEnabled(bool);
+		addressTextField.setEnabled(bool);
+		cpuThresholdTextField.setEnabled(bool);
+		portTextField.setEnabled(bool);
+	}
+	
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}
 	/**
 	 * update data on 
 	 */
-	public void addRecord() {
-		
+	public void addRecord(Message msg) {
+		DefaultTableModel model = (DefaultTableModel)messageTable.getModel();
+		System.out.println(model);
+		System.out.println(msg);
+		model.addRow(new Object[]{msg.getSrc(),
+				msg.getDest(),
+				msg.getObject()});
 	}
 }

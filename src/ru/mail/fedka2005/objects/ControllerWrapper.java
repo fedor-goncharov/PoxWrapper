@@ -1,7 +1,6 @@
 package ru.mail.fedka2005.objects;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -23,6 +22,8 @@ import org.jgroups.blocks.atomic.CounterService;
 import org.jgroups.blocks.locking.LockService;
 import org.jgroups.util.RspList;
 
+import ru.mail.fedka2005.exceptions.ClientConstructorException;
+import ru.mail.fedka2005.main.Controller;
 import ru.mail.fedka2005.messages.*;
 /**
  * Class represents a node in the cluster of controllers
@@ -46,17 +47,22 @@ public class ControllerWrapper implements Runnable {
 	 * performs monitoring of the master-node, and changes it's state
 	 * if cpu-load there exceeds the specified limit.
 	 * 
+	 * @param controller - reference to controller instance
 	 * @param groupName - cluster name
 	 * @param groupAddress - cluster absolute address
 	 * @param pName	- node unique name
 	 * @param id - node unique identifier
 	 * @param poxPath - path to pox-binary
-	 * @param poxPort
-	 * @throws Exception
+	 * @param poxPort - port on which controller starts
+	 * @throws Exception - //TODO generate good exception handling
 	 */
-	public ControllerWrapper(String groupName, String groupAddress, String pName, int id,
-			String poxPath, int poxPort, double cpuThreshold) throws Exception {
+	public ControllerWrapper(Controller controller,
+			String groupName, String groupAddress, 
+			String pName, int id,
+			String poxPath, int poxPort, 
+			double cpuThreshold) throws ClientConstructorException {
 		try {
+			this.controller = controller;
 			this.groupName = groupName;
 			this.groupAddress = groupAddress;
 			this.pName = pName; this.id = id;
@@ -64,6 +70,8 @@ public class ControllerWrapper implements Runnable {
 			this.mNotifications = new Stack<CPULoadRecord>();
 			ControllerWrapper.cpuThreshold = cpuThreshold;
 			
+			//TODO
+			//fix creating JChannel with initial address
 			channel = new JChannel();
 			channel.setName(pName);
 			id_service = new CounterService(channel);	//master id atomic service
@@ -91,6 +99,7 @@ public class ControllerWrapper implements Runnable {
 							//throw Exception
 						}
 					}
+					ControllerWrapper.this.controller.printMessage(msg.copy());	//print message to GUI
 					System.out.println("NodeID:" + channel.getAddressAsUUID() + 
 							" Message:" + msg.toString());
 				}
@@ -141,8 +150,7 @@ public class ControllerWrapper implements Runnable {
 					}
 			});
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("Client constructor exception.");
+			throw new ClientConstructorException("client failed, message: " + e.getMessage());
 		}
 	}
 	/**
@@ -308,6 +316,7 @@ public class ControllerWrapper implements Runnable {
 	private static final int CPU_LOAD = 201;
 	private static final int CRASH_SUSPECT = 203;	//now unused but maybe in future will be helpful
 	private static double cpuThreshold = 90;	//cpu-load threshold for node
+	private Controller controller = null;
 	
 	//dynamic
 	private JChannel channel = null;
@@ -322,7 +331,6 @@ public class ControllerWrapper implements Runnable {
 	private MessageDispatcher msg_disp = null;	//synchrounous req-response cpu-load
 	private boolean cl_mapping_update = true;	//cluster mapping shoudl be updated(yes/no?)
 	
-	
 	//config
 	private String groupAddress;				//cluster absolute address
 	private String groupName;					//cluster unique idendifier
@@ -335,7 +343,9 @@ public class ControllerWrapper implements Runnable {
 	public static final int SEND_DELAY = 2;	//send delay in seconds between cpu-load notifications
 	public static final int RECV_DELAY = 3; //recieve delay in seconds between cpu-load notifications
 	
-	
+	public void stopClient() {
+		isActive = false;	//exit loops stop client
+	}
 	
 	@Deprecated
 	@Override
