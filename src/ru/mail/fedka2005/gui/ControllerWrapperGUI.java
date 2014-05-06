@@ -245,6 +245,12 @@ public class ControllerWrapperGUI extends JFrame {
 	 */
 	public void addRecord(Message msg) {
 		DefaultTableModel model = (DefaultTableModel)messageTable.getModel();
+		if (model.getRowCount() > message_buffer_size) {	//clear table sometimes, add flush messages to log_files
+			int size = model.getRowCount();
+			for (int i = 0; i < size; ++i) {
+				model.removeRow(i);
+			}
+		}
 		model.addRow(new Object[]{msg.getSrc(),
 				(msg.getDest() == null ? "all" : msg.getDest()),
 				msg.getObject()});
@@ -258,4 +264,6 @@ public class ControllerWrapperGUI extends JFrame {
 		JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
 	}
+	
+	private int message_buffer_size = 500;
 }
