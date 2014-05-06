@@ -24,6 +24,9 @@ import ru.mail.fedka2005.exceptions.MalformedInputException;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JTextPane;
+import javax.swing.JTextArea;
+import java.awt.Font;
 
 public class ControllerWrapperGUI extends JFrame {
 	
@@ -224,7 +227,7 @@ public class ControllerWrapperGUI extends JFrame {
 		tabbedPane.addTab("Cluster Messages", null, new JScrollPane(messageTable), null);		
 		JPanel clusterInfoPanel = new JPanel();
 		tabbedPane.addTab("Cluster Info", null, clusterInfoPanel, null);
-	
+		
 		getContentPane().setLayout(groupLayout);
 		this.setVisible(true);
 	}
@@ -258,12 +261,12 @@ public class ControllerWrapperGUI extends JFrame {
 	
 	public void handleInternalException(Exception e) {
 		JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
-		"Unexpected exception occured, see log file for details. Message: " + 
+		"Unexpected exception occured, see log file for details:\n" + 
 		e.getMessage(),
 		"Unexpected exception",
 		JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
 	}
 	
-	private int message_buffer_size = 500;
+	private int message_buffer_size = 500;	//max messages displayed
 }

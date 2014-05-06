@@ -1,9 +1,15 @@
 package ru.mail.fedka2005.main;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.jgroups.Message;
 
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
 import ru.mail.fedka2005.exceptions.MalformedInputException;
+import ru.mail.fedka2005.exceptions.POXInitException;
 import ru.mail.fedka2005.gui.ControllerWrapperGUI;
 import ru.mail.fedka2005.objects.ControllerWrapper;
 /**
@@ -18,7 +24,7 @@ public class Controller {
 
 	private ControllerWrapperGUI gui = null;	//gui
 	private ControllerWrapper instance = null;	//business-logic
-	Process poxProcess = null;
+	public Process poxProcess = null;
 	/**
 	 * Button generated event
 	 */
@@ -47,6 +53,7 @@ public class Controller {
 	 */
 	public void stopClient() {
 		instance.stopClient();
+		poxProcess.destroy();
 	}
 	/**
 	 * Prints a new message from the cluster to gui table
@@ -78,16 +85,25 @@ public class Controller {
 		//TODO
 		//start the pox controller, recieve a reference to it
 		//catch exception if pox execution failed
-		Runtime rt = Runtime.getRuntime();
-		poxProcess = rt.exec("//TODO - add invoking pox");
-		//handle exceptions
+		ProcessBuilder pBuilder = new ProcessBuilder("python","pox.py","openflow.of_01",
+				"--port=" + String.valueOf(port));
+		try { 
+			pBuilder.directory(new File(path));
+			poxProcess = pBuilder.start();
+			
+		} catch (Exception e) {
+			forwardException(new POXInitException("Error invoking pox-controller:\n"
+						+ e.getMessage()));
+		}
 	}
 	/**
 	 * stop POX controller(invoked when client is shifted from the master position)
 	 */
 	public void stopPOX() {
-		//TODO
-		//stop the controller(kill the process)
+		if (poxProcess != null) {
+			poxProcess.destroy();	//kill the controller process
+			poxProcess = null;
+		}
 	}
 	
 }

@@ -198,10 +198,7 @@ public class ControllerWrapper implements Runnable {
 					try {						//handling deadlocking-exception event
 						masterLock.lock();		//concurrent rewriting excluded
 							if (masterID.get() == id) {
-								//TODO
-								//for all ovs's set-controller id(me)
-								//send message to 
-								System.out.println(pName + " -> Master");
+								controller.startPOX(poxPath, poxPort);	//master starts pox controller in a seperate process
 								rewrite = true;
 							}
 					} finally {	masterLock.unlock(); }
@@ -209,6 +206,7 @@ public class ControllerWrapper implements Runnable {
 				channel.send(new Message(null, new CPULoadMessage()));
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
+			controller.stopPOX();	//stop controller if it was running
 			boolean wait_stack = true;	//wait one iteration to get notification from master controller
 			int local_master;
 			while (isActive && (local_master = (int)masterID.get()) != id) {
