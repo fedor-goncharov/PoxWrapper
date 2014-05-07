@@ -55,9 +55,7 @@ public class Controller {
 	 */
 	public void stopClient() {
 		instance.stopClient();
-		if (poxProcess != null) {
-			poxProcess.destroy();
-		}
+		stopPOX();
 	}
 	/**
 	 * Prints a new message from the cluster to gui table

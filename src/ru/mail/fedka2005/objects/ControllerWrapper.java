@@ -216,8 +216,9 @@ public class ControllerWrapper implements Runnable {
 				}
 				if (!mNotifications.empty()) {
 					CPULoadRecord record = mNotifications.pop();
-					if (cluster_mapping.get(record.getAddress()) == local_master 
-							&& record.getCPULoad() > cpuThreshold) {	//cpu-load exceeds the threshold -> replace master
+					if (cluster_mapping.get(record.getAddress()) != null &&
+							cluster_mapping.get(record.getAddress()) == local_master && 
+							record.getCPULoad() > cpuThreshold) {	//cpu-load exceeds the threshold -> replace master
 						replaceMaster(CPU_LOAD, local_master);
 						wait_stack = true;
 					} else {
@@ -247,21 +248,28 @@ public class ControllerWrapper implements Runnable {
 		try {
 			masterLock.lock();	//lock access, write controller addr - synchronized event
 			if (master_id == masterID.get()) {	//synchronized event
-				
-			Address master = null;
-			for (Map.Entry<Address, Integer> entry : cluster_mapping.entrySet()) {
-				if (master_id == entry.getValue()) {
-					master = entry.getKey();
-					break;
+				Address master = null;
+				for (Map.Entry<Address, Integer> entry : cluster_mapping.entrySet()) {
+					if (master_id == entry.getValue()) {
+						master = entry.getKey();
+						break;
+					}
 				}
-			}
-			RspList<CPULoadMessage> rsp_list = msg_disp.castMessage(null,	//request cpu-load from nodes
-					new Message(null, null, new RequestCPULoadMessage()),
-					new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(master)
-					);
-			rsp_list.addRsp(channel.getAddress(), new CPULoadMessage());
-			Address new_master = chooseMaster(rsp_list);
-			masterID.set(cluster_mapping.get(new_master));
+				RspList<CPULoadMessage> rsp_list = null;
+				if (master != null) {
+					rsp_list = msg_disp.castMessage(null,	//request cpu-load from nodes
+							new Message(null, null, new RequestCPULoadMessage()),
+							new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(master)
+							);
+				} else {
+					rsp_list = msg_disp.castMessage(null,	//request cpu-load from nodes
+							new Message(null, null, new RequestCPULoadMessage()),
+							new RequestOptions(ResponseMode.GET_ALL, 0)
+							);
+				}
+				rsp_list.addRsp(channel.getAddress(), new CPULoadMessage());
+				Address new_master = chooseMaster(rsp_list);
+				masterID.set(cluster_mapping.get(new_master));
 			}
 		} catch (Exception e) {
 			throw new Exception("failed to replace master");	//failed to send cpu-load request 

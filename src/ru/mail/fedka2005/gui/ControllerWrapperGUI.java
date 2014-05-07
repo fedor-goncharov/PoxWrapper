@@ -261,7 +261,7 @@ public class ControllerWrapperGUI extends JFrame {
 	
 	public void handleInternalException(Exception e) {
 		JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
-		"Unexpected exception occured, see log file for details:\n" + 
+		"Exception occured, see log file for details:\n" + 
 		e.getMessage(),
 		"Unexpected exception",
 		JOptionPane.ERROR_MESSAGE);
