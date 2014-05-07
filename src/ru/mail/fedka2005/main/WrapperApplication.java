@@ -1,7 +1,6 @@
 package ru.mail.fedka2005.main;
 
 import ru.mail.fedka2005.gui.ControllerWrapperGUI;
-import ru.mail.fedka2005.objects.ControllerWrapper;
 
 
 public class WrapperApplication {

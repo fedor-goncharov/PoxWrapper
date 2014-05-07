@@ -347,12 +347,12 @@ public class ControllerWrapper implements Runnable {
 		isActive = false;	//exit loops stop client
 	}
 	
-	@Deprecated
 	@Override
 	public void run() {
 		try {
 			this.start();
 		} catch (Exception e) {	//catch any exception
+			e.printStackTrace();
 			controller.forwardException(e);
 			Thread.currentThread().interrupt();	//kill current thread
 		}

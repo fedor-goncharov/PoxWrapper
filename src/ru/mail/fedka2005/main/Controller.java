@@ -1,9 +1,8 @@
 package ru.mail.fedka2005.main;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.Scanner;
+
 
 import org.jgroups.Message;
 
@@ -18,7 +17,6 @@ import ru.mail.fedka2005.objects.ControllerWrapper;
  * Executes POX process and also kills controller, when required.
  * It's a singleton class.
  * @author fedor
- *
  */
 public class Controller {
 
@@ -32,11 +30,15 @@ public class Controller {
 			String poxPath, String groupAddress, 
 			String cpuThreshold, String port) throws MalformedInputException, ClientConstructorException {
 		try {
+			//Read 
+			Scanner in = new Scanner(System.in);
+			int id = in.nextInt();
+			
 			instance = new ControllerWrapper(this,
 					groupName, 
 					groupAddress, 
 					nodeName, 
-					1,	//TODO - generate identifier from nodeName, or generate identifier from cluster
+					id,	//TODO - generate identifier from nodeName, or generate identifier from cluster
 					poxPath, 
 					Integer.parseInt(port), 
 					Double.parseDouble(cpuThreshold));
@@ -53,7 +55,9 @@ public class Controller {
 	 */
 	public void stopClient() {
 		instance.stopClient();
-		poxProcess.destroy();
+		if (poxProcess != null) {
+			poxProcess.destroy();
+		}
 	}
 	/**
 	 * Prints a new message from the cluster to gui table
