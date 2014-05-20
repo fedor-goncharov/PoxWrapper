@@ -17,16 +17,18 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 
 import org.jgroups.Message;
+import org.math.plot.Plot2DPanel;
 
 import ru.mail.fedka2005.main.Controller;
+import ru.mail.fedka2005.messages.RecvMessageHandler;
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
 import ru.mail.fedka2005.exceptions.MalformedInputException;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JTextPane;
-import javax.swing.JTextArea;
-import java.awt.Font;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class ControllerWrapperGUI extends JFrame {
 	
@@ -41,6 +43,10 @@ public class ControllerWrapperGUI extends JFrame {
 	private JButton btnStopClient = null;
 	private JTextField cpuThresholdTextField;
 	private JTextField portTextField;
+	
+	private Plot2DPanel plot = new Plot2DPanel();
+	private Queue<Double> masterCPUUsage = new LinkedList<Double>();	//plotting staff
+	
 	public ControllerWrapperGUI() {
 		setResizable(false);
 		this.setSize(640, 480);
@@ -224,9 +230,16 @@ public class ControllerWrapperGUI extends JFrame {
 				return false;
 			}
 		});
-		tabbedPane.addTab("Cluster Messages", null, new JScrollPane(messageTable), null);		
+		JScrollPane scrollPane = new JScrollPane(messageTable);
+		tabbedPane.addTab("Cluster Messages", null, scrollPane, null);
 		JPanel clusterInfoPanel = new JPanel();
 		tabbedPane.addTab("Cluster Info", null, clusterInfoPanel, null);
+		plot.setAxisLabel(0, "Time");
+		plot.setAxisLabel(1,"CPU-usage");
+		plot.setFixedBounds(0, 0, 100);
+		plot.setFixedBounds(1,0,1);
+		plot.removePlotToolBar();
+		tabbedPane.addTab("Master Load",null, plot, null);
 		
 		getContentPane().setLayout(groupLayout);
 		this.setVisible(true);
@@ -251,12 +264,35 @@ public class ControllerWrapperGUI extends JFrame {
 		if (model.getRowCount() > message_buffer_size) {	//clear table sometimes, add flush messages to log_files
 			int size = model.getRowCount();
 			for (int i = 0; i < size; ++i) {
-				model.removeRow(i);
+				model.removeRow(size-i-1);
 			}
 		}
 		model.addRow(new Object[]{msg.getSrc(),
 				(msg.getDest() == null ? "all" : msg.getDest()),
 				msg.getObject()});
+		double cpu_usage = RecvMessageHandler.getCPULoad(msg).getCPULoad();
+		masterCPUUsage.add(Double.valueOf(cpu_usage));
+		if (masterCPUUsage.size() > 100) {
+			masterCPUUsage.poll();
+		}
+
+		double[] x = new double[100];
+		double[] y = new double[100];
+		for (int i = 0; i < 100; ++i) {
+			y[i] = 0; x[i] = 0;
+		}
+		Double[] doubleArray = new Double[masterCPUUsage.size()];
+		masterCPUUsage.toArray(doubleArray);
+		for (int i = 0; i < 100; ++i) {
+			x[i] = i;
+			if (i < doubleArray.length) {
+				y[i] = doubleArray[doubleArray.length - i - 1].doubleValue();
+			} else {
+				y[i] = 0;
+			}
+		}
+		plot.removeAllPlots();
+		plot.addLinePlot("master-cpu", x, y);
 	}
 	
 	public void handleInternalException(Exception e) {

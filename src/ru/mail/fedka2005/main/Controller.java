@@ -30,7 +30,9 @@ public class Controller {
 			String poxPath, String groupAddress, 
 			String cpuThreshold, String port) throws MalformedInputException, ClientConstructorException {
 		try {
-			//Read 
+			//Read id
+			//TODO
+			//generate id from name, or give id when connecting(maybe get state)
 			Scanner in = new Scanner(System.in);
 			int id = in.nextInt();
 			

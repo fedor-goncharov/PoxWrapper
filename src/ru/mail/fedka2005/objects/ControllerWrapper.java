@@ -82,7 +82,7 @@ public class ControllerWrapper implements Runnable {
 				
 				@Override
 				public void setState(InputStream arg0) throws Exception {
-					//empty method	
+					//empty method - must read doc
 				}
 				
 				@Override
@@ -105,8 +105,7 @@ public class ControllerWrapper implements Runnable {
 				
 				@Override
 				public void getState(OutputStream arg0) throws Exception {
-					//empty method
-					//maybe useful in future
+					//empty method	- must read doc
 				}
 			}, 
 				new MembershipListener() {
