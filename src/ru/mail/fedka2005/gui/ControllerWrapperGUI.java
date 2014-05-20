@@ -304,5 +304,5 @@ public class ControllerWrapperGUI extends JFrame {
 		System.exit(1);
 	}
 	
-	private int message_buffer_size = 500;	//max messages displayed
+	private int message_buffer_size = 100;	//max messages displayed
 }
