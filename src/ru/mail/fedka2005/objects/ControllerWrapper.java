@@ -1,7 +1,10 @@
 package ru.mail.fedka2005.objects;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +23,27 @@ import org.jgroups.blocks.ResponseMode;
 import org.jgroups.blocks.atomic.Counter;
 import org.jgroups.blocks.atomic.CounterService;
 import org.jgroups.blocks.locking.LockService;
+import org.jgroups.protocols.BARRIER;
+import org.jgroups.protocols.CENTRAL_LOCK;
+import org.jgroups.protocols.COUNTER;
+import org.jgroups.protocols.FD_ALL;
+import org.jgroups.protocols.FD_SOCK;
+import org.jgroups.protocols.FRAG2;
+import org.jgroups.protocols.MERGE2;
+import org.jgroups.protocols.MFC;
+import org.jgroups.protocols.PING;
+import org.jgroups.protocols.TCP;
+import org.jgroups.protocols.TCPPING;
+import org.jgroups.protocols.UDP;
+import org.jgroups.protocols.UFC;
+import org.jgroups.protocols.UNICAST2;
+import org.jgroups.protocols.VERIFY_SUSPECT;
+import org.jgroups.protocols.pbcast.GMS;
+import org.jgroups.protocols.pbcast.NAKACK;
+import org.jgroups.protocols.pbcast.STABLE;
+import org.jgroups.stack.IpAddress;
+import org.jgroups.stack.Protocol;
+import org.jgroups.stack.ProtocolStack;
 import org.jgroups.util.RspList;
 
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
@@ -38,9 +62,6 @@ import ru.mail.fedka2005.messages.*;
 //TODO
 //add log4j for logging all events
 //replace sleeping with time-scheduler
-
-//TODO
-//bug in updating cluster_mapping
 
 public class ControllerWrapper implements Runnable {
 	/**
@@ -71,9 +92,39 @@ public class ControllerWrapper implements Runnable {
 			this.mNotifications = new Stack<CPULoadRecord>();
 			ControllerWrapper.cpuThreshold = cpuThreshold;
 			
+			
+			channel = new JChannel(false);	//(1)	create own protocol Stack, not default(default - UDP())
+			ProtocolStack stack = new ProtocolStack(); //(2)
+			channel.setProtocolStack(stack);
+			Protocol tcp_ping = new TCPPING();
 			//TODO
-			//fix creating JChannel with initial address
-			channel = new JChannel();	//channel = new Channel(argumentAddress)
+			//add DEFAULT_PORT
+			List<IpAddress> initial_hosts = new ArrayList<IpAddress>() {{
+				add(new IpAddress("93.175.5.194",7800));
+				add(new IpAddress("93.175.5.247", 7800));
+			}};
+			tcp_ping.setValue("initial_hosts", initial_hosts);
+			tcp_ping.setValue("port_range", 10);
+			tcp_ping.setValue("num_initial_members",2);
+			
+			stack.addProtocol(new TCP().setValue("bind_port", 7800))
+						.addProtocol(tcp_ping)	//added list to which should connect
+						.addProtocol(new MERGE2())
+						.addProtocol(new FD_SOCK())
+						.addProtocol(new FD_ALL().setValue("timeout",12000)
+												 .setValue("interval",3000))
+						.addProtocol(new VERIFY_SUSPECT())
+						.addProtocol(new BARRIER())
+						.addProtocol(new NAKACK().setValue("use_mcast_xmit", false))
+						.addProtocol(new UNICAST2())
+						.addProtocol(new STABLE())
+						.addProtocol(new GMS())
+						.addProtocol(new MFC())
+						.addProtocol(new FRAG2())
+						.addProtocol(new COUNTER())
+						.addProtocol(new CENTRAL_LOCK());
+			stack.init();
+			
 			channel.setName(pName);
 			id_service = new CounterService(channel);	//master id atomic service
 			lock_service = new LockService(channel);
@@ -151,6 +202,7 @@ public class ControllerWrapper implements Runnable {
 					}
 			});
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ClientConstructorException("client failed, message: " + e.getMessage());
 		}
 	}
@@ -205,7 +257,7 @@ public class ControllerWrapper implements Runnable {
 				channel.send(new Message(null, new CPULoadMessage()));
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
-			controller.stopPOX();	//stop controller if it was running
+			controller.stopPOX();		//stop controller if it was running
 			boolean wait_stack = true;	//wait one iteration to get notification from master controller
 			int local_master;
 			while (isActive && (local_master = (int)masterID.get()) != id) {

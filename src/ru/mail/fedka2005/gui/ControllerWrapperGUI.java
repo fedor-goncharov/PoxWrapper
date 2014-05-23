@@ -46,6 +46,7 @@ public class ControllerWrapperGUI extends JFrame {
 	
 	private Plot2DPanel plot = new Plot2DPanel();
 	private Queue<Double> masterCPUUsage = new LinkedList<Double>();	//plotting staff
+	private final int message_buffer_size = 20;	//max messages displayed
 	
 	public ControllerWrapperGUI() {
 		setResizable(false);
@@ -303,6 +304,4 @@ public class ControllerWrapperGUI extends JFrame {
 		JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
 	}
-	
-	private int message_buffer_size = 100;	//max messages displayed
 }
