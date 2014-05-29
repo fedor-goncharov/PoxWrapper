@@ -3,7 +3,7 @@ package ru.mail.fedka2005.exceptions;
 /**
  * Thrown, when user invokes connection to cluster, having not entered all required
  * data into the fields.
- * @author fedor
+ * @author fedor.goncharov.ol@gmail.com
  *
  */
 @SuppressWarnings("serial")

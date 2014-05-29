@@ -41,6 +41,7 @@ import org.jgroups.stack.ProtocolStack;
 import org.jgroups.util.RspList;
 
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
+import ru.mail.fedka2005.exceptions.RefreshException;
 import ru.mail.fedka2005.main.Controller;
 import ru.mail.fedka2005.messages.*;
 /**
@@ -373,14 +374,16 @@ public class ControllerWrapper implements Runnable {
 	//static error codes
 	private static final int EXCEEDTIME = 200;
 	private static final int CPU_LOAD = 201;
-	private static final int CRASH_SUSPECT = 203;	//now unused but maybe in future will be helpful
+	//private static final int CRASH_SUSPECT = 203;	//now unused but maybe in future will be helpful
 	//
 	private static double cpuThreshold = 0.9;		//cpu-load threshold for node
 	private Controller controller = null;
 	
 	//dynamic
 	private JChannel channel = null;
+	@SuppressWarnings("unused")
 	private View clView;						//(currentView) will be required later
+	
 	private CounterService syncService = null;
 	private Counter masterID = null;			//atomic service for managing master-id
 	private Integer id;							//node id
@@ -418,10 +421,27 @@ public class ControllerWrapper implements Runnable {
 	
 	/**
 	 * send a broad cast message to all members, to update their personal info
+	 * @throws RefreshException - thrown when node failed to send broadcast request or
+	 * handle some answers
 	 */
-	public void refreshInfo() {
-		//TODO
-		//implement blocked sending		
+	public Map<Address, NodeInfoResponse> refreshInfo() throws RefreshException {
+		try {
+			RspList<NodeInfoResponse> info_rsp = msg_disp.castMessage(null, //request all for id's
+					new Message(null, new NodeInfoRequest()), 
+					new RequestOptions(ResponseMode.GET_ALL, 0));
+			
+			Map<Address, NodeInfoResponse> output = new HashMap<Address, NodeInfoResponse>();
+			for (Address address : info_rsp.keySet()) {
+				output.put(
+						address,
+						((NodeInfoResponse)info_rsp.getValue(address))
+						);
+			}
+			return output;
+		} catch (Exception e) {
+			throw new RefreshException("Exception : refreshInfo() : failed to refresh cluster state," +
+					"message:" + e.toString());
+		}
 	}
 	
 	@Override

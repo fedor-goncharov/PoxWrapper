@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Class as a message, contains channel name, address, id of the node.
  * No methods, pure data only
- * @author fedor
+ * @author fedor.goncharov.ol@gmail.com
  *
  */
 @SuppressWarnings("serial")

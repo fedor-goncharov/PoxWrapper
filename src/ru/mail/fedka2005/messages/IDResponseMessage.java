@@ -3,7 +3,7 @@ package ru.mail.fedka2005.messages;
 import java.io.Serializable;
 /**
  * Response message for node ID request
- * @author fedor
+ * @author fedor.goncharov.ol@gmail.com
  *
  */
 @SuppressWarnings("serial")
