@@ -41,6 +41,11 @@ import org.jgroups.stack.ProtocolStack;
 import org.jgroups.util.RspList;
 
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
+import ru.mail.fedka2005.exceptions.ClientStartException;
+import ru.mail.fedka2005.exceptions.DetachNodeException;
+import ru.mail.fedka2005.exceptions.GenerateMappingException;
+import ru.mail.fedka2005.exceptions.JGroupsException;
+import ru.mail.fedka2005.exceptions.MasterReplaceException;
 import ru.mail.fedka2005.exceptions.RefreshException;
 import ru.mail.fedka2005.main.Controller;
 import ru.mail.fedka2005.messages.*;
@@ -132,8 +137,9 @@ public class ControllerWrapper implements Runnable {
 					switch (RecvMessageHandler.getMessageType(msg)) {
 					case RecvMessageHandler.CPU_NOTIFICATION : {
 							mNotifications.push(RecvMessageHandler.getCPULoad(msg));
+							ControllerWrapper.this.controller.printMessage(msg.copy());
 							break;
-						}
+					}
 					case RecvMessageHandler.STOP : {
 							int message_id = ((ClientStopMessage)msg.getObject()).id;
 							if (message_id == ControllerWrapper.this.id) {
@@ -148,7 +154,6 @@ public class ControllerWrapper implements Runnable {
 							break;
 						}
 					}
-					ControllerWrapper.this.controller.printMessage(msg.copy());	//print message to GUI
 				}
 				
 				@Override
@@ -156,9 +161,7 @@ public class ControllerWrapper implements Runnable {
 					//empty method	- must read doc
 					//maybe used in future
 				}
-			}, 
-				new MembershipListener() {
-				
+			}, new MembershipListener() {
 					@Override
 					public void viewAccepted(View newView) {
 						clView = newView;
@@ -166,28 +169,27 @@ public class ControllerWrapper implements Runnable {
 						
 					}
 				
-				@Override
+					@Override
 					public void unblock() {
-					//empty method
-					//maybe useful in future
-				}
+						//empty method
+						//maybe useful in future
+					}
 				
-				@Override
-					public void suspect(Address addr) {
-					System.out.println("Node:" + addr.toString() + " may have crushed.");
-					//TODO perform actions on member suspected crashed
-				}
+					@Override
+						public void suspect(Address addr) {
+						System.out.println("Node:" + addr.toString() + " may have crushed.");
+						//TODO perform actions on member suspected crashed
+					}
 				
-				@Override
-					public void block() {
-					//empty method
-					//maybe useful in future
-				}
-				}, 
-				new RequestHandler() {
-
+					@Override
+						public void block() {
+						//empty method
+						//maybe useful in future
+					}
+			}, new RequestHandler() {
 					/**
 					 * request type - RequestCPULoadMessage -> new CPULoadMessage
+					 * request type - NodeInforRequest -> new NodeInfoResponse
 					 * request type - unknown -> null
 					 */
 					@Override	//called after cpu-load request
@@ -201,12 +203,13 @@ public class ControllerWrapper implements Runnable {
 														ControllerWrapper.this.pName, 
 														ControllerWrapper.this.groupAddress, 
 														masterID.get() == ControllerWrapper.this.id ? true : false);
-						return null;
+						return null;	//should never get here
 					}
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ClientConstructorException("client failed, message: " + e.getMessage());
+			throw new ClientConstructorException("Exception:client constructor failed, " +
+					"message: " + e.getMessage());
 		}
 	}
 	/**
@@ -214,9 +217,20 @@ public class ControllerWrapper implements Runnable {
 	 * a set of hosts with controllers activated on them.
 	 * @throws Exception
 	 */
-	public void start() throws Exception {
+	public void start() throws ClientStartException, JGroupsException {
 		try {
-			channel.connect(groupName); 
+			channel.connect(groupName);
+		} catch (Exception e) {
+			throw new JGroupsException("Exception: channel connect failed, " +
+					"message:" + e.getMessage());
+		} finally {
+			try {
+				channel.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		try {
 			isActive = true;								//init connection 
 			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
 			masterID = syncService.getOrCreateCounter(master_counter, id);
@@ -229,18 +243,25 @@ public class ControllerWrapper implements Runnable {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new Exception(pName +":ControllerWrapper.start() - Exception");
+			throw new ClientStartException("Exception: controller start method failed, " +
+					"message:" + e.getMessage());
 		} finally {
 			try {
-				if (channel.isConnected()) {channel.close();}
-			} catch (Exception e) {e.printStackTrace();}
+				channel.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	/**
 	 * Node main loop: monitoring messages, replace master actions
 	 * @throws Exception - to be done
 	 */
-	private void eventLoop() throws Exception {
+	private void eventLoop() throws MasterReplaceException, 
+									InterruptedException, 
+									GenerateMappingException,
+									RefreshException,
+									JGroupsException {
 		boolean rewrite = false;			//to switch: ovs-vsctl set-controller (me)
 		while (isActive) {
 			rewrite = false;
@@ -259,7 +280,11 @@ public class ControllerWrapper implements Runnable {
 							}
 					} finally {	masterLock.unlock(); }
 				}
-				channel.send(new Message(null, new CPULoadMessage()));
+				try {
+					channel.send(new Message(null, new CPULoadMessage()));
+				} catch (Exception e) {
+					throw new JGroupsException();
+				}
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
 			controller.stopPOX();		//stop controller if it was running
@@ -301,7 +326,7 @@ public class ControllerWrapper implements Runnable {
 	 * @param code - reason of replacement(low perfomance, loss of connection, suspected)
 	 * @throws MasterReplaceException
 	 */
-	private void replaceMaster(int code, int master_id) throws Exception {
+	private void replaceMaster(int code, int master_id) throws MasterReplaceException {
 		try {
 			masterLock.lock();	//lock access, write controller addr - synchronized event
 			if (master_id == masterID.get()) {	//synchronized event
@@ -329,7 +354,8 @@ public class ControllerWrapper implements Runnable {
 				masterID.set(cluster_mapping.get(new_master));
 			}
 		} catch (Exception e) {
-			throw new Exception("failed to replace master");	//failed to send cpu-load request 
+			throw new MasterReplaceException("Exception: master replacement failed, " +
+					"message:" + e.getMessage());	//failed to send cpu-load request 
 		} finally {
 			masterLock.unlock();
 		}
@@ -339,7 +365,7 @@ public class ControllerWrapper implements Runnable {
 	 * @return HashMap<Integer,Address> 
 	 * @throws GenerateMappingException
 	 */
-	private Map<Address, Integer> generateMapping() throws Exception {
+	private Map<Address, Integer> generateMapping() throws GenerateMappingException {
 		try {
 			RspList<IDResponseMessage> id_rsp = msg_disp.castMessage(null, //request all for id's
 					new Message(null, new IDRequestMessage()), 
@@ -354,7 +380,7 @@ public class ControllerWrapper implements Runnable {
 			output.put(channel.getAddress(), id);	//put own address
 			return output;
 		} catch (Exception e) {
-			throw new Exception("Exception : generateMapping() : failed to generate mapping : " +
+			throw new GenerateMappingException("Exception : generateMapping() : failed to generate mapping : " +
 					e.toString());
 		}
 	}
@@ -380,7 +406,6 @@ public class ControllerWrapper implements Runnable {
 	private static final int EXCEEDTIME = 200;
 	private static final int CPU_LOAD = 201;
 	//private static final int CRASH_SUSPECT = 203;	//now unused but maybe in future will be helpful
-	//
 	private static double cpuThreshold = 0.9;		//cpu-load threshold for node
 	private Controller controller = null;
 	
@@ -393,19 +418,19 @@ public class ControllerWrapper implements Runnable {
 	private Counter masterID = null;			//atomic service for managing master-id
 	private Integer id;							//node id
 	private Map<Address, Integer> cluster_mapping = null;
+	@SuppressWarnings("unused")
 	private Map<Address, NodeInfoResponse> info_mapping = null;
 	private Stack<CPULoadRecord> mNotifications = null;
 	private LockService lock_service = null;
 	private Lock masterLock = null;				//lock when change controller
 	private MessageDispatcher msg_disp = null;	//synchrounous req-response cpu-load
 	private boolean cl_mapping_update = true;	//cluster mapping shoudl be updated(yes/no?)
-	private boolean refreshState = false;
 	
 	//config
 	private String groupAddress;				//cluster absolute address
 	private String groupName;					//cluster unique idendifier
 	private String pName;						//personal name
-	private boolean isActive = false;
+	private boolean isActive = false;			//node works
 	private int poxPort;
 	private String poxPath;
 	private static final String master_lock = "MASTER_LOCK";
@@ -430,7 +455,7 @@ public class ControllerWrapper implements Runnable {
 	 * Sends message broadcastly to detach the specified client. Specified by unique id-value;
 	 * @param id
 	 */
-	public void detachClient(int id) {
+	public void detachClient(int id) throws DetachNodeException {
 		for (Address address : cluster_mapping.keySet()) {
 			Integer client_id = cluster_mapping.get(address);
 			if (id == client_id) {
@@ -438,6 +463,8 @@ public class ControllerWrapper implements Runnable {
 					channel.send(new Message(null, new ClientStopMessage(id)));
 				} catch (Exception e) {
 					e.printStackTrace();
+					throw new DetachNodeException("Exception: detaching client failed, message" +
+							e.getMessage());
 				}
 			}
 		}

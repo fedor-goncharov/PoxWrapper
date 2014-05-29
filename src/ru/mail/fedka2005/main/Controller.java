@@ -9,6 +9,7 @@ import org.jgroups.Message;
 
 
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
+import ru.mail.fedka2005.exceptions.DetachNodeException;
 import ru.mail.fedka2005.exceptions.MalformedInputException;
 import ru.mail.fedka2005.exceptions.POXInitException;
 import ru.mail.fedka2005.exceptions.RefreshException;
@@ -34,10 +35,7 @@ public class Controller {
 			String poxPath, String groupAddress, 
 			String cpuThreshold, String port) throws MalformedInputException, ClientConstructorException {
 		try {
-			//Read id
-			//TODO
-			//generate id from name, or give id when connecting(maybe get state)
-			//generate id after connecting to the cluster and obtaining id's of all clients
+			//TODO - get id from cluster, not from the keyboard input
 			Scanner in = new Scanner(System.in);
 			int id = in.nextInt();
 			in.close();
@@ -52,8 +50,9 @@ public class Controller {
 					Double.parseDouble(cpuThreshold));
 			Thread appProcess = new Thread(instance);
 			appProcess.start();		//process started in another thread
-		} catch (NumberFormatException ex) {
-			throw new MalformedInputException("malformed input, message: " + ex.getMessage());
+		} catch (NumberFormatException e) {
+			forwardException(new MalformedInputException("Exception: malformed input, " +
+					"message: " + e.getMessage()));
 		}
 	}
 	/**
@@ -90,9 +89,6 @@ public class Controller {
 	 * @param int poxPort - number of port, to which POX is attached 
 	 */
 	public void startPOX(String path, int port) {
-		//TODO
-		//start the pox controller, recieve a reference to it
-		//catch exception if pox execution failed
 		ProcessBuilder pBuilder = new ProcessBuilder("python","pox.py","openflow.of_01",
 				"--port=" + String.valueOf(port));
 		try { 
@@ -100,7 +96,7 @@ public class Controller {
 			poxProcess = pBuilder.start();
 			
 		} catch (Exception e) {
-			forwardException(new POXInitException("Error invoking pox-controller:\n"
+			forwardException(new POXInitException("Exception:failed to invoke POX-Controller:\n"
 						+ e.getMessage()));
 		}
 	}
@@ -110,9 +106,7 @@ public class Controller {
 	 * Parameters - list of specialized classes(or messages)
 	 */
 	public void printConnectedNodes(Map<Address, NodeInfoResponse> content) {
-		System.out.println("gui called");
 		gui.updateNodeInfo(content);
-		System.out.println("gui called");
 	}
 	
 	
@@ -122,7 +116,11 @@ public class Controller {
 	 * message delivery is unreliable(because all messaging is handled by UDP)
 	 */
 	public void detachSelectedNode(int id) {
-		instance.detachClient(id);
+		try {
+			instance.detachClient(id);
+		} catch (DetachNodeException e) {
+			forwardException(e);
+		}
 	}
 	/**
 	 * After user calls this method, target client broadcastly requires info about all the nodes(name, cluster, address, master - yes,no) 
