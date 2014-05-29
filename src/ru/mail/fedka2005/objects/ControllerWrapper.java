@@ -193,6 +193,11 @@ public class ControllerWrapper implements Runnable {
 							return new CPULoadMessage();
 						if (msg.getObject() instanceof IDRequestMessage)
 							return new IDResponseMessage(ControllerWrapper.this.id);	//buggy line
+						if (msg.getObject() instanceof NodeInfoRequest)
+							return new NodeInfoResponse(ControllerWrapper.this.id, 
+														ControllerWrapper.this.pName, 
+														ControllerWrapper.this.groupAddress, 
+														masterID.get() == ControllerWrapper.this.id ? true : false);
 						return null;
 					}
 			});
@@ -398,6 +403,9 @@ public class ControllerWrapper implements Runnable {
 	public static final int SEND_DELAY = 2;	//send delay in SECONDS between CPU-LOAD notifications
 	public static final int RECV_DELAY = 3; //recieve delay SECONDS between CPU-LOAD notifications
 	
+	/**
+	 * Internal method to stop the node on the next iteration of the life-loop
+	 */
 	public void stopClient() {
 		isActive = false;	//exit loops stop client
 	}
@@ -406,6 +414,14 @@ public class ControllerWrapper implements Runnable {
 	 */
 	public void sendStopGUI() {
 		controller.stopGUI();
+	}
+	
+	/**
+	 * send a broad cast message to all members, to update their personal info
+	 */
+	public void refreshInfo() {
+		//TODO
+		//implement blocked sending		
 	}
 	
 	@Override
