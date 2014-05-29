@@ -3,7 +3,9 @@ package ru.mail.fedka2005.gui;
 import javax.swing.JFrame;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -25,6 +27,8 @@ import ru.mail.fedka2005.messages.RecvMessageHandler;
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
 import ru.mail.fedka2005.exceptions.MalformedInputException;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -49,6 +53,7 @@ public class ControllerWrapperGUI extends JFrame {
 	private final int message_buffer_size = 17;	//max messages displayed
 	private Plot2DPanel plot = new Plot2DPanel();	//plot, master cpu-load
 	private LinkedList<Double> masterCPUUsage = new LinkedList<Double>();	//plotting staff
+	private int selected_id;
 	
 	public ControllerWrapperGUI() {
 		setResizable(false);
@@ -242,8 +247,50 @@ public class ControllerWrapperGUI extends JFrame {
 		membersTable.setRowSelectionAllowed(true);
 		membersTable.setColumnSelectionAllowed(false);
 		
-		//TODO
-		//add event handler for clicking right mose on the row - detach, refresh
+		
+		final ActionListener menuListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {			
+				if (event.getActionCommand() == "Refresh") {
+					controller.refreshNodes();
+				}
+				if (event.getActionCommand() == "Detach") {
+					int detached_id = (int)membersTable.getModel().getValueAt(selected_id, 2);
+					controller.detachSelectedNode(detached_id);
+				}
+			}
+		};
+		membersTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int r = membersTable.rowAtPoint(e.getPoint());
+				if (r >= 0 && r < membersTable.getRowCount()) {
+					membersTable.setRowSelectionInterval(r,r);
+				} else {
+					membersTable.clearSelection();
+				}
+				
+				if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+					
+					if (r >= 0 && r < membersTable.getRowCount()) {
+						membersTable.setRowSelectionInterval(r,r);
+						ControllerWrapperGUI.this.selected_id = membersTable.getSelectedRow();
+					}
+					
+					JPopupMenu popup = new JPopupMenu();
+					JMenuItem menuItem;
+					menuItem = new JMenuItem("Refresh");
+					menuItem.addActionListener(menuListener);
+					popup.add(menuItem);
+					menuItem = new JMenuItem("Detach");
+					menuItem.addActionListener(menuListener);
+					popup.add(menuItem);
+					
+					popup.show(e.getComponent(), e.getX(), e.getY());
+				}
+			}
+		});
+		
 		
 		JScrollPane messageScrollPane = new JScrollPane(messageTable);
 		JScrollPane membersScrollPane = new JScrollPane(membersTable);

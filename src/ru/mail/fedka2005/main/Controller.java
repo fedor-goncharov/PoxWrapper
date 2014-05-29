@@ -121,16 +121,9 @@ public class Controller {
 	 * sends a special message to the target node - as an order to terminate. No response is sent,
 	 * message delivery is unreliable(because all messaging is handled by UDP)
 	 */
-	public void detachSelectedNode() {
-		//TODO
-		//implement detaching node
-		//when someone calls this method - a message is sent to the target node
-		//target node broadcastly sends message that it's been shutted down
-		//after what user may call a refresh button to get all the members from the cluster()
-		
+	public void detachSelectedNode(int id) {
+		instance.detachClient(id);
 	}
-	//TODO
-	//implement refreshing node
 	/**
 	 * After user calls this method, target client broadcastly requires info about all the nodes(name, cluster, address, master - yes,no) 
 	 * Target node is blocked untill all the messages are recieved.  

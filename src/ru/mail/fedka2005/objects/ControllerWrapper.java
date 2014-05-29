@@ -135,9 +135,12 @@ public class ControllerWrapper implements Runnable {
 							break;
 						}
 					case RecvMessageHandler.STOP : {
-							stopClient();	//stop client
-							sendStopGUI();
-							break;
+							int message_id = ((ClientStopMessage)msg.getObject()).id;
+							if (message_id == ControllerWrapper.this.id) {
+								stopClient();	//stop client
+								sendStopGUI();
+								break;
+							}
 						}
 					case RecvMessageHandler.UNKNOWN : {
 							System.out.println("[INFO]: Unknown message type");
@@ -423,6 +426,22 @@ public class ControllerWrapper implements Runnable {
 		controller.stopGUI();
 	}
 	
+	/**
+	 * Sends message broadcastly to detach the specified client. Specified by unique id-value;
+	 * @param id
+	 */
+	public void detachClient(int id) {
+		for (Address address : cluster_mapping.keySet()) {
+			Integer client_id = cluster_mapping.get(address);
+			if (id == client_id) {
+				try {
+					channel.send(new Message(null, new ClientStopMessage(id)));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	/**
 	 * send a broad cast message to all members, to update their personal info. Called when view 
 	 * has changed to update the data;

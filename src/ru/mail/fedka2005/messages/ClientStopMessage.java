@@ -10,5 +10,9 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class ClientStopMessage implements Serializable {
-
+	public int id;
+	
+	public ClientStopMessage(int id) {
+		this.id = id;
+	}
 }
