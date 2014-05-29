@@ -145,8 +145,8 @@ public class ControllerWrapper implements Runnable {
 							if (message_id == ControllerWrapper.this.id) {
 								stopClient();	//stop client
 								sendStopGUI();
-								break;
 							}
+							break;
 						}
 					case RecvMessageHandler.UNKNOWN : {
 							System.out.println("[INFO]: Unknown message type");
@@ -221,14 +221,13 @@ public class ControllerWrapper implements Runnable {
 		try {
 			channel.connect(groupName);
 		} catch (Exception e) {
-			throw new JGroupsException("Exception: channel connect failed, " +
-					"message:" + e.getMessage());
-		} finally {
 			try {
 				channel.close();
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
+			throw new JGroupsException("Exception: channel connect failed, " +
+					"message:" + e.getMessage());
 		}
 		try {
 			isActive = true;								//init connection 
@@ -283,7 +282,8 @@ public class ControllerWrapper implements Runnable {
 				try {
 					channel.send(new Message(null, new CPULoadMessage()));
 				} catch (Exception e) {
-					throw new JGroupsException();
+					throw new JGroupsException("Exception: channel send message failed, " +
+							"message" + e.getMessage());
 				}
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
@@ -484,13 +484,11 @@ public class ControllerWrapper implements Runnable {
 			
 			Map<Address, NodeInfoResponse> output = new HashMap<Address, NodeInfoResponse>();
 			for (Address address : info_rsp.keySet()) {
-				System.out.println(info_rsp.get(address));
 				output.put(
 						address,
 						((NodeInfoResponse)(info_rsp.getValue(address)))
 						);
 			}
-			System.out.println("got here");
 			controller.printConnectedNodes(output);	
 			return output;
 		} catch (Exception e) {
