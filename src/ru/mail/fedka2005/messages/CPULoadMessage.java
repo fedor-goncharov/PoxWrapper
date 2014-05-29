@@ -10,11 +10,8 @@ import com.sun.management.OperatingSystemMXBean;
  * @author fedor
  *
  */
+@SuppressWarnings("serial")
 public class CPULoadMessage implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7828421234707335812L;
 	public double cpuLoad;
 	
 	public CPULoadMessage() {

@@ -6,6 +6,7 @@ package ru.mail.fedka2005.exceptions;
  * @author fedor
  *
  */
+@SuppressWarnings("serial")
 public class MalformedInputException extends Exception {
 	public MalformedInputException() {}
 

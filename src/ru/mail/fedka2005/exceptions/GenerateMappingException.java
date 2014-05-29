@@ -5,6 +5,7 @@ package ru.mail.fedka2005.exceptions;
  * @author fedor
  *
  */
+@SuppressWarnings("serial")
 public class GenerateMappingException extends Exception {
 	public GenerateMappingException() {}
 	

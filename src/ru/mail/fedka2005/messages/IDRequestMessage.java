@@ -7,9 +7,7 @@ import java.io.Serializable;
  * @author fedor
  *
  */
+@SuppressWarnings("serial")
 public class IDRequestMessage implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6483167857129357632L;}
+}

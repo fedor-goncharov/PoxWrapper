@@ -11,7 +11,6 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -27,13 +26,13 @@ import ru.mail.fedka2005.exceptions.MalformedInputException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
+@SuppressWarnings("serial")
 public class ControllerWrapperGUI extends JFrame {
 	
 	private Controller controller = null; //reference to controller object
 	private JTable messageTable = null;
+	private JTable membersTable = null;	  //list of users in cluster, and who is the master
 	private JTextField nodeNameTextField;
 	private JTextField groupNameTextField;
 	private JTextField poxPathTextField;
@@ -44,9 +43,9 @@ public class ControllerWrapperGUI extends JFrame {
 	private JTextField cpuThresholdTextField;
 	private JTextField portTextField;
 	
-	private Plot2DPanel plot = new Plot2DPanel();
-	private Queue<Double> masterCPUUsage = new LinkedList<Double>();	//plotting staff
-	private final int message_buffer_size = 20;	//max messages displayed
+	private final int message_buffer_size = 17;	//max messages displayed
+	private Plot2DPanel plot = new Plot2DPanel();	//plot, master cpu-load
+	private LinkedList<Double> masterCPUUsage = new LinkedList<Double>();	//plotting staff
 	
 	public ControllerWrapperGUI() {
 		setResizable(false);
@@ -112,9 +111,7 @@ public class ControllerWrapperGUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				controller.stopClient();
-				textFieldsEnable(true);
-				btnStartClient.setEnabled(true);
-				btnStopClient.setEnabled(false);
+				stopGUI();
 			}
 		});
 		btnStopClient.setToolTipText("Disconnects client from the cluster");
@@ -231,10 +228,25 @@ public class ControllerWrapperGUI extends JFrame {
 				return false;
 			}
 		});
-		JScrollPane scrollPane = new JScrollPane(messageTable);
-		tabbedPane.addTab("Cluster Messages", null, scrollPane, null);
-		JPanel clusterInfoPanel = new JPanel();
-		tabbedPane.addTab("Cluster Info", null, clusterInfoPanel, null);
+		messageTable.setRowSelectionAllowed(true);
+		messageTable.setColumnSelectionAllowed(false);
+		membersTable = new JTable(new DefaultTableModel(new Object[]{"Name","Address","ID","Master"},0) {	//add table of cluster members
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		});
+		membersTable.setRowSelectionAllowed(true);
+		membersTable.setColumnSelectionAllowed(false);
+		
+		//TODO
+		//add event handler for clicking right mose on the row - detach, refresh
+		
+		JScrollPane messageScrollPane = new JScrollPane(messageTable);
+		JScrollPane membersScrollPane = new JScrollPane(membersTable);
+		
+		tabbedPane.addTab("Cluster Messages", null, messageScrollPane, null);	//table of messages to view the history
+		tabbedPane.addTab("Cluster Info", null, membersScrollPane, null);	//talbe of cluster members to remember all the members
 		plot.setAxisLabel(0, "Time");
 		plot.setAxisLabel(1,"CPU-usage");
 		plot.setFixedBounds(0, 0, 100);
@@ -258,7 +270,8 @@ public class ControllerWrapperGUI extends JFrame {
 		this.controller = controller;
 	}
 	/**
-	 * update data on 
+	 * update data on message table, draw in gui
+	 * @parame Message
 	 */
 	public void addRecord(Message msg) {
 		DefaultTableModel model = (DefaultTableModel)messageTable.getModel();
@@ -295,7 +308,10 @@ public class ControllerWrapperGUI extends JFrame {
 		plot.removeAllPlots();
 		plot.addLinePlot("master-cpu", x, y);
 	}
-	
+	/**
+	 * Pop-up exceptions, generated from business-logic
+	 * @param e
+	 */
 	public void handleInternalException(Exception e) {
 		JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
 		"Exception occured, see log file for details:\n" + 
@@ -303,5 +319,14 @@ public class ControllerWrapperGUI extends JFrame {
 		"Unexpected exception",
 		JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
+	}
+	
+	/**
+	 * Stop client, display in GUI:
+	 */
+	public void stopGUI() {
+		textFieldsEnable(true);
+		btnStartClient.setEnabled(true);
+		btnStopClient.setEnabled(false);
 	}
 }

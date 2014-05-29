@@ -33,8 +33,10 @@ public class Controller {
 			//Read id
 			//TODO
 			//generate id from name, or give id when connecting(maybe get state)
+			//generate id after connecting to the cluster and obtaining id's of all clients
 			Scanner in = new Scanner(System.in);
 			int id = in.nextInt();
+			in.close();	//
 			
 			instance = new ControllerWrapper(this,
 					groupName, 
@@ -46,8 +48,6 @@ public class Controller {
 					Double.parseDouble(cpuThreshold));
 			Thread appProcess = new Thread(instance);
 			appProcess.start();		//process started in another thread
-		//TODO catch true exception
-		//from cluster
 		} catch (NumberFormatException ex) {
 			throw new MalformedInputException("malformed input, message: " + ex.getMessage());
 		}
@@ -101,13 +101,56 @@ public class Controller {
 		}
 	}
 	/**
-	 * stop POX controller(invoked when client is shifted from the master position)
+	 * ControllerWrapper class calls this method to send information about all the nodes
+	 * to gui class.
+	 * Parameters - list of specialized classes(or messages)
+	 */
+	public void printConnectedNodes() {
+		//TODO
+		//implement printing new node to the table
+	}
+	
+	
+	/**
+	 * Method called from GUI to detach selected node from cluster. After calling thread
+	 * sends a special message to the target node - as an order to terminate. No response is sent,
+	 * message delivery is unreliable(because all messaging is handled by UDP)
+	 */
+	public void detachSelectedNode() {
+		//TODO
+		//implement detaching node
+		//when someone calls this method - a message is sent to the target node
+		//target node broadcastly sends message that it's been shutted down
+		//after what user may call a refresh button to get all the members from the cluster()
+		
+	}
+	//TODO
+	//implement refreshing node
+	/**
+	 * After user calls this method, target client broadcastly requires info about all the nodes(name, cluster, address, master - yes,no) 
+	 * Target node is blocked untill all the messages are recieved.  
+	 */
+	public void refreshNodes() {
+		//TODO
+		//implement refreshing command
+		//a node is blocked untill messages from all the nodes are obtained
+		
+	}
+	
+	/**
+	 * Stop POX controller(invoked when client is shifted from the master position)
 	 */
 	public void stopPOX() {
 		if (poxProcess != null) {
 			poxProcess.destroy();	//kill the controller process
 			poxProcess = null;
 		}
+	}
+	/**
+	 * Controller calls gui to stop
+	 */
+	public void stopGUI() {
+		gui.stopGUI();
 	}
 	
 }

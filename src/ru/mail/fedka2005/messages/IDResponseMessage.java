@@ -6,11 +6,11 @@ import java.io.Serializable;
  * @author fedor
  *
  */
+@SuppressWarnings("serial")
 public class IDResponseMessage implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	public Integer id = null;
 	public IDResponseMessage(Integer id) {
 		this.id = new Integer(id);

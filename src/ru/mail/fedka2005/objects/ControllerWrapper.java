@@ -2,9 +2,7 @@ package ru.mail.fedka2005.objects;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
@@ -32,8 +30,6 @@ import org.jgroups.protocols.FRAG2;
 import org.jgroups.protocols.MERGE2;
 import org.jgroups.protocols.MFC;
 import org.jgroups.protocols.PING;
-import org.jgroups.protocols.TCP;
-import org.jgroups.protocols.TCPPING;
 import org.jgroups.protocols.UDP;
 import org.jgroups.protocols.UFC;
 import org.jgroups.protocols.UNICAST2;
@@ -41,8 +37,6 @@ import org.jgroups.protocols.VERIFY_SUSPECT;
 import org.jgroups.protocols.pbcast.GMS;
 import org.jgroups.protocols.pbcast.NAKACK;
 import org.jgroups.protocols.pbcast.STABLE;
-import org.jgroups.stack.IpAddress;
-import org.jgroups.stack.Protocol;
 import org.jgroups.stack.ProtocolStack;
 import org.jgroups.util.RspList;
 
@@ -51,7 +45,7 @@ import ru.mail.fedka2005.main.Controller;
 import ru.mail.fedka2005.messages.*;
 /**
  * Class represents a node in the cluster of controllers
- * ghjA group of ControllerWrapper instances is a cluster.
+ * A group of ControllerWrapper instances is a cluster.
  * Target - synchronize a number of pox-controllers, choose
  * the master, and return address of the master controller.
  * When controller is chosen, others must monitor it's state.
@@ -93,32 +87,28 @@ public class ControllerWrapper implements Runnable {
 			ControllerWrapper.cpuThreshold = cpuThreshold;
 			
 			
-			channel = new JChannel(false);	//(1)	create own protocol Stack, not default(default - UDP())
+			channel = new JChannel(false);	//(1)	create own protocol Stack, not default
 			ProtocolStack stack = new ProtocolStack(); //(2)
 			channel.setProtocolStack(stack);
-			Protocol tcp_ping = new TCPPING();
-			//TODO
-			//add DEFAULT_PORT
-			List<IpAddress> initial_hosts = new ArrayList<IpAddress>() {{
-				add(new IpAddress("93.175.5.194",7800));
-				add(new IpAddress("93.175.5.247", 7800));
-			}};
-			tcp_ping.setValue("initial_hosts", initial_hosts);
-			tcp_ping.setValue("port_range", 10);
-			tcp_ping.setValue("num_initial_members",2);
 			
-			stack.addProtocol(new TCP().setValue("bind_port", 7800))
-						.addProtocol(tcp_ping)	//added list to which should connect
+			stack.addProtocol(new UDP().setValue("bind_addr", InetAddress.getByName(groupAddress))
+									   .setValue("mcast_port", 7600)
+									   .setValue("ip_ttl", 8)
+									   .setValue("ip_mcast", true)
+									   .setValue("mcast_send_buf_size", 32000)
+									   .setValue("ucast_recv_buf_size", 64000))
+						.addProtocol(new PING())	
 						.addProtocol(new MERGE2())
 						.addProtocol(new FD_SOCK())
 						.addProtocol(new FD_ALL().setValue("timeout",12000)
 												 .setValue("interval",3000))
 						.addProtocol(new VERIFY_SUSPECT())
 						.addProtocol(new BARRIER())
-						.addProtocol(new NAKACK().setValue("use_mcast_xmit", false))
+						.addProtocol(new NAKACK())
 						.addProtocol(new UNICAST2())
 						.addProtocol(new STABLE())
 						.addProtocol(new GMS())
+						.addProtocol(new UFC())
 						.addProtocol(new MFC())
 						.addProtocol(new FRAG2())
 						.addProtocol(new COUNTER())
@@ -126,7 +116,7 @@ public class ControllerWrapper implements Runnable {
 			stack.init();
 			
 			channel.setName(pName);
-			id_service = new CounterService(channel);	//master id atomic service
+			syncService = new CounterService(channel);	//master id atomic service
 			lock_service = new LockService(channel);
 			msg_disp = new MessageDispatcher(channel, 
 				new MessageListener() {
@@ -143,12 +133,15 @@ public class ControllerWrapper implements Runnable {
 							mNotifications.push(RecvMessageHandler.getCPULoad(msg));
 							break;
 						}
+					case RecvMessageHandler.STOP : {
+							stopClient();	//stop client
+							sendStopGUI();
+							break;
+						}
 					case RecvMessageHandler.UNKNOWN : {
 							System.out.println("[INFO]: Unknown message type");
+							System.out.println("[INFO]: Message:" + msg.toString());
 							break;
-							//TODO
-							//print message - UNKNOWN type of message
-							//throw Exception
 						}
 					}
 					ControllerWrapper.this.controller.printMessage(msg.copy());	//print message to GUI
@@ -157,6 +150,7 @@ public class ControllerWrapper implements Runnable {
 				@Override
 				public void getState(OutputStream arg0) throws Exception {
 					//empty method	- must read doc
+					//maybe used in future
 				}
 			}, 
 				new MembershipListener() {
@@ -164,6 +158,8 @@ public class ControllerWrapper implements Runnable {
 					@Override
 					public void viewAccepted(View newView) {
 						clView = newView;
+						//TODO
+						//refresh the table of class members
 						cl_mapping_update = true;
 					}
 				
@@ -175,9 +171,8 @@ public class ControllerWrapper implements Runnable {
 				
 				@Override
 					public void suspect(Address addr) {
-					System.out.println("Member:" + addr.toString() + " may have crushed.");
-					//TODO
-					//perform actions for member suspected for crash
+					System.out.println("Node:" + addr.toString() + " may have crushed.");
+					//TODO perform actions on member suspected crashed
 				}
 				
 				@Override
@@ -220,7 +215,7 @@ public class ControllerWrapper implements Runnable {
 				cluster_mapping = generateMapping();			//Map<id,Address>
 				cl_mapping_update = false;
 			}
-			masterID = id_service.getOrCreateCounter(master_counter, id);
+			masterID = syncService.getOrCreateCounter(master_counter, id);
 			eventLoop();
 			
 		} catch (Exception e) {
@@ -370,17 +365,18 @@ public class ControllerWrapper implements Runnable {
 		}
 		return next_master;
 	}
-	//static
+	//static error codes
 	private static final int EXCEEDTIME = 200;
 	private static final int CPU_LOAD = 201;
 	private static final int CRASH_SUSPECT = 203;	//now unused but maybe in future will be helpful
-	private static double cpuThreshold = 90;		//cpu-load threshold for node
+	//
+	private static double cpuThreshold = 0.9;		//cpu-load threshold for node
 	private Controller controller = null;
 	
 	//dynamic
 	private JChannel channel = null;
 	private View clView;						//(currentView) will be required later
-	private CounterService id_service = null;
+	private CounterService syncService = null;
 	private Counter masterID = null;			//atomic service for managing master-id
 	private Integer id;							//node id
 	private Map<Address, Integer> cluster_mapping = null;
@@ -399,11 +395,17 @@ public class ControllerWrapper implements Runnable {
 	private String poxPath;
 	private static final String master_lock = "MASTER_LOCK";
 	private static final String master_counter = "MASTER";
-	public static final int SEND_DELAY = 2;	//send delay in seconds between cpu-load notifications
-	public static final int RECV_DELAY = 3; //recieve delay in seconds between cpu-load notifications
+	public static final int SEND_DELAY = 2;	//send delay in SECONDS between CPU-LOAD notifications
+	public static final int RECV_DELAY = 3; //recieve delay SECONDS between CPU-LOAD notifications
 	
 	public void stopClient() {
 		isActive = false;	//exit loops stop client
+	}
+	/**
+	 * Recieved a stop message, client invokes stop GUI method
+	 */
+	public void sendStopGUI() {
+		controller.stopGUI();
 	}
 	
 	@Override
