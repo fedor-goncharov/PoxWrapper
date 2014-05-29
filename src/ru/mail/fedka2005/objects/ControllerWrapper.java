@@ -159,9 +159,8 @@ public class ControllerWrapper implements Runnable {
 					@Override
 					public void viewAccepted(View newView) {
 						clView = newView;
-						//TODO
-						//refresh the table of class members
 						cl_mapping_update = true;
+						
 					}
 				
 				@Override
@@ -217,11 +216,12 @@ public class ControllerWrapper implements Runnable {
 			channel.connect(groupName); 
 			isActive = true;								//init connection 
 			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
+			masterID = syncService.getOrCreateCounter(master_counter, id);
 			if (cl_mapping_update) {
-				cluster_mapping = generateMapping();			//Map<id,Address>
+				cluster_mapping = generateMapping();			//Map<id,Address>	//private method
+				info_mapping = refreshInfo();					//Map<Address, General info>
 				cl_mapping_update = false;
 			}
-			masterID = syncService.getOrCreateCounter(master_counter, id);
 			eventLoop();
 			
 		} catch (Exception e) {
@@ -244,6 +244,7 @@ public class ControllerWrapper implements Runnable {
 			while (isActive && masterID.get() == id) {	//cpu-load notification for the cluster
 				if (cl_mapping_update) {
 					cluster_mapping = generateMapping();
+					info_mapping = refreshInfo();
 					cl_mapping_update = false;
 				}
 				if (!rewrite) {
@@ -264,6 +265,7 @@ public class ControllerWrapper implements Runnable {
 			while (isActive && (local_master = (int)masterID.get()) != id) {
 				if (cl_mapping_update) {
 					cluster_mapping = generateMapping();
+					info_mapping = refreshInfo();
 					cl_mapping_update = false;
 				}
 				if (!mNotifications.empty()) {
@@ -388,11 +390,13 @@ public class ControllerWrapper implements Runnable {
 	private Counter masterID = null;			//atomic service for managing master-id
 	private Integer id;							//node id
 	private Map<Address, Integer> cluster_mapping = null;
+	private Map<Address, NodeInfoResponse> info_mapping = null;
 	private Stack<CPULoadRecord> mNotifications = null;
 	private LockService lock_service = null;
 	private Lock masterLock = null;				//lock when change controller
 	private MessageDispatcher msg_disp = null;	//synchrounous req-response cpu-load
 	private boolean cl_mapping_update = true;	//cluster mapping shoudl be updated(yes/no?)
+	private boolean refreshState = false;
 	
 	//config
 	private String groupAddress;				//cluster absolute address
@@ -420,7 +424,9 @@ public class ControllerWrapper implements Runnable {
 	}
 	
 	/**
-	 * send a broad cast message to all members, to update their personal info
+	 * send a broad cast message to all members, to update their personal info. Called when view 
+	 * has changed to update the data;
+	 * 
 	 * @throws RefreshException - thrown when node failed to send broadcast request or
 	 * handle some answers
 	 */
@@ -432,11 +438,14 @@ public class ControllerWrapper implements Runnable {
 			
 			Map<Address, NodeInfoResponse> output = new HashMap<Address, NodeInfoResponse>();
 			for (Address address : info_rsp.keySet()) {
+				System.out.println(info_rsp.get(address));
 				output.put(
 						address,
-						((NodeInfoResponse)info_rsp.getValue(address))
+						((NodeInfoResponse)(info_rsp.getValue(address)))
 						);
 			}
+			System.out.println("got here");
+			controller.printConnectedNodes(output);	
 			return output;
 		} catch (Exception e) {
 			throw new RefreshException("Exception : refreshInfo() : failed to refresh cluster state," +

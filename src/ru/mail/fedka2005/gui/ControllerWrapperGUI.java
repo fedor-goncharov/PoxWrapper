@@ -15,10 +15,12 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
+import org.jgroups.Address;
 import org.jgroups.Message;
 import org.math.plot.Plot2DPanel;
 
 import ru.mail.fedka2005.main.Controller;
+import ru.mail.fedka2005.messages.NodeInfoResponse;
 import ru.mail.fedka2005.messages.RecvMessageHandler;
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
 import ru.mail.fedka2005.exceptions.MalformedInputException;
@@ -26,6 +28,7 @@ import ru.mail.fedka2005.exceptions.MalformedInputException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 public class ControllerWrapperGUI extends JFrame {
@@ -307,6 +310,25 @@ public class ControllerWrapperGUI extends JFrame {
 		}
 		plot.removeAllPlots();
 		plot.addLinePlot("master-cpu", x, y);
+	}
+	/**
+	 * Update list of connected nodes
+	 * @param content
+	 */
+	public void updateNodeInfo(Map<Address, NodeInfoResponse> content) {
+		DefaultTableModel model = (DefaultTableModel)membersTable.getModel();
+		int size = model.getRowCount();
+		for (int i = 0; i < size; ++i) {
+			model.removeRow(size-i-1);
+		}
+		
+		for (NodeInfoResponse node_info : content.values()) {
+			model.addRow(new Object[]{node_info.name,
+									  node_info.address,
+									  node_info.id,
+									  node_info.master
+			});
+		}
 	}
 	/**
 	 * Pop-up exceptions, generated from business-logic

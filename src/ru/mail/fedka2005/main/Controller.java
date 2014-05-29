@@ -1,15 +1,19 @@
 package ru.mail.fedka2005.main;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Scanner;
 
-
+import org.jgroups.Address;
 import org.jgroups.Message;
+
 
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
 import ru.mail.fedka2005.exceptions.MalformedInputException;
 import ru.mail.fedka2005.exceptions.POXInitException;
+import ru.mail.fedka2005.exceptions.RefreshException;
 import ru.mail.fedka2005.gui.ControllerWrapperGUI;
+import ru.mail.fedka2005.messages.NodeInfoResponse;
 import ru.mail.fedka2005.objects.ControllerWrapper;
 /**
  * Part of MVC(Model-View-Controller Application) -- binds graphical user
@@ -36,7 +40,7 @@ public class Controller {
 			//generate id after connecting to the cluster and obtaining id's of all clients
 			Scanner in = new Scanner(System.in);
 			int id = in.nextInt();
-			in.close();	//
+			in.close();
 			
 			instance = new ControllerWrapper(this,
 					groupName, 
@@ -105,9 +109,10 @@ public class Controller {
 	 * to gui class.
 	 * Parameters - list of specialized classes(or messages)
 	 */
-	public void printConnectedNodes() {
-		//TODO
-		//implement printing new node to the table
+	public void printConnectedNodes(Map<Address, NodeInfoResponse> content) {
+		System.out.println("gui called");
+		gui.updateNodeInfo(content);
+		System.out.println("gui called");
 	}
 	
 	
@@ -131,10 +136,11 @@ public class Controller {
 	 * Target node is blocked untill all the messages are recieved.  
 	 */
 	public void refreshNodes() {
-		//TODO
-		//implement refreshing command
-		//a node is blocked untill messages from all the nodes are obtained
-		
+		try {
+			instance.refreshInfo();
+		} catch (RefreshException e) {
+			forwardException(e);			
+		}
 	}
 	
 	/**
