@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/fedor/Programming/workspace/JARS/jgroups-3.5.0.Beta3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/home/fedor/Programming/workspace/JARS/jmathplot.jar"/>
+	<classpathentry kind="lib" path="/home/fedor/Programming/workspace/JARS/jgroups-3.4.4.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
