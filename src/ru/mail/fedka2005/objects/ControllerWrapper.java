@@ -8,35 +8,13 @@ import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
-import org.jgroups.MembershipListener;
-import org.jgroups.Message;
-import org.jgroups.MessageListener;
-import org.jgroups.JChannel;
-import org.jgroups.View;
-import org.jgroups.Address;
-import org.jgroups.blocks.MessageDispatcher;
-import org.jgroups.blocks.RequestHandler;
-import org.jgroups.blocks.RequestOptions;
-import org.jgroups.blocks.ResponseMode;
-import org.jgroups.blocks.atomic.Counter;
-import org.jgroups.blocks.atomic.CounterService;
+import org.jgroups.*;
 import org.jgroups.blocks.locking.LockService;
-import org.jgroups.protocols.BARRIER;
-import org.jgroups.protocols.CENTRAL_LOCK;
-import org.jgroups.protocols.COUNTER;
-import org.jgroups.protocols.FD_ALL;
-import org.jgroups.protocols.FD_SOCK;
-import org.jgroups.protocols.FRAG2;
-import org.jgroups.protocols.MERGE2;
-import org.jgroups.protocols.MFC;
-import org.jgroups.protocols.PING;
-import org.jgroups.protocols.UDP;
-import org.jgroups.protocols.UFC;
-import org.jgroups.protocols.UNICAST2;
-import org.jgroups.protocols.VERIFY_SUSPECT;
-import org.jgroups.protocols.pbcast.GMS;
-import org.jgroups.protocols.pbcast.NAKACK;
-import org.jgroups.protocols.pbcast.STABLE;
+import org.jgroups.blocks.*;
+import org.jgroups.blocks.atomic.*;
+import org.jgroups.protocols.*;
+import org.jgroups.protocols.pbcast.*;
+
 import org.jgroups.stack.ProtocolStack;
 import org.jgroups.util.RspList;
 
@@ -84,7 +62,7 @@ public class ControllerWrapper implements Runnable {
 			String poxPath, int poxPort, 
 			double cpuThreshold) throws ClientConstructorException {
 		try {
-			this.controller = controller;
+			this.controller = controller;	//bound to controller
 			this.groupName = groupName;
 			this.groupAddress = groupAddress;
 			this.pName = pName; this.id = id;
@@ -103,7 +81,7 @@ public class ControllerWrapper implements Runnable {
 									   .setValue("ip_mcast", true)
 									   .setValue("mcast_send_buf_size", 32000)
 									   .setValue("ucast_recv_buf_size", 64000))
-						.addProtocol(new PING())	
+						.addProtocol(new BPING().setValue("dest", "192.168.0.255"))	
 						.addProtocol(new MERGE2())
 						.addProtocol(new FD_SOCK())
 						.addProtocol(new FD_ALL().setValue("timeout",12000)

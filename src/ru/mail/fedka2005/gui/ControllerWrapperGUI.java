@@ -1,21 +1,12 @@
 package ru.mail.fedka2005.gui;
 
-import javax.swing.JFrame;
-import javax.swing.GroupLayout;
+import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
+
+import java.awt.*;
 
 import org.jgroups.Address;
 import org.jgroups.Message;
@@ -360,7 +351,7 @@ public class ControllerWrapperGUI extends JFrame {
 	}
 	/**
 	 * Update list of connected nodes
-	 * @param content
+	 * @param Map<Address, NodeInfoResponse> 
 	 */
 	public void updateNodeInfo(Map<Address, NodeInfoResponse> content) {
 		DefaultTableModel model = (DefaultTableModel)membersTable.getModel();
@@ -379,7 +370,7 @@ public class ControllerWrapperGUI extends JFrame {
 	}
 	/**
 	 * Pop-up exceptions, generated from business-logic
-	 * @param e
+	 * @param Exception
 	 */
 	public void handleInternalException(Exception e) {
 		JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
