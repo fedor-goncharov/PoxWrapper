@@ -40,10 +40,6 @@ import org.apache.log4j.Logger;
  *
  */
 
-//TODO
-//add log4j for logging all events
-//replace sleeping with time-scheduler
-
 public class ControllerWrapper implements Runnable {
 	/**
 	 * method creates the channel and connect process to the cluster
