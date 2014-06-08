@@ -6,3 +6,9 @@ In time from all the nodes one master-node selected, which performs all actions 
 
 Requires: Java 1.7+, JGroups, log4j, apache-common-utils
 email: fedor.goncharov.ol@gmail.com
+
+Installation:
+
+1) Copy project to your hard drive and open it in Eclipse
+2) Export project as executable JAR file
+3) Set properties file for log4j, if you don't do that an exception will be thrown and the programm will run without logging
