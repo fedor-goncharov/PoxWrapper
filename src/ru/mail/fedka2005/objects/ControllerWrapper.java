@@ -16,7 +16,6 @@ import org.jgroups.protocols.*;
 import org.jgroups.protocols.pbcast.*;
 
 import org.jgroups.stack.ProtocolStack;
-import org.jgroups.stack.IpAddress;
 import org.jgroups.util.RspList;
 
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
@@ -78,16 +77,15 @@ public class ControllerWrapper implements Runnable {
 			
 			stack.addProtocol(new UDP().setValue("bind_addr", InetAddress.getByName(groupAddress))
 									   .setValue("ip_mcast", true)
-									   .setValue("mcast_port", 7600)
-									   .setValue("mcast_addr", new IpAddress("224.0.0.1", 7600))
 									   .setValue("ip_ttl", 8)
 									   .setValue("mcast_send_buf_size", 32000)
 									   .setValue("ucast_recv_buf_size", 64000))
-						.addProtocol(new BPING().setValue("dest", "192.168.0.255"))	
-						.addProtocol(new MERGE2())
+						.addProtocol(new BPING().setValue("dest", "192.168.0.255"))	//broadcast udp	
+						.addProtocol(new MERGE2())	//merge protocol
+						.addProtocol(new MERGE3())	//another merging layer for safety
 						.addProtocol(new FD_SOCK())
 						.addProtocol(new FD_ALL().setValue("timeout",12000)
-												 .setValue("interval",3000))
+												 .setValue("interval",3000))	//heartbeat protocol, failure detection
 						.addProtocol(new VERIFY_SUSPECT())
 						.addProtocol(new BARRIER())
 						.addProtocol(new NAKACK())
@@ -129,8 +127,8 @@ public class ControllerWrapper implements Runnable {
 							break;
 						}
 					case RecvMessageHandler.UNKNOWN : {
-							System.out.println("[INFO]: Unknown message type");
-							System.out.println("[INFO]: Message:" + msg.toString());
+							System.out.println("[INFO]: Unknown message type, " +
+									"message:" + msg.toString());
 							break;
 						}
 					}
@@ -300,10 +298,10 @@ public class ControllerWrapper implements Runnable {
 		}
 	}
 	/**
-	 * replaces the master controller, depends on the reason of replacement:
+	 * Replaces the master controller, call depends on reasons:
 	 * exceeded notification await time, suspected for crush, high cpu-load on the node.
-	 * @param masterLock - 
 	 * @param code - reason of replacement(low perfomance, loss of connection, suspected)
+	 * @param master_id who is the master at the moment, when called this method
 	 * @throws MasterReplaceException
 	 */
 	private void replaceMaster(int code, int master_id) throws MasterReplaceException {
@@ -366,8 +364,8 @@ public class ControllerWrapper implements Runnable {
 	}
 	
 	/**
-	 * method sorts cpu-load from cluster nodes, the least loaded
-	 * node becomes the new master
+	 * Method sorts cpu-load from cluster nodes, the least loaded
+	 * node becomes a new master.
 	 * @param rsp_list - list of responses from the nodes
 	 * @return	Address - Address class of the new master
 	 */
@@ -450,7 +448,7 @@ public class ControllerWrapper implements Runnable {
 		}
 	}
 	/**
-	 * send a broad cast message to all members, to update their personal info. Called when view 
+	 * Send a broad cast message to all members, to update their personal info. Called when view 
 	 * has changed to update the data;
 	 * 
 	 * @throws RefreshException - thrown when node failed to send broadcast request or
@@ -484,6 +482,7 @@ public class ControllerWrapper implements Runnable {
 		} catch (Exception e) {	//catch any exception
 			e.printStackTrace();
 			controller.forwardException(e);
+			//TODO clean the channel, close all connections 
 			Thread.currentThread().interrupt();	//kill current thread
 		}
 	}
