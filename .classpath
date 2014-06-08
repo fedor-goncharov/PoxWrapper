@@ -5,5 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/home/fedor/Programming/workspace/JARS/jmathplot.jar"/>
 	<classpathentry kind="lib" path="/home/fedor/Programming/workspace/JARS/jgroups-3.4.4.Final.jar"/>
+	<classpathentry kind="lib" path="/home/fedor/Programming/workspace/JARS/log4j-1.2.17.zip"/>
+	<classpathentry kind="lib" path="/home/fedor/Programming/workspace/JARS/apache-log4j-1.2.17/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

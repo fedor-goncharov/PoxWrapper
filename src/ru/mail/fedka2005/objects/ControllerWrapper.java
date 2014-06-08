@@ -27,6 +27,10 @@ import ru.mail.fedka2005.exceptions.MasterReplaceException;
 import ru.mail.fedka2005.exceptions.RefreshException;
 import ru.mail.fedka2005.main.Controller;
 import ru.mail.fedka2005.messages.*;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 /**
  * Class represents a node in the cluster of controllers
  * A group of ControllerWrapper instances is a cluster.
@@ -478,10 +482,10 @@ public class ControllerWrapper implements Runnable {
 	public void run() {
 		try {
 			this.start();
-		} catch (Exception e) {	//catch any exception
+		} catch (Exception e) {
 			e.printStackTrace();
+			channel.close();	//close channel, free resources
 			controller.forwardException(e);
-			//TODO clean the channel, close all connections 
 			Thread.currentThread().interrupt();	//kill current thread
 		}
 	}
