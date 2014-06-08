@@ -203,17 +203,14 @@ public class ControllerWrapper implements Runnable {
 	 * @throws Exception
 	 */
 	public void start() throws ClientStartException, JGroupsException {
+		logger.info("Client process started.");
 		try {
 			channel.connect(groupName);
 		} catch (Exception e) {
-			try {
-				channel.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
 			logger.error(ExceptionUtils.getStackTrace(e));
-			throw new JGroupsException("Exception: channel connect failed, " +
-					"message:" + e.getMessage());
+			channel.close();
+			throw new ClientStartException("Exception: controller start method failed, " +
+						"message:" + e.getMessage());
 		}
 		try {
 			isActive = true;								//init connection 
@@ -231,11 +228,7 @@ public class ControllerWrapper implements Runnable {
 			throw new ClientStartException("Exception: controller start method failed, " +
 					"message:" + e.getMessage());
 		} finally {
-			try {
-				channel.close();
-			} catch (Exception e) {
-				logger.error(ExceptionUtils.getStackTrace(e));
-			}
+			channel.close();
 		}
 	}
 	/**
@@ -262,6 +255,7 @@ public class ControllerWrapper implements Runnable {
 							if (masterID.get() == id) {
 								controller.startPOX(poxPath, poxPort);	//master starts pox controller in a seperate process
 								rewrite = true;
+								logger.info("POX started at:" + poxPath + ":" + poxPort);
 							}
 					} finally {	masterLock.unlock(); }
 				}
@@ -275,6 +269,7 @@ public class ControllerWrapper implements Runnable {
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
 			controller.stopPOX();		//stop controller if it was running
+			logger.info("Not a master any more, controller stopped.");
 			boolean wait_stack = true;	//wait one iteration to get notification from master controller
 			int local_master;
 			while (isActive && (local_master = (int)masterID.get()) != id) {
@@ -288,6 +283,7 @@ public class ControllerWrapper implements Runnable {
 					if (cluster_mapping.get(record.getAddress()) != null &&
 							cluster_mapping.get(record.getAddress()) == local_master && 
 							record.getCPULoad() > cpuThreshold) {	//cpu-load exceeds the threshold -> replace master
+						logger.info("invoking master replacement process");
 						replaceMaster(CPU_LOAD, local_master);
 						wait_stack = true;
 					} else {
@@ -339,6 +335,7 @@ public class ControllerWrapper implements Runnable {
 				rsp_list.addRsp(channel.getAddress(), new CPULoadMessage());
 				Address new_master = chooseMaster(rsp_list);
 				masterID.set(cluster_mapping.get(new_master));
+				logger.info("New master selected:" + cluster_mapping.get(new_master));
 			}
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
@@ -494,7 +491,7 @@ public class ControllerWrapper implements Runnable {
 			this.start();
 		} catch (Exception e) {
 			e.printStackTrace();
-			channel.close();	//close channel, free resources
+			channel.close();	//close channel, free resources - closing channel doesn't throw any exceptions
 			controller.forwardException(e);
 			Thread.currentThread().interrupt();	//kill current thread
 		}
