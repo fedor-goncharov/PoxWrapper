@@ -1,0 +1,62 @@
+[08 Jun 2014 17:03:25,926]:local_addr=fedich3, coord=fedich1, is_coord=false
+[08 Jun 2014 17:03:26,026]:Not a master any more, controller stopped.
+[08 Jun 2014 17:03:50,376]:peer fedich1 closed socket (eof)
+[08 Jun 2014 17:03:50,377]:suspecting fedich1 (own address is fedich3)
+[08 Jun 2014 17:03:50,378]:ping_dest is fedich2, pingable_mbrs=[fedich2, fedich3]
+[08 Jun 2014 17:03:52,489]:fedich3: installing view [fedich2|3] (2) [fedich2, fedich3]
+[08 Jun 2014 17:03:52,491]:fedich3: removed fedich1 from xmit_table (not member anymore)
+[08 Jun 2014 17:03:52,491]:VIEW_CHANGE received: [fedich2, fedich3]
+[08 Jun 2014 17:03:52,493]:view=[fedich2|3] (2) [fedich2, fedich3]
+[08 Jun 2014 17:03:52,493]:view=[fedich2|3] (2) [fedich2, fedich3]
+[08 Jun 2014 17:03:52,493]:local_addr=fedich3, coord=fedich2, is_coord=false
+[08 Jun 2014 17:05:42,612]:fedich3: installing view [fedich3|4] (1) [fedich3]
+[08 Jun 2014 17:05:42,614]:resuming message garbage collection
+[08 Jun 2014 17:05:42,615]:fedich3: removed fedich2 from xmit_table (not member anymore)
+[08 Jun 2014 17:05:42,615]:peer fedich2 closed socket gracefully
+[08 Jun 2014 17:05:42,615]:VIEW_CHANGE received: [fedich3]
+[08 Jun 2014 17:05:42,615]:ping_dest is null, pingable_mbrs=[fedich3]
+[08 Jun 2014 17:05:42,624]:view=[fedich3|4] (1) [fedich3]
+[08 Jun 2014 17:05:42,625]:view=[fedich3|4] (1) [fedich3]
+[08 Jun 2014 17:05:42,625]:local_addr=fedich3, coord=fedich3, is_coord=true
+[08 Jun 2014 17:05:44,134]:New master selected:3
+[08 Jun 2014 17:05:44,151]:POX started at:/home/fedor/Desktop/SDN/pox:6677
+[08 Jun 2014 18:31:34,454]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[08 Jun 2014 18:31:34,455]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[08 Jun 2014 18:31:34,488]:Protocol stack initialized, bind address:192.168.0.1
+[08 Jun 2014 18:31:34,499]:JGroups message dispatcher and counter initialized
+[08 Jun 2014 18:31:34,500]:Client process started.
+[08 Jun 2014 18:31:34,518]:sockets will use interface 192.168.0.1
+[08 Jun 2014 18:31:34,527]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.0.1, ttl=8
+sock: bound to 192.168.0.1:56472, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.0.1:7600, send buffer size=32000, receive buffer size=500000
+[08 Jun 2014 18:31:37,570]:
+[fedich setDigest()]
+existing digest:  []
+new digest:       fedich: [0 (0)]
+resulting digest: fedich: [0 (0)]
+[08 Jun 2014 18:31:37,571]:fedich: installing view [fedich|0] (1) [fedich]
+[08 Jun 2014 18:31:37,571]:resuming message garbage collection
+[08 Jun 2014 18:31:37,573]:VIEW_CHANGE received: [fedich]
+[08 Jun 2014 18:31:37,576]:view=[fedich|0] (1) [fedich]
+[08 Jun 2014 18:31:37,577]:view=[fedich|0] (1) [fedich]
+[08 Jun 2014 18:31:37,577]:local_addr=fedich, coord=fedich, is_coord=true
+[08 Jun 2014 18:31:37,582]:resuming message garbage collection
+[08 Jun 2014 18:31:37,583]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[08 Jun 2014 18:31:37,667]:POX started at:/home/fedor/Desktop/SDN/pox:6644
+[08 Jun 2014 18:36:39,406]:suspending message garbage collection
+[08 Jun 2014 18:36:39,408]:fedich: resume task started, max_suspend_time=33000
+[08 Jun 2014 18:36:39,412]:fedich: installing view [fedich|1] (2) [fedich, fedich2]
+[08 Jun 2014 18:36:39,413]:VIEW_CHANGE received: [fedich, fedich2]
+[08 Jun 2014 18:36:39,416]:ping_dest is fedich2, pingable_mbrs=[fedich, fedich2]
+[08 Jun 2014 18:36:39,418]:view=[fedich|1] (2) [fedich, fedich2]
+[08 Jun 2014 18:36:39,420]:view=[fedich|1] (2) [fedich, fedich2]
+[08 Jun 2014 18:36:39,421]:local_addr=fedich, coord=fedich, is_coord=true
+[08 Jun 2014 18:36:39,504]:resuming message garbage collection
+[08 Jun 2014 18:37:01,874]:Not a master any more, controller stopped.
+[08 Jun 2014 18:37:01,888]:multicast socket closed
+[08 Jun 2014 18:37:01,888]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[08 Jun 2014 18:37:01,889]:multicast receiver thread terminated
+[08 Jun 2014 18:37:01,891]:unicast receiver thread terminated
+[08 Jun 2014 18:37:02,194]:closing sockets and stopping threads
+[08 Jun 2014 18:37:02,194]:socket to fedich2 was closed gracefully

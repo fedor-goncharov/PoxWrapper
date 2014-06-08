@@ -319,7 +319,11 @@ public class ControllerWrapperGUI extends JFrame {
 		if (model.getRowCount() > message_buffer_size) {	//clear table sometimes, add flush messages to log_files
 			int size = model.getRowCount();
 			for (int i = 0; i < size; ++i) {
-				model.removeRow(size-i-1);
+				try {
+					model.removeRow(size-i-1);
+				} catch (ArrayIndexOutOfBoundsException e) {
+					//do nothing here, will be deleted aftewards
+				}
 			}
 		}
 		model.addRow(new Object[]{msg.getSrc(),
@@ -357,7 +361,11 @@ public class ControllerWrapperGUI extends JFrame {
 		DefaultTableModel model = (DefaultTableModel)membersTable.getModel();
 		int size = model.getRowCount();
 		for (int i = 0; i < size; ++i) {
-			model.removeRow(size-i-1);
+			try {
+				model.removeRow(size-i-1);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				//do nothing here, record will be deleted aftewards
+			}
 		}
 		
 		for (NodeInfoResponse node_info : content.values()) {
