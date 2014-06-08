@@ -239,6 +239,7 @@ public class ControllerWrapper implements Runnable {
 		boolean rewrite = false;			//to switch: ovs-vsctl set-controller (me)
 		while (isActive) {
 			rewrite = false;
+			info_mapping = refreshInfo();
 			while (isActive && masterID.get() == id) {	//cpu-load notification for the cluster
 				if (cl_mapping_update) {
 					cluster_mapping = generateMapping();
@@ -265,6 +266,7 @@ public class ControllerWrapper implements Runnable {
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
 			controller.stopPOX();		//stop controller if it was running
+			info_mapping = refreshInfo();
 			logger.info("Not a master any more, controller stopped.");
 			boolean wait_stack = true;	//wait one iteration to get notification from master controller
 			int local_master;
