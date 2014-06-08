@@ -28,9 +28,8 @@ import ru.mail.fedka2005.exceptions.RefreshException;
 import ru.mail.fedka2005.main.Controller;
 import ru.mail.fedka2005.messages.*;
 
-import org.apache.log4j.Level;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 /**
  * Class represents a node in the cluster of controllers
  * A group of ControllerWrapper instances is a cluster.
@@ -71,6 +70,8 @@ public class ControllerWrapper implements Runnable {
 			this.groupAddress = groupAddress;
 			this.pName = pName; this.id = id;
 			this.poxPath = poxPath; this.poxPort = poxPort;
+			this.logger = Logger.getLogger(ControllerWrapper.class);	//create logger
+			
 			this.mNotifications = new Stack<CPULoadRecord>();
 			ControllerWrapper.cpuThreshold = cpuThreshold;
 			
@@ -101,6 +102,8 @@ public class ControllerWrapper implements Runnable {
 						.addProtocol(new COUNTER())
 						.addProtocol(new CENTRAL_LOCK());
 			stack.init();
+			
+			logger.info("Protocol stack initialized, bind address:" + groupAddress);
 			
 			channel.setName(pName);
 			syncService = new CounterService(channel);	//master id atomic service
@@ -187,8 +190,9 @@ public class ControllerWrapper implements Runnable {
 						return null;	//should never get here
 					}
 			});
+			logger.info("JGroups message dispatcher and counter initialized");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(ExceptionUtils.getStackTrace(e));
 			throw new ClientConstructorException("Exception:client constructor failed, " +
 					"message: " + e.getMessage());
 		}
@@ -207,6 +211,7 @@ public class ControllerWrapper implements Runnable {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+			logger.error(ExceptionUtils.getStackTrace(e));
 			throw new JGroupsException("Exception: channel connect failed, " +
 					"message:" + e.getMessage());
 		}
@@ -222,14 +227,14 @@ public class ControllerWrapper implements Runnable {
 			eventLoop();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(ExceptionUtils.getStackTrace(e));
 			throw new ClientStartException("Exception: controller start method failed, " +
 					"message:" + e.getMessage());
 		} finally {
 			try {
 				channel.close();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(ExceptionUtils.getStackTrace(e));
 			}
 		}
 	}
@@ -263,6 +268,7 @@ public class ControllerWrapper implements Runnable {
 				try {
 					channel.send(new Message(null, new CPULoadMessage()));
 				} catch (Exception e) {
+					logger.error(ExceptionUtils.getStackTrace(e));
 					throw new JGroupsException("Exception: channel send message failed, " +
 							"message" + e.getMessage());
 				}
@@ -335,6 +341,7 @@ public class ControllerWrapper implements Runnable {
 				masterID.set(cluster_mapping.get(new_master));
 			}
 		} catch (Exception e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
 			throw new MasterReplaceException("Exception: master replacement failed, " +
 					"message:" + e.getMessage());	//failed to send cpu-load request 
 		} finally {
@@ -361,6 +368,7 @@ public class ControllerWrapper implements Runnable {
 			output.put(channel.getAddress(), id);	//put own address
 			return output;
 		} catch (Exception e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
 			throw new GenerateMappingException("Exception : generateMapping() : failed to generate mapping : " +
 					e.toString());
 		}
@@ -414,6 +422,7 @@ public class ControllerWrapper implements Runnable {
 	private boolean isActive = false;			//node works
 	private int poxPort;
 	private String poxPath;
+	private Logger logger = null;				//logger
 	private static final String master_lock = "MASTER_LOCK";
 	private static final String master_counter = "MASTER";
 	public static final int SEND_DELAY = 2;	//send delay in SECONDS between CPU-LOAD notifications
@@ -443,7 +452,7 @@ public class ControllerWrapper implements Runnable {
 				try {
 					channel.send(new Message(null, new ClientStopMessage(id)));
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error(ExceptionUtils.getStackTrace(e));
 					throw new DetachNodeException("Exception: detaching client failed, message" +
 							e.getMessage());
 				}
@@ -473,6 +482,7 @@ public class ControllerWrapper implements Runnable {
 			controller.printConnectedNodes(output);	
 			return output;
 		} catch (Exception e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
 			throw new RefreshException("Exception : refreshInfo() : failed to refresh cluster state," +
 					"message:" + e.toString());
 		}
