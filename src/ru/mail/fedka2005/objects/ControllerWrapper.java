@@ -80,7 +80,7 @@ public class ControllerWrapper implements Runnable {
 									   .setValue("ip_ttl", 8)
 									   .setValue("mcast_send_buf_size", 32000)
 									   .setValue("ucast_recv_buf_size", 64000))
-						.addProtocol(new BPING().setValue("dest", "192.168.0.255"))	//broadcast udp	
+						.addProtocol(new BPING())	//broadcast udp	
 						.addProtocol(new MERGE2())	//merge protocol
 						.addProtocol(new MERGE3())	//another merging layer for safety
 						.addProtocol(new FD_SOCK())

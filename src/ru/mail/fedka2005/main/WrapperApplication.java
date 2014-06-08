@@ -13,6 +13,9 @@ public class WrapperApplication {
 	 */
 	public static void main(String[] args) {
 		
+		//System config
+		System.setProperty("java.net.preferIPv4Stack", "true");
+		
 		ControllerWrapperGUI gui = new ControllerWrapperGUI();	//create GUI
 		Controller controller = new Controller();				//create Controller from MVC-pattern
 		gui.setController(controller);							//bound objects
