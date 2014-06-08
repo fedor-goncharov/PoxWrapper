@@ -76,11 +76,10 @@ public class ControllerWrapper implements Runnable {
 			channel.setProtocolStack(stack);
 			
 			stack.addProtocol(new UDP().setValue("bind_addr", InetAddress.getByName(groupAddress))
-									   .setValue("ip_mcast", true)
 									   .setValue("ip_ttl", 8)
 									   .setValue("mcast_send_buf_size", 32000)
 									   .setValue("ucast_recv_buf_size", 64000))
-						.addProtocol(new BPING())	//broadcast udp	
+						.addProtocol(new PING())	//broadcast udp	
 						.addProtocol(new MERGE2())	//merge protocol
 						.addProtocol(new MERGE3())	//another merging layer for safety
 						.addProtocol(new FD_SOCK())
