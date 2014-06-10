@@ -40,6 +40,10 @@ import org.apache.log4j.Logger;
  *
  */
 
+//TODO
+//fix bug with updating the cluster state
+//after master is changed not everything being updated correctly
+
 public class ControllerWrapper implements Runnable {
 	/**
 	 * method creates the channel and connect process to the cluster

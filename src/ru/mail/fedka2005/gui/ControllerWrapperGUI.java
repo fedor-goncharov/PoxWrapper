@@ -38,6 +38,7 @@ public class ControllerWrapperGUI extends JFrame {
 	
 	private JButton btnStartClient = null;	//buttons for actions
 	private JButton btnStopClient = null;
+	private JButton btnPOXConfiguration = null;
 	private JTextField cpuThresholdTextField;
 	private JTextField portTextField;
 	
@@ -48,7 +49,7 @@ public class ControllerWrapperGUI extends JFrame {
 	
 	public ControllerWrapperGUI() {
 		setResizable(false);
-		this.setSize(640, 480);
+		this.setSize(656, 489);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		setTitle("Cluster Monitoring Client");
 		
@@ -79,6 +80,7 @@ public class ControllerWrapperGUI extends JFrame {
 					}
 					btnStartClient.setEnabled(false);
 					textFieldsEnable(false);
+					btnPOXConfiguration.setEnabled(false);
 					
 					controller.startClient(nodeName, groupName, poxPath, address, cpuThreshold, port);	//start controller-client
 					//in a seperate thread
@@ -114,6 +116,10 @@ public class ControllerWrapperGUI extends JFrame {
 			}
 		});
 		btnStopClient.setToolTipText("Disconnects client from the cluster");
+		btnPOXConfiguration = new JButton("Configure POX");
+		btnPOXConfiguration.setEnabled(true);
+		//TODO
+		//add frame for configuration
 		
 		nodeNameTextField = new JTextField();
 		nodeNameTextField.setColumns(10);
@@ -144,6 +150,7 @@ public class ControllerWrapperGUI extends JFrame {
 		
 		portTextField = new JTextField();
 		portTextField.setColumns(10);
+
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -152,10 +159,15 @@ public class ControllerWrapperGUI extends JFrame {
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnStopClient, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-								.addComponent(btnStartClient, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
-							.addGap(14)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(btnStopClient, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED))
+								.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(btnPOXConfiguration, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+										.addComponent(btnStartClient, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
+									.addGap(14)))
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblNodeName)
@@ -199,25 +211,20 @@ public class ControllerWrapperGUI extends JFrame {
 						.addComponent(lblNodeName)
 						.addComponent(poxPathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblPoxPath))
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-							.addComponent(btnStopClient)
-							.addPreferredGap(ComponentPlacement.UNRELATED))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblGroupName)
-								.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblAddress)
-								.addComponent(groupNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel)
-								.addComponent(portTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(cpuThresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblCpuThreshold))
-							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblGroupName)
+						.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblAddress)
+						.addComponent(groupNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnPOXConfiguration))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel)
+						.addComponent(portTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cpuThresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblCpuThreshold)
+						.addComponent(btnStopClient))
 					.addGap(12))
 		);
 		
