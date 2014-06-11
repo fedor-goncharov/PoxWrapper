@@ -1,6 +1,7 @@
 package ru.mail.fedka2005.main;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -89,8 +90,13 @@ public class Controller {
 	 * @param int poxPort - number of port, to which POX is attached 
 	 */
 	public void startPOX(String path, int port) {
-		ProcessBuilder pBuilder = new ProcessBuilder("python","pox.py","openflow.of_01",
-				"--port=" + String.valueOf(port));
+		ArrayList<String> cmdList = new ArrayList<String>();
+		cmdList.add("python"); cmdList.add("pox.py");
+		if (gui.poxComponentsSelected != null) {
+			cmdList.addAll(gui.poxComponentsSelected);
+		}
+		
+		ProcessBuilder pBuilder = new ProcessBuilder(cmdList);
 		try { 
 			pBuilder.directory(new File(path));
 			poxProcess = pBuilder.start();

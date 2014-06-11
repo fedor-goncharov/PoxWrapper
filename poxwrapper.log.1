@@ -1,75 +1,77 @@
-[09 Jun 2014 21:10:55,678]:ping_dest is fedich, pingable_mbrs=[fedich, fedich3, fedich4, fedich5]
-[09 Jun 2014 21:10:55,680]:view=[fedich|7] (4) [fedich, fedich3, fedich4, fedich5]
-[09 Jun 2014 21:10:55,683]:view=[fedich|7] (4) [fedich, fedich3, fedich4, fedich5]
-[09 Jun 2014 21:10:55,683]:local_addr=fedich5, coord=fedich, is_coord=false
-[09 Jun 2014 21:11:05,495]:fedich5: installing view [fedich|8] (3) [fedich, fedich3, fedich5]
-[09 Jun 2014 21:11:05,496]:fedich5: removed fedich4 from xmit_table (not member anymore)
-[09 Jun 2014 21:11:05,497]:VIEW_CHANGE received: [fedich, fedich3, fedich5]
-[09 Jun 2014 21:11:05,498]:view=[fedich|8] (3) [fedich, fedich3, fedich5]
-[09 Jun 2014 21:11:05,498]:view=[fedich|8] (3) [fedich, fedich3, fedich5]
-[09 Jun 2014 21:11:05,499]:local_addr=fedich5, coord=fedich, is_coord=false
-[09 Jun 2014 21:11:08,744]:POX started at:/home/fedor/Desktop/SDN/pox:6699
-[09 Jun 2014 21:11:09,803]:peer fedich closed socket (eof)
-[09 Jun 2014 21:11:09,803]:suspecting fedich (own address is fedich5)
-[09 Jun 2014 21:11:09,804]:ping_dest is fedich3, pingable_mbrs=[fedich3, fedich5]
-[09 Jun 2014 21:11:11,913]:fedich5: installing view [fedich3|9] (2) [fedich3, fedich5]
-[09 Jun 2014 21:11:11,914]:fedich5: removed fedich from xmit_table (not member anymore)
-[09 Jun 2014 21:11:11,915]:VIEW_CHANGE received: [fedich3, fedich5]
-[09 Jun 2014 21:11:11,916]:view=[fedich3|9] (2) [fedich3, fedich5]
-[09 Jun 2014 21:11:11,916]:view=[fedich3|9] (2) [fedich3, fedich5]
-[09 Jun 2014 21:11:11,917]:local_addr=fedich5, coord=fedich3, is_coord=false
-[09 Jun 2014 21:11:59,981]:Not a master any more, controller stopped.
-[09 Jun 2014 21:11:59,983]:fedich5: sending LEAVE request to fedich3
-[09 Jun 2014 21:12:00,038]:multicast socket closed
-[09 Jun 2014 21:12:00,038]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[09 Jun 2014 21:12:00,039]:multicast receiver thread terminated
-[09 Jun 2014 21:12:00,040]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[09 Jun 2014 21:12:00,040]:unicast receiver thread terminated
-[09 Jun 2014 21:12:00,342]:closing sockets and stopping threads
-[09 Jun 2014 21:12:00,342]:socket to fedich3 was closed gracefully
-[10 Jun 2014 11:29:14,537]:set property UDP.mcast_group_addr to default value /228.8.8.8
-[10 Jun 2014 11:29:14,538]:set property UDP.diagnostics_addr to default value /224.0.75.75
-[10 Jun 2014 11:29:14,569]:Protocol stack initialized, bind address:192.168.0.1
-[10 Jun 2014 11:29:14,578]:JGroups message dispatcher and counter initialized
-[10 Jun 2014 11:29:14,578]:Client process started.
-[10 Jun 2014 11:29:14,597]:sockets will use interface 192.168.0.1
-[10 Jun 2014 11:29:14,604]:socket information:
+[10 Jun 2014 11:43:10,432]:fedich: installing view [fedich|0] (1) [fedich]
+[10 Jun 2014 11:43:10,433]:resuming message garbage collection
+[10 Jun 2014 11:43:10,434]:VIEW_CHANGE received: [fedich]
+[10 Jun 2014 11:43:10,438]:view=[fedich|0] (1) [fedich]
+[10 Jun 2014 11:43:10,438]:view=[fedich|0] (1) [fedich]
+[10 Jun 2014 11:43:10,439]:local_addr=fedich, coord=fedich, is_coord=true
+[10 Jun 2014 11:43:10,443]:resuming message garbage collection
+[10 Jun 2014 11:43:10,443]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[10 Jun 2014 11:43:10,524]:POX started at:/home/fedor/Desktop/SDN/pox:6644
+[10 Jun 2014 11:43:22,542]:Not a master any more, controller stopped.
+[10 Jun 2014 11:43:22,550]:multicast socket closed
+[10 Jun 2014 11:43:22,550]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[10 Jun 2014 11:43:22,551]:multicast receiver thread terminated
+[10 Jun 2014 11:43:22,551]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[10 Jun 2014 11:43:22,551]:unicast receiver thread terminated
+[10 Jun 2014 11:43:22,552]:closing sockets and stopping threads
+[10 Jun 2014 22:20:25,994]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[10 Jun 2014 22:20:26,018]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[10 Jun 2014 22:20:26,110]:Protocol stack initialized, bind address:192.168.0.1
+[10 Jun 2014 22:20:26,164]:JGroups message dispatcher and counter initialized
+[10 Jun 2014 22:20:26,164]:Client process started.
+[10 Jun 2014 22:20:26,251]:sockets will use interface 192.168.0.1
+[10 Jun 2014 22:20:26,258]:socket information:
 mcast_addr=228.8.8.8:7600, bind_addr=/192.168.0.1, ttl=8
-sock: bound to 192.168.0.1:45785, receive buffer size=64000, send buffer size=100000
+sock: bound to 192.168.0.1:47779, receive buffer size=64000, send buffer size=100000
 mcast_sock: bound to 192.168.0.1:7600, send buffer size=32000, receive buffer size=500000
-[10 Jun 2014 11:29:17,653]:
+[10 Jun 2014 22:20:29,348]:
+[fedic setDigest()]
+existing digest:  []
+new digest:       fedic: [0 (0)]
+resulting digest: fedic: [0 (0)]
+[10 Jun 2014 22:20:29,349]:fedic: installing view [fedic|0] (1) [fedic]
+[10 Jun 2014 22:20:29,349]:resuming message garbage collection
+[10 Jun 2014 22:20:29,351]:VIEW_CHANGE received: [fedic]
+[10 Jun 2014 22:20:29,355]:view=[fedic|0] (1) [fedic]
+[10 Jun 2014 22:20:29,355]:view=[fedic|0] (1) [fedic]
+[10 Jun 2014 22:20:29,355]:local_addr=fedic, coord=fedic, is_coord=true
+[10 Jun 2014 22:20:29,359]:resuming message garbage collection
+[10 Jun 2014 22:20:29,360]:created cluster (first member). My view is [fedic|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[10 Jun 2014 22:20:29,485]:POX started at:/home/fedor/Desktop/SDN/pox:6644
+[10 Jun 2014 22:20:47,638]:Not a master any more, controller stopped.
+[10 Jun 2014 22:20:47,645]:multicast socket closed
+[10 Jun 2014 22:20:47,645]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[10 Jun 2014 22:20:47,645]:multicast receiver thread terminated
+[10 Jun 2014 22:20:47,646]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[10 Jun 2014 22:20:47,646]:unicast receiver thread terminated
+[10 Jun 2014 22:20:47,647]:closing sockets and stopping threads
+[11 Jun 2014 23:22:02,462]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[11 Jun 2014 23:22:02,486]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[11 Jun 2014 23:22:02,526]:Protocol stack initialized, bind address:192.168.0.1
+[11 Jun 2014 23:22:02,534]:JGroups message dispatcher and counter initialized
+[11 Jun 2014 23:22:02,535]:Client process started.
+[11 Jun 2014 23:22:02,640]:sockets will use interface 192.168.0.1
+[11 Jun 2014 23:22:02,653]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.0.1, ttl=8
+sock: bound to 192.168.0.1:56229, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.0.1:7600, send buffer size=32000, receive buffer size=500000
+[11 Jun 2014 23:22:05,687]:
 [fedich setDigest()]
 existing digest:  []
 new digest:       fedich: [0 (0)]
 resulting digest: fedich: [0 (0)]
-[10 Jun 2014 11:29:17,653]:fedich: installing view [fedich|0] (1) [fedich]
-[10 Jun 2014 11:29:17,654]:resuming message garbage collection
-[10 Jun 2014 11:29:17,655]:VIEW_CHANGE received: [fedich]
-[10 Jun 2014 11:29:17,659]:view=[fedich|0] (1) [fedich]
-[10 Jun 2014 11:29:17,659]:view=[fedich|0] (1) [fedich]
-[10 Jun 2014 11:29:17,660]:local_addr=fedich, coord=fedich, is_coord=true
-[10 Jun 2014 11:29:17,664]:resuming message garbage collection
-[10 Jun 2014 11:29:17,664]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
-[10 Jun 2014 11:29:17,756]:POX started at:/home/fedor/Desktop/SDN/pox:6644
-[10 Jun 2014 11:29:27,796]:Not a master any more, controller stopped.
-[10 Jun 2014 11:29:27,803]:multicast socket closed
-[10 Jun 2014 11:29:27,803]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[10 Jun 2014 11:29:27,804]:multicast receiver thread terminated
-[10 Jun 2014 11:29:27,804]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[10 Jun 2014 11:29:27,804]:unicast receiver thread terminated
-[10 Jun 2014 11:29:27,805]:closing sockets and stopping threads
-[10 Jun 2014 11:43:07,323]:set property UDP.mcast_group_addr to default value /228.8.8.8
-[10 Jun 2014 11:43:07,325]:set property UDP.diagnostics_addr to default value /224.0.75.75
-[10 Jun 2014 11:43:07,356]:Protocol stack initialized, bind address:192.168.0.1
-[10 Jun 2014 11:43:07,365]:JGroups message dispatcher and counter initialized
-[10 Jun 2014 11:43:07,365]:Client process started.
-[10 Jun 2014 11:43:07,383]:sockets will use interface 192.168.0.1
-[10 Jun 2014 11:43:07,389]:socket information:
-mcast_addr=228.8.8.8:7600, bind_addr=/192.168.0.1, ttl=8
-sock: bound to 192.168.0.1:45110, receive buffer size=64000, send buffer size=100000
-mcast_sock: bound to 192.168.0.1:7600, send buffer size=32000, receive buffer size=500000
-[10 Jun 2014 11:43:10,431]:
-[fedich setDigest()]
-existing digest:  []
-new digest:       fedich: [0 (0)]
-resulting digest: fedich: [0 (0)]
+[11 Jun 2014 23:22:05,688]:fedich: installing view [fedich|0] (1) [fedich]
+[11 Jun 2014 23:22:05,688]:resuming message garbage collection
+[11 Jun 2014 23:22:05,689]:VIEW_CHANGE received: [fedich]
+[11 Jun 2014 23:22:05,694]:view=[fedich|0] (1) [fedich]
+[11 Jun 2014 23:22:05,694]:view=[fedich|0] (1) [fedich]
+[11 Jun 2014 23:22:05,694]:local_addr=fedich, coord=fedich, is_coord=true
+[11 Jun 2014 23:22:05,699]:resuming message garbage collection
+[11 Jun 2014 23:22:05,699]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[11 Jun 2014 23:22:05,783]:POX started at:/home/fedor/Desktop/SDN/pox:6644
+[11 Jun 2014 23:22:31,820]:Not a master any more, controller stopped.
+[11 Jun 2014 23:22:31,830]:multicast socket closed
+[11 Jun 2014 23:22:31,830]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[11 Jun 2014 23:22:31,831]:multicast receiver thread terminated
+[11 Jun 2014 23:22:31,831]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[11 Jun 2014 23:22:31,831]:unicast receiver thread terminated

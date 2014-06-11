@@ -22,7 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -46,7 +46,7 @@ public class ControllerWrapperGUI extends JFrame {
 	private final int message_buffer_size = 17;	//max messages displayed
 	private Plot2DPanel plot = new Plot2DPanel();	//plot, master cpu-load
 	private LinkedList<Double> masterCPUUsage = new LinkedList<Double>();	//plotting staff'
-	private ArrayList<String> poxComponentsSelected = new ArrayList<String>();
+	public HashSet<String> poxComponentsSelected = null;
 	private int selected_id;
 	
 	public ControllerWrapperGUI() {
@@ -124,15 +124,9 @@ public class ControllerWrapperGUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JFrame frame = new POXComponentsGUI(ControllerWrapperGUI.this);
-				btnPOXConfiguration.setEnabled(false);
 				frame.setVisible(true);
-				//TODO
-				//create frame to choose controller options
-				//pause all other processes
 			}
 		});
-		//TODO
-		//add frame for configuration
 		
 		nodeNameTextField = new JTextField();
 		nodeNameTextField.setColumns(10);
@@ -170,17 +164,13 @@ public class ControllerWrapperGUI extends JFrame {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(btnStopClient, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.RELATED))
-								.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(btnPOXConfiguration, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-										.addComponent(btnStartClient, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
-									.addGap(14)))
+								.addComponent(btnStopClient, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+								.addComponent(btnPOXConfiguration, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+								.addComponent(btnStartClient, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+							.addGap(14)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblNodeName)
@@ -414,6 +404,7 @@ public class ControllerWrapperGUI extends JFrame {
 	public void stopGUI() {
 		textFieldsEnable(true);
 		btnStartClient.setEnabled(true);
+		btnPOXConfiguration.setEnabled(true);
 		btnStopClient.setEnabled(false);
 	}
 }

@@ -44,6 +44,13 @@ import org.apache.log4j.Logger;
 //fix bug with updating the cluster state
 //after master is changed not everything being updated correctly
 
+//TODO
+//after new master has been chosen one must send message to all members, that they should
+//update their mappings -> after that everything is clear
+
+//TODO
+//this class can not to know the path to pox controller
+
 public class ControllerWrapper implements Runnable {
 	/**
 	 * method creates the channel and connect process to the cluster
@@ -113,7 +120,8 @@ public class ControllerWrapper implements Runnable {
 				
 				@Override
 				public void setState(InputStream arg0) throws Exception {
-					//empty method - must read doc
+					//empty method - initial state when connect
+					//will be used in future versions
 				}
 				
 				@Override
@@ -143,7 +151,7 @@ public class ControllerWrapper implements Runnable {
 				@Override
 				public void getState(OutputStream arg0) throws Exception {
 					//empty method	- must read doc
-					//maybe used in future
+					//will be used in future versions
 				}
 			}, new MembershipListener() {
 					@Override
