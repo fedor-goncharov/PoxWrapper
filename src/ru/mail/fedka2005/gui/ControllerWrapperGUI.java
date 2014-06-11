@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -44,7 +45,8 @@ public class ControllerWrapperGUI extends JFrame {
 	
 	private final int message_buffer_size = 17;	//max messages displayed
 	private Plot2DPanel plot = new Plot2DPanel();	//plot, master cpu-load
-	private LinkedList<Double> masterCPUUsage = new LinkedList<Double>();	//plotting staff
+	private LinkedList<Double> masterCPUUsage = new LinkedList<Double>();	//plotting staff'
+	private ArrayList<String> poxComponentsSelected = new ArrayList<String>();
 	private int selected_id;
 	
 	public ControllerWrapperGUI() {
@@ -118,6 +120,17 @@ public class ControllerWrapperGUI extends JFrame {
 		btnStopClient.setToolTipText("Disconnects client from the cluster");
 		btnPOXConfiguration = new JButton("Configure POX");
 		btnPOXConfiguration.setEnabled(true);
+		btnPOXConfiguration.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFrame frame = new POXComponentsGUI(ControllerWrapperGUI.this);
+				btnPOXConfiguration.setEnabled(false);
+				frame.setVisible(true);
+				//TODO
+				//create frame to choose controller options
+				//pause all other processes
+			}
+		});
 		//TODO
 		//add frame for configuration
 		

@@ -14,3 +14,34 @@
 [10 Jun 2014 11:43:22,551]:receiver socket is closed, exception=java.net.SocketException: Socket closed
 [10 Jun 2014 11:43:22,551]:unicast receiver thread terminated
 [10 Jun 2014 11:43:22,552]:closing sockets and stopping threads
+[10 Jun 2014 22:20:25,994]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[10 Jun 2014 22:20:26,018]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[10 Jun 2014 22:20:26,110]:Protocol stack initialized, bind address:192.168.0.1
+[10 Jun 2014 22:20:26,164]:JGroups message dispatcher and counter initialized
+[10 Jun 2014 22:20:26,164]:Client process started.
+[10 Jun 2014 22:20:26,251]:sockets will use interface 192.168.0.1
+[10 Jun 2014 22:20:26,258]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.0.1, ttl=8
+sock: bound to 192.168.0.1:47779, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.0.1:7600, send buffer size=32000, receive buffer size=500000
+[10 Jun 2014 22:20:29,348]:
+[fedic setDigest()]
+existing digest:  []
+new digest:       fedic: [0 (0)]
+resulting digest: fedic: [0 (0)]
+[10 Jun 2014 22:20:29,349]:fedic: installing view [fedic|0] (1) [fedic]
+[10 Jun 2014 22:20:29,349]:resuming message garbage collection
+[10 Jun 2014 22:20:29,351]:VIEW_CHANGE received: [fedic]
+[10 Jun 2014 22:20:29,355]:view=[fedic|0] (1) [fedic]
+[10 Jun 2014 22:20:29,355]:view=[fedic|0] (1) [fedic]
+[10 Jun 2014 22:20:29,355]:local_addr=fedic, coord=fedic, is_coord=true
+[10 Jun 2014 22:20:29,359]:resuming message garbage collection
+[10 Jun 2014 22:20:29,360]:created cluster (first member). My view is [fedic|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[10 Jun 2014 22:20:29,485]:POX started at:/home/fedor/Desktop/SDN/pox:6644
+[10 Jun 2014 22:20:47,638]:Not a master any more, controller stopped.
+[10 Jun 2014 22:20:47,645]:multicast socket closed
+[10 Jun 2014 22:20:47,645]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[10 Jun 2014 22:20:47,645]:multicast receiver thread terminated
+[10 Jun 2014 22:20:47,646]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[10 Jun 2014 22:20:47,646]:unicast receiver thread terminated
+[10 Jun 2014 22:20:47,647]:closing sockets and stopping threads
