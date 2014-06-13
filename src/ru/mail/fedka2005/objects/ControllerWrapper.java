@@ -51,6 +51,9 @@ import org.apache.log4j.Logger;
 //TODO
 //this class can not to know the path to pox controller
 
+//TODO
+//add License under which this program being distributed(fully open license)
+
 public class ControllerWrapper implements Runnable {
 	/**
 	 * method creates the channel and connect process to the cluster
@@ -68,8 +71,7 @@ public class ControllerWrapper implements Runnable {
 	 */
 	public ControllerWrapper(Controller controller,
 			String groupName, String groupAddress, 
-			String pName, int id,
-			String poxPath, int poxPort, 
+			String pName, int id, 
 			double cpuThreshold) throws ClientConstructorException {
 		try {
 			this.controller = controller;	//bound to controller
@@ -262,7 +264,7 @@ public class ControllerWrapper implements Runnable {
 					try {						//handling deadlocking-exception event
 						masterLock.lock();		//concurrent rewriting excluded
 							if (masterID.get() == id) {
-								controller.startPOX(poxPath, poxPort);	//master starts pox controller in a seperate process
+								controller.startPOX();	//master starts pox controller in a seperate process
 								rewrite = true;
 								logger.info("POX started at:" + poxPath + ":" + poxPort);
 							}

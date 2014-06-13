@@ -41,7 +41,6 @@ public class ControllerWrapperGUI extends JFrame {
 	private JButton btnStopClient = null;
 	private JButton btnPOXConfiguration = null;
 	private JTextField cpuThresholdTextField;
-	private JTextField portTextField;
 	
 	private final int message_buffer_size = 17;	//max messages displayed
 	private Plot2DPanel plot = new Plot2DPanel();	//plot, master cpu-load
@@ -70,10 +69,9 @@ public class ControllerWrapperGUI extends JFrame {
 					String poxPath = poxPathTextField.getText();
 					String address = addressTextField.getText();
 					String cpuThreshold = cpuThresholdTextField.getText();
-					String port = portTextField.getText();
 					if (nodeName.length() == 0 || groupName.length() == 0 || 
 							poxPath.length() == 0 || address.length() == 0 ||
-							cpuThreshold.length() == 0 || port.length() == 0) {
+							cpuThreshold.length() == 0) {
 						JOptionPane.showMessageDialog(ControllerWrapperGUI.this,
 								"Some fields where not defined",
 								"EmptyInput Error",
@@ -84,7 +82,7 @@ public class ControllerWrapperGUI extends JFrame {
 					textFieldsEnable(false);
 					btnPOXConfiguration.setEnabled(false);
 					
-					controller.startClient(nodeName, groupName, poxPath, address, cpuThreshold, port);	//start controller-client
+					controller.startClient(nodeName, groupName, poxPath, address, cpuThreshold);	//start controller-client
 					//in a seperate thread
 					btnStopClient.setEnabled(true);
 				} catch (NullPointerException ex) {
@@ -155,8 +153,6 @@ public class ControllerWrapperGUI extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("POX port:");
 		
-		portTextField = new JTextField();
-		portTextField.setColumns(10);
 
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -198,7 +194,6 @@ public class ControllerWrapperGUI extends JFrame {
 										.addComponent(lblAddress))
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(portTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))))
 					.addContainerGap())
 		);
@@ -224,7 +219,6 @@ public class ControllerWrapperGUI extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel)
-						.addComponent(portTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(cpuThresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblCpuThreshold)
 						.addComponent(btnStopClient))
@@ -314,7 +308,6 @@ public class ControllerWrapperGUI extends JFrame {
 		poxPathTextField.setEnabled(bool);
 		addressTextField.setEnabled(bool);
 		cpuThresholdTextField.setEnabled(bool);
-		portTextField.setEnabled(bool);
 	}
 	
 	public void setController(Controller controller) {

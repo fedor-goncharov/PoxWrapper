@@ -28,13 +28,17 @@ public class Controller {
 
 	private ControllerWrapperGUI gui = null;	//gui
 	private ControllerWrapper instance = null;	//business-logic
-	public Process poxProcess = null;
+	
+	
+	private Process poxProcess = null;
+	private String poxPath = null;
 	/**
 	 * Button generated event
 	 */
 	public void startClient(String nodeName, String groupName, 
 			String poxPath, String groupAddress, 
-			String cpuThreshold, String port) throws MalformedInputException, ClientConstructorException {
+			String cpuThreshold) throws MalformedInputException, ClientConstructorException {
+		this.poxPath = poxPath;
 		try {
 			//TODO - get id from cluster, not from the keyboard input
 			Scanner in = new Scanner(System.in);
@@ -45,9 +49,7 @@ public class Controller {
 					groupName, 
 					groupAddress, 
 					nodeName, 
-					id,	//TODO - generate identifier from nodeName, or generate identifier from cluster
-					poxPath, 
-					Integer.parseInt(port), 
+					id,	//TODO - generate identifier from nodeName, or generate identifier from cluster 
 					Double.parseDouble(cpuThreshold));
 			Thread appProcess = new Thread(instance);
 			appProcess.start();		//process started in another thread
@@ -89,7 +91,7 @@ public class Controller {
 	 * @param String poxPath - path to pox.py
 	 * @param int poxPort - number of port, to which POX is attached 
 	 */
-	public void startPOX(String path, int port) {
+	public void startPOX() {
 		ArrayList<String> cmdList = new ArrayList<String>();
 		cmdList.add("python"); cmdList.add("pox.py");
 		if (gui.poxComponentsSelected != null) {
@@ -98,7 +100,7 @@ public class Controller {
 		
 		ProcessBuilder pBuilder = new ProcessBuilder(cmdList);
 		try { 
-			pBuilder.directory(new File(path));
+			pBuilder.directory(new File(poxPath));
 			poxProcess = pBuilder.start();
 			
 		} catch (Exception e) {
