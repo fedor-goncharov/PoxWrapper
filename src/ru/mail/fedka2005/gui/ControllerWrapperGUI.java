@@ -104,21 +104,21 @@ public class ControllerWrapperGUI extends JFrame {
 							"MalformedInput Error",
 							JOptionPane.WARNING_MESSAGE);
 					
-					textFieldsEnable(true);
-					btnStartClient.setEnabled(true);
+					stopGUI();
 				} catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
 							"Malformed input, check if you entered correct data",
 							"MalformedInput Error",
 							JOptionPane.WARNING_MESSAGE);
 					
-					textFieldsEnable(true);
-					btnStartClient.setEnabled(true);
+					stopGUI();
 				} catch (ClientConstructorException ex) {
 					JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
-							"Initialization of constructor failed, see log file for details.",
+							"Initialization of constructor failed, program will now exit." +
+							" See log file for details.",
 							"Initialization Error",
 							JOptionPane.ERROR_MESSAGE);
+					System.exit(1);
 				}
 			}
 		});
