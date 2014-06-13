@@ -26,6 +26,15 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 
+
+//TODO
+//add functions to refresh gui when gui is stopped or started - will look better
+
+/**
+ * Graphical user interface, includes cpu-load plot of the master, list of cluster-members
+ * @author fedor.goncharov.ol@gmail.com
+ *
+ */
 @SuppressWarnings("serial")
 public class ControllerWrapperGUI extends JFrame {
 	
@@ -48,6 +57,9 @@ public class ControllerWrapperGUI extends JFrame {
 	public HashSet<String> poxComponentsSelected = null;
 	private int selected_id;
 	
+	/**
+	 * Empty constructor, adds all components on the frame
+	 */
 	public ControllerWrapperGUI() {
 		setResizable(false);
 		this.setSize(656, 489);
@@ -82,17 +94,24 @@ public class ControllerWrapperGUI extends JFrame {
 					textFieldsEnable(false);
 					btnPOXConfiguration.setEnabled(false);
 					
-					controller.startClient(nodeName, groupName, poxPath, address, cpuThreshold);	//start controller-client
-					//in a seperate thread
+					controller.startClient(nodeName, groupName, 
+										   poxPath, address, 
+										   Double.valueOf(cpuThreshold));
 					btnStopClient.setEnabled(true);
-				} catch (NullPointerException ex) {
-					//TODO - throw exception
-					//happens when problems with gui components occure
 				} catch (MalformedInputException ex) {
 					JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
 							"Malformed input, check if you entered correct data",
 							"MalformedInput Error",
-							JOptionPane.ERROR_MESSAGE);
+							JOptionPane.WARNING_MESSAGE);
+					
+					textFieldsEnable(true);
+					btnStartClient.setEnabled(true);
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
+							"Malformed input, check if you entered correct data",
+							"MalformedInput Error",
+							JOptionPane.WARNING_MESSAGE);
+					
 					textFieldsEnable(true);
 					btnStartClient.setEnabled(true);
 				} catch (ClientConstructorException ex) {
@@ -264,14 +283,12 @@ public class ControllerWrapperGUI extends JFrame {
 				} else {
 					membersTable.clearSelection();
 				}
-				
 				if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
 					
 					if (r >= 0 && r < membersTable.getRowCount()) {
 						membersTable.setRowSelectionInterval(r,r);
 						ControllerWrapperGUI.this.selected_id = membersTable.getSelectedRow();
 					}
-					
 					JPopupMenu popup = new JPopupMenu();
 					JMenuItem menuItem;
 					menuItem = new JMenuItem("Refresh");
@@ -291,7 +308,7 @@ public class ControllerWrapperGUI extends JFrame {
 		JScrollPane membersScrollPane = new JScrollPane(membersTable);
 		
 		tabbedPane.addTab("Cluster Messages", null, messageScrollPane, null);	//table of messages to view the history
-		tabbedPane.addTab("Cluster Info", null, membersScrollPane, null);	//talbe of cluster members to remember all the members
+		tabbedPane.addTab("Cluster Info", null, membersScrollPane, null);		//talbe of cluster members to remember all the members
 		plot.setAxisLabel(0, "Time");
 		plot.setAxisLabel(1,"CPU-usage");
 		plot.setFixedBounds(0, 0, 100);
@@ -314,8 +331,8 @@ public class ControllerWrapperGUI extends JFrame {
 		this.controller = controller;
 	}
 	/**
-	 * update data on message table, draw in gui
-	 * @parame Message
+	 * Update data on message table.
+	 * @param msg JGroups message class
 	 */
 	public void addRecord(Message msg) {
 		DefaultTableModel model = (DefaultTableModel)messageTable.getModel();
@@ -357,8 +374,9 @@ public class ControllerWrapperGUI extends JFrame {
 		plot.addLinePlot("master-cpu", x, y);
 	}
 	/**
-	 * Update list of connected nodes
-	 * @param Map<Address, NodeInfoResponse> 
+	 * Update list of connected nodes.
+	 * @param content  Map<Address, NodeInfoResponse>, Address - JGroups address,
+	 * NodeInfoResponse - message class, containing id, name, master
 	 */
 	public void updateNodeInfo(Map<Address, NodeInfoResponse> content) {
 		DefaultTableModel model = (DefaultTableModel)membersTable.getModel();
@@ -367,7 +385,7 @@ public class ControllerWrapperGUI extends JFrame {
 			try {
 				model.removeRow(size-i-1);
 			} catch (ArrayIndexOutOfBoundsException e) {
-				//do nothing here, record will be deleted aftewards
+				//Nothing to do here, critical section error
 			}
 		}
 		
@@ -381,23 +399,27 @@ public class ControllerWrapperGUI extends JFrame {
 	}
 	/**
 	 * Pop-up exceptions, generated from business-logic
-	 * @param Exception
+	 * @param e internal exception that should be displayer
 	 */
 	public void handleInternalException(Exception e) {
 		JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
-				"Exception occured, see log file for details:\n" + e.getMessage(),
+				"Exception occured, program will now exit. " +
+				"See log file(poxwrapper.log) for details:\n" + e.getMessage(),
 				"Unexpected exception",
 				JOptionPane.ERROR_MESSAGE);
 		System.exit(1);
 	}
 	
 	/**
-	 * Stop client, display in GUI:
+	 * Unblocks buttons, cleares message,members - tables
 	 */
 	public void stopGUI() {
 		textFieldsEnable(true);
 		btnStartClient.setEnabled(true);
 		btnPOXConfiguration.setEnabled(true);
 		btnStopClient.setEnabled(false);
+		
+		messageTable.removeAll();
+		membersTable.removeAll();
 	}
 }

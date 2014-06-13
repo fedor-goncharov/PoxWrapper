@@ -78,15 +78,14 @@ public class ControllerWrapper implements Runnable {
 			this.groupName = groupName;
 			this.groupAddress = groupAddress;
 			this.pName = pName; this.id = id;
-			this.poxPath = poxPath; this.poxPort = poxPort;
 			this.logger = Logger.getLogger(ControllerWrapper.class);	//create logger
 			
 			this.mNotifications = new Stack<CPULoadRecord>();
 			ControllerWrapper.cpuThreshold = cpuThreshold;
 			
 			
-			channel = new JChannel(false);	//(1)	create own protocol Stack, not default
-			ProtocolStack stack = new ProtocolStack(); //(2)
+			channel = new JChannel(false);	//	create own protocol stack
+			ProtocolStack stack = new ProtocolStack();
 			channel.setProtocolStack(stack);
 			
 			stack.addProtocol(new UDP().setValue("bind_addr", InetAddress.getByName(groupAddress))
@@ -171,8 +170,8 @@ public class ControllerWrapper implements Runnable {
 				
 					@Override
 						public void suspect(Address addr) {
-						System.out.println("Node:" + addr.toString() + " may have crushed.");
-						//TODO perform actions on member suspected crashed
+						logger.info("Node:" + addr.toString() + " may have crushed.");
+						//do nothing here
 					}
 				
 					@Override
@@ -243,7 +242,6 @@ public class ControllerWrapper implements Runnable {
 	}
 	/**
 	 * Node main loop: monitoring messages, replace master actions
-	 * @throws Exception - to be done
 	 */
 	private void eventLoop() throws MasterReplaceException, 
 									InterruptedException, 
@@ -266,7 +264,6 @@ public class ControllerWrapper implements Runnable {
 							if (masterID.get() == id) {
 								controller.startPOX();	//master starts pox controller in a seperate process
 								rewrite = true;
-								logger.info("POX started at:" + poxPath + ":" + poxPort);
 							}
 					} finally {	masterLock.unlock(); }
 				}
@@ -279,10 +276,10 @@ public class ControllerWrapper implements Runnable {
 				}
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
-			controller.stopPOX();		//stop controller if it was running
+			controller.stopPOXController();		//stop controller if it was running
 			info_mapping = refreshInfo();
 			logger.info("Not a master any more, controller stopped.");
-			boolean wait_stack = true;	//wait one iteration to get notification from master controller
+			boolean wait_stack = true;			//wait one iteration to get notification from master controller
 			int local_master;
 			while (isActive && (local_master = (int)masterID.get()) != id) {
 				if (cl_mapping_update) {
@@ -317,7 +314,7 @@ public class ControllerWrapper implements Runnable {
 	/**
 	 * Replaces the master controller, call depends on reasons:
 	 * exceeded notification await time, suspected for crush, high cpu-load on the node.
-	 * @param code - reason of replacement(low perfomance, loss of connection, suspected)
+	 * @param code - reason of replacement(low perfomance, loss of connection)
 	 * @param master_id who is the master at the moment, when called this method
 	 * @throws MasterReplaceException
 	 */
@@ -429,8 +426,6 @@ public class ControllerWrapper implements Runnable {
 	private String groupName;					//cluster unique idendifier
 	private String pName;						//personal name
 	private boolean isActive = false;			//node works
-	private int poxPort;
-	private String poxPath;
 	private Logger logger = null;				//logger
 	private static final String master_lock = "MASTER_LOCK";
 	private static final String master_counter = "MASTER";

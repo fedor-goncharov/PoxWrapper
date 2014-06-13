@@ -16,6 +16,7 @@ public class WrapperApplication {
 	 * be invoked, path to executable pox.py, and port), own-name in the cluster, and CPU-threshold(if 
 	 * CPU-load exceeds this value, a new master selected) 
 	 * @param args
+	 * @author fedor.goncharov.ol@gmail.com
 	 */
 	public static void main(String[] args) {
 		

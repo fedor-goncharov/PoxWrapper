@@ -20,9 +20,8 @@ import ru.mail.fedka2005.objects.ControllerWrapper;
 /**
  * Part of MVC(Model-View-Controller Application) -- binds graphical user
  * interface(ControllerWrapperGUI) and business logic(ControllerWrapper).
- * Executes POX process and also kills controller, when required.
- * It's a singleton class.
- * @author fedor
+ * Executes POX process and also kills controller, when required. Singleton class.
+ * @author fedor.goncharov.ol@gmail.com
  */
 public class Controller {
 
@@ -32,12 +31,18 @@ public class Controller {
 	
 	private Process poxProcess = null;
 	private String poxPath = null;
+	
 	/**
-	 * Button generated event
+	 * Button generated event, creates another thread running all logic and synchronization.
+	 * @param nodeName logical name of the node(not unique among cluster)
+	 * @param groupName name of the target cluster, connect to
+	 * @param poxPath path to POX folder
+	 * @param groupAddress ip-address to which the client will be binded
+	 * @param cpuThreshold highest cpu-load master can have without being replaced
 	 */
 	public void startClient(String nodeName, String groupName, 
 			String poxPath, String groupAddress, 
-			String cpuThreshold) throws MalformedInputException, ClientConstructorException {
+			double cpuThreshold) throws MalformedInputException, ClientConstructorException {
 		this.poxPath = poxPath;
 		try {
 			//TODO - get id from cluster, not from the keyboard input
@@ -49,8 +54,8 @@ public class Controller {
 					groupName, 
 					groupAddress, 
 					nodeName, 
-					id,	//TODO - generate identifier from nodeName, or generate identifier from cluster 
-					Double.parseDouble(cpuThreshold));
+					id, 
+					cpuThreshold);
 			Thread appProcess = new Thread(instance);
 			appProcess.start();		//process started in another thread
 		} catch (NumberFormatException e) {
@@ -63,7 +68,7 @@ public class Controller {
 	 */
 	public void stopClient() {
 		instance.stopClient();
-		stopPOX();
+		stopPOXController();
 	}
 	/**
 	 * Prints a new message from the cluster to gui table
@@ -80,16 +85,14 @@ public class Controller {
 		this.gui = gui;		
 	}
 	/**
-	 * forward exception from ControllerWrapper to gui
-	 * @param Exception to be forwarded to some GUI methods
+	 * Forward exception from ControllerWrapper to gui.
+	 * @param e to be forwarded to some GUI methods
 	 */
 	public void forwardException(Exception e) {
 		gui.handleInternalException(e);
 	}
 	/**
-	 * start POX controller(invoked when this client is a master)
-	 * @param String poxPath - path to pox.py
-	 * @param int poxPort - number of port, to which POX is attached 
+	 * Start POX controller(invoked when this client is a master). 
 	 */
 	public void startPOX() {
 		ArrayList<String> cmdList = new ArrayList<String>();
@@ -111,7 +114,7 @@ public class Controller {
 	/**
 	 * ControllerWrapper class calls this method to send information about all the nodes
 	 * to gui class.
-	 * Parameters - list of specialized classes(or messages)
+	 * @param content map, containing info about id, name, address
 	 */
 	public void printConnectedNodes(Map<Address, NodeInfoResponse> content) {
 		gui.updateNodeInfo(content);
@@ -122,6 +125,8 @@ public class Controller {
 	 * Method called from GUI to detach selected node from cluster. After calling thread
 	 * sends a special message to the target node - as an order to terminate. No response is sent,
 	 * message delivery is unreliable(because all messaging is handled by UDP)
+	 * 
+	 * @param id - identificator of the node to be detached
 	 */
 	public void detachSelectedNode(int id) {
 		try {
@@ -131,7 +136,7 @@ public class Controller {
 		}
 	}
 	/**
-	 * After user calls this method, target client broadcastly requires info about all the nodes(name, cluster, address, master - yes,no) 
+	 * Target client broadcastly requires info about all the nodes(name, cluster, address, master - yes,no) 
 	 * Target node is blocked untill all the messages are recieved.  
 	 */
 	public void refreshNodes() {
@@ -145,14 +150,13 @@ public class Controller {
 	/**
 	 * Stop POX controller(invoked when client is shifted from the master position)
 	 */
-	public void stopPOX() {
+	public void stopPOXController() {
 		if (poxProcess != null) {
 			poxProcess.destroy();	//kill the controller process
-			poxProcess = null;
 		}
 	}
 	/**
-	 * Controller calls gui to stop
+	 * Stop GUI, unblock buttons and fields. Clean the fields and tables.
 	 */
 	public void stopGUI() {
 		gui.stopGUI();
