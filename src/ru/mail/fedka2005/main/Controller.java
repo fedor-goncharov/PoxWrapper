@@ -17,6 +17,7 @@ import ru.mail.fedka2005.exceptions.RefreshException;
 import ru.mail.fedka2005.gui.ControllerWrapperGUI;
 import ru.mail.fedka2005.messages.NodeInfoResponse;
 import ru.mail.fedka2005.objects.ControllerWrapper;
+
 /**
  * Part of MVC(Model-View-Controller Application) -- binds graphical user
  * interface(ControllerWrapperGUI) and business logic(ControllerWrapper).
@@ -27,7 +28,6 @@ public class Controller {
 
 	private ControllerWrapperGUI gui = null;	//gui
 	private ControllerWrapper instance = null;	//business-logic
-	
 	
 	private Process poxProcess = null;
 	private String poxPath = null;
@@ -71,11 +71,11 @@ public class Controller {
 		stopPOXController();
 	}
 	/**
-	 * Prints a new message from the cluster to gui table
+	 * Prints a new message from the cluster to GUI messageTable
 	 * @param Message msg - JGroups class, containing destination, source, serialized object
 	 */
 	public void printMessage(Message msg) {
-		gui.addRecord(msg);
+		gui.addMessageRecord(msg);
 	}
 	/**
 	 * binding gui and controller object
@@ -92,7 +92,8 @@ public class Controller {
 		gui.handleInternalException(e);
 	}
 	/**
-	 * Start POX controller(invoked when this client is a master). 
+	 * Start POX controller(invoked when this client is a master).
+	 * Starts with components selected in POX configuration
 	 */
 	public void startPOX() {
 		ArrayList<String> cmdList = new ArrayList<String>();
@@ -100,7 +101,6 @@ public class Controller {
 		if (gui.poxComponentsSelected != null) {
 			cmdList.addAll(gui.poxComponentsSelected);
 		}
-		
 		ProcessBuilder pBuilder = new ProcessBuilder(cmdList);
 		try { 
 			pBuilder.directory(new File(poxPath));
@@ -125,7 +125,6 @@ public class Controller {
 	 * Method called from GUI to detach selected node from cluster. After calling thread
 	 * sends a special message to the target node - as an order to terminate. No response is sent,
 	 * message delivery is unreliable(because all messaging is handled by UDP)
-	 * 
 	 * @param id - identificator of the node to be detached
 	 */
 	public void detachSelectedNode(int id) {
@@ -137,7 +136,7 @@ public class Controller {
 	}
 	/**
 	 * Target client broadcastly requires info about all the nodes(name, cluster, address, master - yes,no) 
-	 * Target node is blocked untill all the messages are recieved.  
+	 * Client is blocked until all the messages are recieved.  
 	 */
 	public void refreshNodes() {
 		try {

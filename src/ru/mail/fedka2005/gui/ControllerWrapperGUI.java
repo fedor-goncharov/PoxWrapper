@@ -26,10 +26,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 
-
-//TODO
-//add functions to refresh gui when gui is stopped or started - will look better
-
 /**
  * Graphical user interface, includes cpu-load plot of the master, list of cluster-members
  * @author fedor.goncharov.ol@gmail.com
@@ -170,8 +166,6 @@ public class ControllerWrapperGUI extends JFrame {
 		
 		JLabel lblCpuThreshold = new JLabel("CPU Threshold:");
 		
-		JLabel lblNewLabel = new JLabel("POX port:");
-		
 
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -209,7 +203,6 @@ public class ControllerWrapperGUI extends JFrame {
 									.addComponent(poxPathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayout.createSequentialGroup()
 									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(lblNewLabel)
 										.addComponent(lblAddress))
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -237,7 +230,6 @@ public class ControllerWrapperGUI extends JFrame {
 						.addComponent(btnPOXConfiguration))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel)
 						.addComponent(cpuThresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblCpuThreshold)
 						.addComponent(btnStopClient))
@@ -334,18 +326,11 @@ public class ControllerWrapperGUI extends JFrame {
 	 * Update data on message table.
 	 * @param msg JGroups message class
 	 */
-	public void addRecord(Message msg) {
-		DefaultTableModel model = (DefaultTableModel)messageTable.getModel();
-		if (model.getRowCount() > message_buffer_size) {	//clear table sometimes, add flush messages to log_files
-			int size = model.getRowCount();
-			for (int i = 0; i < size; ++i) {
-				try {
-					model.removeRow(size-i-1);
-				} catch (ArrayIndexOutOfBoundsException e) {
-					//do nothing here, will be deleted aftewards
-				}
-			}
+	public void addMessageRecord(Message msg) {
+		if (messageTable.getModel().getRowCount() > message_buffer_size) {
+			clearTable(messageTable);
 		}
+		DefaultTableModel model = (DefaultTableModel)messageTable.getModel();
 		model.addRow(new Object[]{msg.getSrc(),
 				(msg.getDest() == null ? "all" : msg.getDest()),
 				msg.getObject()});
@@ -379,16 +364,9 @@ public class ControllerWrapperGUI extends JFrame {
 	 * NodeInfoResponse - message class, containing id, name, master
 	 */
 	public void updateNodeInfo(Map<Address, NodeInfoResponse> content) {
-		DefaultTableModel model = (DefaultTableModel)membersTable.getModel();
-		int size = model.getRowCount();
-		for (int i = 0; i < size; ++i) {
-			try {
-				model.removeRow(size-i-1);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				//Nothing to do here, critical section error
-			}
-		}
+		clearTable(membersTable);
 		
+		DefaultTableModel model = (DefaultTableModel)membersTable.getModel();
 		for (NodeInfoResponse node_info : content.values()) {
 			model.addRow(new Object[]{node_info.name,
 									  node_info.address,
@@ -419,7 +397,19 @@ public class ControllerWrapperGUI extends JFrame {
 		btnPOXConfiguration.setEnabled(true);
 		btnStopClient.setEnabled(false);
 		
-		messageTable.removeAll();
-		membersTable.removeAll();
+		clearTable(messageTable);
+		clearTable(membersTable);
+	}
+	
+	private void clearTable(JTable table) {
+		try {
+			DefaultTableModel model = (DefaultTableModel)table.getModel();
+			int rowCount = model.getColumnCount();
+			for (int i = 0; i < rowCount; ++i) {
+				model.removeRow(i);
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			//nothing to do
+		}
 	}
 }

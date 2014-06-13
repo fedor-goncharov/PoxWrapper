@@ -20,12 +20,6 @@ import java.awt.event.WindowEvent;
  * @author fedor.goncharov.ol@gmail.com
  *
  */
-
-//TODO
-//implement choosing number of components
-//TODO
-//actions on close, apply buttons
-
 @SuppressWarnings("serial")
 public class POXComponentsGUI extends JFrame {
 	
@@ -43,6 +37,9 @@ public class POXComponentsGUI extends JFrame {
 	public POXComponentsGUI(ControllerWrapperGUI controllerWrapperGUI) {
 		
 		masterInstance = controllerWrapperGUI;
+		if (masterInstance.poxComponentsSelected != null) {
+			selectedComponents = masterInstance.poxComponentsSelected;
+		}
 		masterInstance.setEnabled(false); 	//disable until choose number of components
 		setAlwaysOnTop(true);
 		setResizable(false);
@@ -55,7 +52,7 @@ public class POXComponentsGUI extends JFrame {
 		btnApply.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				masterInstance.poxComponentsSelected = selectedComponents;
+				masterInstance.poxComponentsSelected = new HashSet<String>(selectedComponents);
 				POXComponentsGUI.this.dispose();
 			}
 		});
@@ -83,6 +80,7 @@ public class POXComponentsGUI extends JFrame {
 		
 		selectedComponentsListGUI = new JList<String>();
 		if (selectedComponents.size() > 0) {
+			System.out.println(selectedComponents);
 			selectedComponentsListGUI.setListData(
 					selectedComponents.toArray(new String[selectedComponents.size()]));
 		}
@@ -148,9 +146,7 @@ public class POXComponentsGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 	}
-
-
-	//number of avalable pox components 
+ 
 	private static final String[] components = { 
 		"py", "forwarding.hub", "forwarding.l2_learning", "forwarding.l2_pairs",
 		"forwarding.l3_learning", "forwarding.l2_multi", "forwarding.l2_nx", "forwarding.topo_proactive",
