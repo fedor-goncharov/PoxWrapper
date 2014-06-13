@@ -1,80 +1,81 @@
-[14 Jun 2014 00:56:00,007]:view=[fedich|0] (1) [fedich]
-[14 Jun 2014 00:56:00,007]:view=[fedich|0] (1) [fedich]
-[14 Jun 2014 00:56:00,007]:local_addr=fedich, coord=fedich, is_coord=true
-[14 Jun 2014 00:56:00,013]:resuming message garbage collection
-[14 Jun 2014 00:56:00,014]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
-[14 Jun 2014 00:56:18,127]:Not a master any more, controller stopped.
-[14 Jun 2014 00:56:18,135]:multicast socket closed
-[14 Jun 2014 00:56:18,135]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 00:56:18,136]:multicast receiver thread terminated
-[14 Jun 2014 00:56:18,137]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 00:56:18,137]:unicast receiver thread terminated
-[14 Jun 2014 00:56:18,138]:closing sockets and stopping threads
-[14 Jun 2014 00:58:28,091]:set property UDP.mcast_group_addr to default value /228.8.8.8
-[14 Jun 2014 00:58:28,092]:set property UDP.diagnostics_addr to default value /224.0.75.75
-[14 Jun 2014 00:58:28,124]:Protocol stack initialized, bind address:192.168.1.1
-[14 Jun 2014 00:58:28,133]:JGroups message dispatcher and counter initialized
-[14 Jun 2014 00:58:28,133]:Client process started.
-[14 Jun 2014 00:58:28,155]:sockets will use interface 192.168.1.1
-[14 Jun 2014 00:58:30,394]:java.lang.IllegalArgumentException: port out of range:65536
-	at java.net.InetSocketAddress.checkPort(InetSocketAddress.java:143)
-	at java.net.InetSocketAddress.<init>(InetSocketAddress.java:185)
-	at java.net.DatagramSocket.<init>(DatagramSocket.java:284)
-	at org.jgroups.util.DefaultSocketFactory.createDatagramSocket(DefaultSocketFactory.java:62)
-	at org.jgroups.protocols.UDP.createEphemeralDatagramSocket(UDP.java:457)
-	at org.jgroups.protocols.UDP.createSockets(UDP.java:337)
-	at org.jgroups.protocols.UDP.start(UDP.java:231)
-	at org.jgroups.stack.ProtocolStack.startStack(ProtocolStack.java:952)
-	at org.jgroups.JChannel.startStack(JChannel.java:864)
-	at org.jgroups.JChannel._preConnect(JChannel.java:527)
-	at org.jgroups.JChannel.connect(JChannel.java:284)
-	at org.jgroups.JChannel.connect(JChannel.java:275)
-	at ru.mail.fedka2005.objects.ControllerWrapper.start(ControllerWrapper.java:217)
-	at ru.mail.fedka2005.objects.ControllerWrapper.run(ControllerWrapper.java:498)
-	at java.lang.Thread.run(Thread.java:744)
-
-[14 Jun 2014 00:59:24,716]:set property UDP.mcast_group_addr to default value /228.8.8.8
-[14 Jun 2014 00:59:24,718]:set property UDP.diagnostics_addr to default value /224.0.75.75
-[14 Jun 2014 00:59:24,750]:Protocol stack initialized, bind address:192.168.1.6
-[14 Jun 2014 00:59:24,759]:JGroups message dispatcher and counter initialized
-[14 Jun 2014 00:59:24,759]:Client process started.
-[14 Jun 2014 00:59:24,778]:sockets will use interface 192.168.1.6
-[14 Jun 2014 00:59:24,789]:socket information:
+[14 Jun 2014 01:54:07,647]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[14 Jun 2014 01:54:07,678]:Protocol stack initialized, bind address:192.168.1.6
+[14 Jun 2014 01:54:07,687]:JGroups message dispatcher and counter initialized
+[14 Jun 2014 01:54:07,688]:Client process started.
+[14 Jun 2014 01:54:07,707]:sockets will use interface 192.168.1.6
+[14 Jun 2014 01:54:07,714]:socket information:
 mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.6, ttl=8
-sock: bound to 192.168.1.6:57698, receive buffer size=64000, send buffer size=100000
+sock: bound to 192.168.1.6:50991, receive buffer size=64000, send buffer size=100000
 mcast_sock: bound to 192.168.1.6:7600, send buffer size=32000, receive buffer size=500000
-[14 Jun 2014 00:59:27,833]:
+[14 Jun 2014 01:54:10,764]:
 [fedich setDigest()]
 existing digest:  []
 new digest:       fedich: [0 (0)]
 resulting digest: fedich: [0 (0)]
-[14 Jun 2014 00:59:27,834]:fedich: installing view [fedich|0] (1) [fedich]
-[14 Jun 2014 00:59:27,835]:resuming message garbage collection
-[14 Jun 2014 00:59:27,837]:VIEW_CHANGE received: [fedich]
-[14 Jun 2014 00:59:27,840]:view=[fedich|0] (1) [fedich]
-[14 Jun 2014 00:59:27,841]:view=[fedich|0] (1) [fedich]
-[14 Jun 2014 00:59:27,841]:local_addr=fedich, coord=fedich, is_coord=true
-[14 Jun 2014 00:59:27,845]:resuming message garbage collection
-[14 Jun 2014 00:59:27,845]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
-[14 Jun 2014 00:59:57,959]:Not a master any more, controller stopped.
-[14 Jun 2014 00:59:57,966]:multicast socket closed
-[14 Jun 2014 00:59:57,966]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 00:59:57,966]:multicast receiver thread terminated
-[14 Jun 2014 00:59:57,967]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 00:59:57,967]:unicast receiver thread terminated
-[14 Jun 2014 00:59:57,968]:closing sockets and stopping threads
-[14 Jun 2014 01:00:46,351]:set property UDP.mcast_group_addr to default value /228.8.8.8
-[14 Jun 2014 01:00:46,353]:set property UDP.diagnostics_addr to default value /224.0.75.75
-[14 Jun 2014 01:00:46,384]:Protocol stack initialized, bind address:192.168.1.6
-[14 Jun 2014 01:00:46,392]:JGroups message dispatcher and counter initialized
-[14 Jun 2014 01:00:46,393]:Client process started.
-[14 Jun 2014 01:00:46,413]:sockets will use interface 192.168.1.6
-[14 Jun 2014 01:00:46,424]:socket information:
+[14 Jun 2014 01:54:10,764]:fedich: installing view [fedich|0] (1) [fedich]
+[14 Jun 2014 01:54:10,765]:resuming message garbage collection
+[14 Jun 2014 01:54:10,766]:VIEW_CHANGE received: [fedich]
+[14 Jun 2014 01:54:10,770]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 01:54:10,770]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 01:54:10,770]:local_addr=fedich, coord=fedich, is_coord=true
+[14 Jun 2014 01:54:10,775]:resuming message garbage collection
+[14 Jun 2014 01:54:10,775]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[14 Jun 2014 01:54:14,911]:Not a master any more, controller stopped.
+[14 Jun 2014 01:54:14,920]:multicast socket closed
+[14 Jun 2014 01:54:14,920]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[14 Jun 2014 01:54:14,920]:multicast receiver thread terminated
+[14 Jun 2014 01:54:14,921]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[14 Jun 2014 01:54:14,921]:unicast receiver thread terminated
+[14 Jun 2014 01:54:14,923]:closing sockets and stopping threads
+[14 Jun 2014 01:58:20,706]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[14 Jun 2014 01:58:20,707]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[14 Jun 2014 01:58:20,740]:Protocol stack initialized, bind address:192.168.1.6
+[14 Jun 2014 01:58:20,749]:JGroups message dispatcher and counter initialized
+[14 Jun 2014 01:58:20,750]:Client process started.
+[14 Jun 2014 01:58:20,770]:sockets will use interface 192.168.1.6
+[14 Jun 2014 01:58:20,777]:socket information:
 mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.6, ttl=8
-sock: bound to 192.168.1.6:43950, receive buffer size=64000, send buffer size=100000
+sock: bound to 192.168.1.6:50245, receive buffer size=64000, send buffer size=100000
 mcast_sock: bound to 192.168.1.6:7600, send buffer size=32000, receive buffer size=500000
-[14 Jun 2014 01:00:49,477]:
+[14 Jun 2014 01:58:23,821]:
 [fedich setDigest()]
 existing digest:  []
 new digest:       fedich: [0 (0)]
 resulting digest: fedich: [0 (0)]
+[14 Jun 2014 01:58:23,821]:fedich: installing view [fedich|0] (1) [fedich]
+[14 Jun 2014 01:58:23,822]:resuming message garbage collection
+[14 Jun 2014 01:58:23,823]:VIEW_CHANGE received: [fedich]
+[14 Jun 2014 01:58:23,827]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 01:58:23,827]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 01:58:23,827]:local_addr=fedich, coord=fedich, is_coord=true
+[14 Jun 2014 01:58:23,832]:resuming message garbage collection
+[14 Jun 2014 01:58:23,832]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[14 Jun 2014 01:58:25,929]:Not a master any more, controller stopped.
+[14 Jun 2014 01:58:25,937]:multicast socket closed
+[14 Jun 2014 01:58:25,937]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[14 Jun 2014 01:58:25,937]:multicast receiver thread terminated
+[14 Jun 2014 01:58:25,938]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[14 Jun 2014 01:58:25,938]:unicast receiver thread terminated
+[14 Jun 2014 01:58:25,939]:closing sockets and stopping threads
+[14 Jun 2014 02:02:27,850]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[14 Jun 2014 02:02:27,851]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[14 Jun 2014 02:02:27,883]:Protocol stack initialized, bind address:192.168.1.6
+[14 Jun 2014 02:02:27,892]:JGroups message dispatcher and counter initialized
+[14 Jun 2014 02:02:27,892]:Client process started.
+[14 Jun 2014 02:02:27,914]:sockets will use interface 192.168.1.6
+[14 Jun 2014 02:02:27,922]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.6, ttl=8
+sock: bound to 192.168.1.6:36351, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.6:7600, send buffer size=32000, receive buffer size=500000
+[14 Jun 2014 02:02:30,973]:
+[fedich setDigest()]
+existing digest:  []
+new digest:       fedich: [0 (0)]
+resulting digest: fedich: [0 (0)]
+[14 Jun 2014 02:02:30,973]:fedich: installing view [fedich|0] (1) [fedich]
+[14 Jun 2014 02:02:30,974]:resuming message garbage collection
+[14 Jun 2014 02:02:30,975]:VIEW_CHANGE received: [fedich]
+[14 Jun 2014 02:02:30,979]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 02:02:30,979]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 02:02:30,980]:local_addr=fedich, coord=fedich, is_coord=true
+[14 Jun 2014 02:02:30,984]:resuming message garbage collection

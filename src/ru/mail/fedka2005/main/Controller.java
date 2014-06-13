@@ -48,7 +48,7 @@ public class Controller {
 			//TODO - get id from cluster, not from the keyboard input
 			Scanner in = new Scanner(System.in);
 			int id = in.nextInt();
-			in.close();
+			//in.close();
 			
 			instance = new ControllerWrapper(this,
 					groupName, 
@@ -64,11 +64,11 @@ public class Controller {
 		}
 	}
 	/**
-	 * Button generated event
+	 * Invokes stop the bussiness logic, stop POX controller
 	 */
 	public void stopClient() {
-		instance.stopClient();
 		stopPOXController();
+		instance.stopClient();
 	}
 	/**
 	 * Prints a new message from the cluster to GUI messageTable

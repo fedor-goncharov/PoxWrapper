@@ -82,8 +82,8 @@ public class ControllerWrapperGUI extends JFrame {
 							cpuThreshold.length() == 0) {
 						JOptionPane.showMessageDialog(ControllerWrapperGUI.this,
 								"Some fields where not defined",
-								"EmptyInput Error",
-								JOptionPane.ERROR_MESSAGE);
+								"Empty Input",
+								JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 					btnStartClient.setEnabled(false);
@@ -97,14 +97,14 @@ public class ControllerWrapperGUI extends JFrame {
 				} catch (MalformedInputException ex) {
 					JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
 							"Malformed input, check if you entered correct data",
-							"MalformedInput Error",
+							"Malformed Input",
 							JOptionPane.WARNING_MESSAGE);
 					
 					stopGUI();
 				} catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(ControllerWrapperGUI.this, 
 							"Malformed input, check if you entered correct data",
-							"MalformedInput Error",
+							"Malformed Input",
 							JOptionPane.WARNING_MESSAGE);
 					
 					stopGUI();
