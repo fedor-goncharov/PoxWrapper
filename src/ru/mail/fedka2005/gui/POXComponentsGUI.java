@@ -156,6 +156,6 @@ public class POXComponentsGUI extends JFrame {
 		"proto.dhcp_client", "proto.dhcpd", "misc.of_tutorial", "misc.full_payload", 
 		"misc.mac_blocker", "misc.nat", "misc.ip_loadbalancer", "misc.gephi_topo",
 		"log", "log.color", "log.level", "samples.pretty_log", "tk",
-		"host_tracker", "datnapaths.pcap_switch"
+		"host_tracker", "datnapaths.pcap_switch", "timer"
 	};
 }

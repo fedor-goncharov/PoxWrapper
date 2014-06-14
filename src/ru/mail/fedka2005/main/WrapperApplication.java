@@ -22,7 +22,7 @@ public class WrapperApplication {
 		
 		System.setProperty("java.net.preferIPv4Stack", "true");	//connect node via IPv4, no IPv6
 		PropertyConfigurator.configure("properties/log4j.properties");	//enable logging settings
-		
+
 		ControllerWrapperGUI gui = new ControllerWrapperGUI();	//create GUI
 		Controller controller = new Controller();				//create Controller from MVC-pattern
 		gui.setController(controller);							//bound objects

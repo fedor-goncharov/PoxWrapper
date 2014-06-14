@@ -404,7 +404,7 @@ public class ControllerWrapperGUI extends JFrame {
 	private void clearTable(JTable table) {
 		try {
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
-			int rowCount = model.getColumnCount();
+			int rowCount = model.getRowCount();
 			for (int i = 0; i < rowCount; ++i) {
 				model.removeRow(i);
 			}

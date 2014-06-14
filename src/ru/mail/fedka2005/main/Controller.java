@@ -62,11 +62,11 @@ public class Controller {
 	public void stopClient() {
 		stopPOXController();
 		long time_m = System.currentTimeMillis();
-		int hours  = (int) ((time_m / (1000*60*60)) % 24);
-		int minutes = (int) ((time_m / (1000*60)) % 60);
-		int seconds = (int) ((time_m / (1000)) % 60);
-		int dec_seconds = (int) ((time_m / 10) % 100);
-		instance.logger.info("POX stopped, hours:" + hours + ":" + minutes + 
+		long hours  = ((time_m / (1000*60*60)) % 24);
+		long minutes = ((time_m / (1000*60)) % 60);
+		long seconds = ((time_m / (1000)) % 60);
+		long dec_seconds = ((time_m / 10) % 100);
+		instance.logger.info("POX stopped : " + hours + ":" + minutes + 
 				":" + seconds + ":" + dec_seconds);	//write time to log-file
 		instance.stopClient();
 	}

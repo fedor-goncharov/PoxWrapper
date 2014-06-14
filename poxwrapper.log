@@ -1,35 +1,37 @@
-[14 Jun 2014 17:39:38,040]:multicast receiver thread terminated
-[14 Jun 2014 17:39:38,041]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 17:39:38,041]:unicast receiver thread terminated
-[14 Jun 2014 17:39:38,042]:closing sockets and stopping threads
-[14 Jun 2014 17:39:43,980]:set property UDP.mcast_group_addr to default value /228.8.8.8
-[14 Jun 2014 17:39:43,981]:set property UDP.diagnostics_addr to default value /224.0.75.75
-[14 Jun 2014 17:39:44,003]:Protocol stack initialized, bind address:192.168.1.6
-[14 Jun 2014 17:39:44,003]:JGroups message dispatcher and counter initialized
-[14 Jun 2014 17:39:44,004]:Client process started.
-[14 Jun 2014 17:39:44,004]:sockets will use interface 192.168.1.6
-[14 Jun 2014 17:39:44,005]:socket information:
-mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.6, ttl=8
-sock: bound to 192.168.1.6:48647, receive buffer size=64000, send buffer size=100000
-mcast_sock: bound to 192.168.1.6:7600, send buffer size=32000, receive buffer size=500000
-[14 Jun 2014 17:39:47,012]:
+[14 Jun 2014 20:59:08,754]:
 [fedich setDigest()]
 existing digest:  []
 new digest:       fedich: [0 (0)]
 resulting digest: fedich: [0 (0)]
-[14 Jun 2014 17:39:47,012]:fedich: installing view [fedich|0] (1) [fedich]
-[14 Jun 2014 17:39:47,012]:resuming message garbage collection
-[14 Jun 2014 17:39:47,013]:VIEW_CHANGE received: [fedich]
-[14 Jun 2014 17:39:47,014]:view=[fedich|0] (1) [fedich]
-[14 Jun 2014 17:39:47,014]:view=[fedich|0] (1) [fedich]
-[14 Jun 2014 17:39:47,014]:local_addr=fedich, coord=fedich, is_coord=true
-[14 Jun 2014 17:39:47,015]:resuming message garbage collection
-[14 Jun 2014 17:39:47,015]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
-[14 Jun 2014 17:40:23,527]:POX stopped, hours:13:40:23:52
-[14 Jun 2014 17:40:24,066]:Not a master any more, controller stopped.
-[14 Jun 2014 17:40:24,068]:multicast socket closed
-[14 Jun 2014 17:40:24,068]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 17:40:24,069]:multicast receiver thread terminated
-[14 Jun 2014 17:40:24,070]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 17:40:24,070]:unicast receiver thread terminated
-[14 Jun 2014 17:40:24,071]:closing sockets and stopping threads
+[14 Jun 2014 20:59:08,754]:fedich: installing view [fedich|0] (1) [fedich]
+[14 Jun 2014 20:59:08,755]:resuming message garbage collection
+[14 Jun 2014 20:59:08,756]:VIEW_CHANGE received: [fedich]
+[14 Jun 2014 20:59:08,760]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 20:59:08,761]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 20:59:08,761]:local_addr=fedich, coord=fedich, is_coord=true
+[14 Jun 2014 20:59:08,765]:resuming message garbage collection
+[14 Jun 2014 20:59:08,766]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[14 Jun 2014 20:59:34,425]:suspending message garbage collection
+[14 Jun 2014 20:59:34,427]:fedich: resume task started, max_suspend_time=33000
+[14 Jun 2014 20:59:34,430]:fedich: installing view [fedich|1] (2) [fedich, fedich]
+[14 Jun 2014 20:59:34,431]:VIEW_CHANGE received: [fedich, fedich]
+[14 Jun 2014 20:59:34,432]:ping_dest is fedich, pingable_mbrs=[fedich, fedich]
+[14 Jun 2014 20:59:34,434]:view=[fedich|1] (2) [fedich, fedich]
+[14 Jun 2014 20:59:34,435]:view=[fedich|1] (2) [fedich, fedich]
+[14 Jun 2014 20:59:34,436]:local_addr=fedich, coord=fedich, is_coord=true
+[14 Jun 2014 20:59:34,483]:resuming message garbage collection
+100000
+mcast_sock: bound to 192.168.1.6:7600, send buffer size=32000, receive buffer size=500000
+[14 Jun 2014 20:59:34,365]:fedich: sending JOIN(fedich) to fedich
+[14 Jun 2014 20:59:34,464]:
+[fedich setDigest()]
+existing digest:  []
+new digest:       fedich: [29 (29)], fedich: [0 (0)]
+resulting digest: fedich: [29 (29)], fedich: [0 (0)]
+[14 Jun 2014 20:59:34,464]:fedich: installing view [fedich|1] (2) [fedich, fedich]
+[14 Jun 2014 20:59:34,466]:VIEW_CHANGE received: [fedich, fedich]
+[14 Jun 2014 20:59:34,468]:ping_dest is fedich, pingable_mbrs=[fedich, fedich]
+[14 Jun 2014 20:59:34,473]:view=[fedich|1] (2) [fedich, fedich]
+[14 Jun 2014 20:59:34,473]:view=[fedich|1] (2) [fedich, fedich]
+[14 Jun 2014 20:59:34,474]:local_addr=fedich, coord=fedich, is_coord=false
+[14 Jun 2014 20:59:34,547]:Not a master any more, controller stopped.
