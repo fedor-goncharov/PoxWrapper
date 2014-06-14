@@ -158,11 +158,11 @@ public class ControllerWrapper implements Runnable {
 					@Override
 					public void viewAccepted(View newView) {
 						clView = newView;
-						if (!isActive) {
+						if (firstConnect) {
 							id = newView.size();
+							firstConnect = false;
 						}
 						cl_mapping_update = true;
-						
 					}
 				
 					@Override
@@ -225,7 +225,6 @@ public class ControllerWrapper implements Runnable {
 						"message:" + e.getMessage());
 		}
 		try {
-			isActive = true;								//init connection
 			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
 			masterID = syncService.getOrCreateCounter(master_counter, id);
 			if (cl_mapping_update) {
@@ -427,12 +426,13 @@ public class ControllerWrapper implements Runnable {
 	private String groupAddress;				//cluster absolute address
 	private String groupName;					//cluster unique idendifier
 	private String pName;						//personal name
-	private boolean isActive = false;			//node works
-	private Logger logger = null;				//logger
+	private boolean isActive = true;			//node works
+	private boolean firstConnect = true;
+	public Logger logger = null;				//logger
 	private static final String master_lock = "MASTER_LOCK";
 	private static final String master_counter = "MASTER";
-	public static final int SEND_DELAY = 2;	//send delay in SECONDS between CPU-LOAD notifications
-	public static final int RECV_DELAY = 3; //recieve delay SECONDS between CPU-LOAD notifications
+	public static final int SEND_DELAY = 1;	//send delay in SECONDS between CPU-LOAD notifications
+	public static final int RECV_DELAY = 2; //recieve delay SECONDS between CPU-LOAD notifications
 	
 	/**
 	 * Internal method to stop the node on the next iteration of the life-loop
