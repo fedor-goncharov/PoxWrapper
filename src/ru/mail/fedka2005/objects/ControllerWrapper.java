@@ -71,13 +71,13 @@ public class ControllerWrapper implements Runnable {
 	 */
 	public ControllerWrapper(Controller controller,
 			String groupName, String groupAddress, 
-			String pName, int id, 
+			String pName, 
 			double cpuThreshold) throws ClientConstructorException {
 		try {
 			this.controller = controller;	//bound to controller
 			this.groupName = groupName;
 			this.groupAddress = groupAddress;
-			this.pName = pName; this.id = id;
+			this.pName = pName;
 			this.logger = Logger.getLogger(ControllerWrapper.class);	//create logger
 			
 			this.mNotifications = new Stack<CPULoadRecord>();
@@ -158,6 +158,9 @@ public class ControllerWrapper implements Runnable {
 					@Override
 					public void viewAccepted(View newView) {
 						clView = newView;
+						if (!isActive) {
+							id = newView.size();
+						}
 						cl_mapping_update = true;
 						
 					}
@@ -222,7 +225,7 @@ public class ControllerWrapper implements Runnable {
 						"message:" + e.getMessage());
 		}
 		try {
-			isActive = true;								//init connection 
+			isActive = true;								//init connection
 			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
 			masterID = syncService.getOrCreateCounter(master_counter, id);
 			if (cl_mapping_update) {
@@ -231,11 +234,10 @@ public class ControllerWrapper implements Runnable {
 				cl_mapping_update = false;
 			}
 			eventLoop();
-			
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
 			throw new ClientStartException("Exception: controller start method failed, " +
-					"message:" + e.getMessage());
+					"message:\n" + e.getMessage());
 		} finally {
 			channel.close();
 		}
@@ -349,7 +351,7 @@ public class ControllerWrapper implements Runnable {
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
 			throw new MasterReplaceException("Exception: master replacement failed, " +
-					"message:" + e.getMessage());	//failed to send cpu-load request 
+					"message:\n" + e.getMessage());	//failed to send cpu-load request 
 		} finally {
 			masterLock.unlock();
 		}
@@ -375,7 +377,7 @@ public class ControllerWrapper implements Runnable {
 			return output;
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
-			throw new GenerateMappingException("Exception : generateMapping() : failed to generate mapping : " +
+			throw new GenerateMappingException("Exception : generateMapping() : failed to generate mapping:\n" +
 					e.toString());
 		}
 	}
@@ -488,7 +490,7 @@ public class ControllerWrapper implements Runnable {
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
 			throw new RefreshException("Exception : refreshInfo() : failed to refresh cluster state," +
-					"message:" + e.toString());
+					"message:\n" + e.toString());
 		}
 	}
 	

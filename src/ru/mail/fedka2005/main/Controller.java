@@ -3,7 +3,6 @@ package ru.mail.fedka2005.main;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 
 import org.jgroups.Address;
 import org.jgroups.Message;
@@ -45,16 +44,10 @@ public class Controller {
 			double cpuThreshold) throws MalformedInputException, ClientConstructorException {
 		this.poxPath = poxPath;
 		try {
-			//TODO - get id from cluster, not from the keyboard input
-			Scanner in = new Scanner(System.in);
-			int id = in.nextInt();
-			//in.close();
-			
 			instance = new ControllerWrapper(this,
 					groupName, 
 					groupAddress, 
 					nodeName, 
-					id, 
 					cpuThreshold);
 			Thread appProcess = new Thread(instance);
 			appProcess.start();		//process started in another thread

@@ -1,38 +1,63 @@
-[14 Jun 2014 02:02:30,985]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
-[14 Jun 2014 02:02:33,075]:Not a master any more, controller stopped.
-[14 Jun 2014 02:02:33,082]:multicast socket closed
-[14 Jun 2014 02:02:33,083]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 02:02:33,083]:multicast receiver thread terminated
-[14 Jun 2014 02:02:33,084]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 02:02:33,084]:unicast receiver thread terminated
-[14 Jun 2014 02:02:33,085]:closing sockets and stopping threads
-[14 Jun 2014 02:02:36,046]:set property UDP.mcast_group_addr to default value /228.8.8.8
-[14 Jun 2014 02:02:36,046]:set property UDP.diagnostics_addr to default value /224.0.75.75
-[14 Jun 2014 02:02:36,064]:Protocol stack initialized, bind address:192.168.1.6
-[14 Jun 2014 02:02:36,065]:JGroups message dispatcher and counter initialized
-[14 Jun 2014 02:02:36,067]:Client process started.
-[14 Jun 2014 02:02:36,068]:sockets will use interface 192.168.1.6
-[14 Jun 2014 02:02:36,069]:socket information:
+[14 Jun 2014 13:56:52,930]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[14 Jun 2014 13:56:52,931]:unicast receiver thread terminated
+[14 Jun 2014 13:56:52,932]:closing sockets and stopping threads
+[14 Jun 2014 13:57:49,484]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[14 Jun 2014 13:57:49,485]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[14 Jun 2014 13:57:49,519]:Protocol stack initialized, bind address:192.168.1.6
+[14 Jun 2014 13:57:49,528]:JGroups message dispatcher and counter initialized
+[14 Jun 2014 13:57:49,528]:Client process started.
+[14 Jun 2014 13:57:49,548]:sockets will use interface 192.168.1.6
+[14 Jun 2014 13:57:49,556]:socket information:
 mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.6, ttl=8
-sock: bound to 192.168.1.6:59399, receive buffer size=64000, send buffer size=100000
+sock: bound to 192.168.1.6:55879, receive buffer size=64000, send buffer size=100000
 mcast_sock: bound to 192.168.1.6:7600, send buffer size=32000, receive buffer size=500000
-[14 Jun 2014 02:02:39,072]:
+[14 Jun 2014 13:57:52,611]:
 [fedich setDigest()]
 existing digest:  []
 new digest:       fedich: [0 (0)]
 resulting digest: fedich: [0 (0)]
-[14 Jun 2014 02:02:39,073]:fedich: installing view [fedich|0] (1) [fedich]
-[14 Jun 2014 02:02:39,074]:resuming message garbage collection
-[14 Jun 2014 02:02:39,074]:VIEW_CHANGE received: [fedich]
-[14 Jun 2014 02:02:39,075]:view=[fedich|0] (1) [fedich]
-[14 Jun 2014 02:02:39,076]:view=[fedich|0] (1) [fedich]
-[14 Jun 2014 02:02:39,076]:local_addr=fedich, coord=fedich, is_coord=true
-[14 Jun 2014 02:02:39,077]:resuming message garbage collection
-[14 Jun 2014 02:02:39,077]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
-[14 Jun 2014 02:02:41,096]:Not a master any more, controller stopped.
-[14 Jun 2014 02:02:41,098]:multicast socket closed
-[14 Jun 2014 02:02:41,098]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 02:02:41,099]:multicast receiver thread terminated
-[14 Jun 2014 02:02:41,099]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[14 Jun 2014 02:02:41,099]:unicast receiver thread terminated
-[14 Jun 2014 02:02:41,100]:closing sockets and stopping threads
+[14 Jun 2014 13:57:52,611]:fedich: installing view [fedich|0] (1) [fedich]
+[14 Jun 2014 13:57:52,612]:resuming message garbage collection
+[14 Jun 2014 13:57:52,613]:VIEW_CHANGE received: [fedich]
+[14 Jun 2014 13:57:52,618]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 13:57:52,619]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 13:57:52,619]:local_addr=fedich, coord=fedich, is_coord=true
+[14 Jun 2014 13:57:52,623]:resuming message garbage collection
+[14 Jun 2014 13:57:52,624]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[14 Jun 2014 13:58:08,723]:Not a master any more, controller stopped.
+[14 Jun 2014 13:58:08,736]:multicast socket closed
+[14 Jun 2014 13:58:08,736]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[14 Jun 2014 13:58:08,736]:multicast receiver thread terminated
+[14 Jun 2014 13:58:08,737]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[14 Jun 2014 13:58:08,737]:unicast receiver thread terminated
+[14 Jun 2014 13:58:08,738]:closing sockets and stopping threads
+[14 Jun 2014 13:58:10,738]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[14 Jun 2014 13:58:10,738]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[14 Jun 2014 13:58:10,757]:Protocol stack initialized, bind address:192.168.1.6
+[14 Jun 2014 13:58:10,757]:JGroups message dispatcher and counter initialized
+[14 Jun 2014 13:58:10,757]:Client process started.
+[14 Jun 2014 13:58:10,762]:sockets will use interface 192.168.1.6
+[14 Jun 2014 13:58:10,764]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.6, ttl=8
+sock: bound to 192.168.1.6:56173, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.6:7600, send buffer size=32000, receive buffer size=500000
+[14 Jun 2014 13:58:13,772]:
+[fedich setDigest()]
+existing digest:  []
+new digest:       fedich: [0 (0)]
+resulting digest: fedich: [0 (0)]
+[14 Jun 2014 13:58:13,773]:fedich: installing view [fedich|0] (1) [fedich]
+[14 Jun 2014 13:58:13,774]:resuming message garbage collection
+[14 Jun 2014 13:58:13,775]:VIEW_CHANGE received: [fedich]
+[14 Jun 2014 13:58:13,776]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 13:58:13,777]:view=[fedich|0] (1) [fedich]
+[14 Jun 2014 13:58:13,777]:local_addr=fedich, coord=fedich, is_coord=true
+[14 Jun 2014 13:58:13,777]:resuming message garbage collection
+[14 Jun 2014 13:58:13,778]:created cluster (first member). My view is [fedich|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[14 Jun 2014 13:58:21,798]:Not a master any more, controller stopped.
+[14 Jun 2014 13:58:21,800]:multicast socket closed
+[14 Jun 2014 13:58:21,800]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[14 Jun 2014 13:58:21,800]:multicast receiver thread terminated
+[14 Jun 2014 13:58:21,801]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[14 Jun 2014 13:58:21,801]:unicast receiver thread terminated
+[14 Jun 2014 13:58:21,802]:closing sockets and stopping threads
