@@ -89,6 +89,8 @@ public class ControllerWrapperGUI extends JFrame {
 					btnStartClient.setEnabled(false);
 					textFieldsEnable(false);
 					btnPOXConfiguration.setEnabled(false);
+					clearTable(membersTable);
+					clearTable(messageTable);
 					
 					controller.startClient(nodeName, groupName, 
 										   poxPath, address, 
@@ -364,8 +366,7 @@ public class ControllerWrapperGUI extends JFrame {
 	 * NodeInfoResponse - message class, containing id, name, master
 	 */
 	public void updateNodeInfo(Map<Address, NodeInfoResponse> content) {
-		clearTable(membersTable);
-		
+		clearTable(membersTable);	
 		DefaultTableModel model = (DefaultTableModel)membersTable.getModel();
 		for (NodeInfoResponse node_info : content.values()) {
 			model.addRow(new Object[]{node_info.name,
@@ -374,6 +375,7 @@ public class ControllerWrapperGUI extends JFrame {
 									  node_info.master
 			});
 		}
+		membersTable.setModel(model);
 	}
 	/**
 	 * Pop-up exceptions, generated from business-logic
@@ -402,14 +404,15 @@ public class ControllerWrapperGUI extends JFrame {
 	}
 	
 	private void clearTable(JTable table) {
-		try {
-			DefaultTableModel model = (DefaultTableModel)table.getModel();
-			int rowCount = model.getRowCount();
-			for (int i = 0; i < rowCount; ++i) {
+		DefaultTableModel model = (DefaultTableModel)table.getModel();
+		int rowCount = model.getRowCount();
+		for (int i = rowCount - 1; i >= 0; --i) {
+			try {
 				model.removeRow(i);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Exception");
 			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			//nothing to do
 		}
+		table.setModel(model);
 	}
 }
