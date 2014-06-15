@@ -1,3 +1,11 @@
-[14 Jun 2014 21:30:22,417]:unicast receiver thread terminated
-[14 Jun 2014 21:30:22,613]:peer fedich2 closed socket gracefully
-[14 Jun 2014 21:30:22,719]:closing sockets and stopping threads
+[15 Jun 2014 14:50:50,167]:(requester=fedich5, local_addr=fedich2) fedich2 not found in retransmission table
+[15 Jun 2014 14:50:50,171]:multicast socket closed
+[15 Jun 2014 14:50:50,171]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[15 Jun 2014 14:50:50,171]:multicast receiver thread terminated
+[15 Jun 2014 14:50:50,171]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[15 Jun 2014 14:50:50,171]:unicast receiver thread terminated
+[15 Jun 2014 14:50:50,175]:fedich2: merge leader fedich2 did not get responses from all 3 partition coordinators; missing responses from 2 members, removing them from the merge
+[15 Jun 2014 14:50:50,176]:fedich2: installing merge view [fedich2|14] (3 members) in 1 coords
+[15 Jun 2014 14:50:50,176]:fedich2: merge fedich2::3 took 1010 ms
+[15 Jun 2014 14:50:50,473]:closing sockets and stopping threads
+[15 Jun 2014 14:50:50,473]:socket to fedich5 was closed gracefully

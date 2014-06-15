@@ -10,9 +10,9 @@ import org.jgroups.Message;
 
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
 import ru.mail.fedka2005.exceptions.DetachNodeException;
+import ru.mail.fedka2005.exceptions.UpdateInfoException;
 import ru.mail.fedka2005.exceptions.MalformedInputException;
 import ru.mail.fedka2005.exceptions.POXInitException;
-import ru.mail.fedka2005.exceptions.RefreshException;
 import ru.mail.fedka2005.gui.ControllerWrapperGUI;
 import ru.mail.fedka2005.messages.NodeInfoResponse;
 import ru.mail.fedka2005.objects.ControllerWrapper;
@@ -26,7 +26,7 @@ import ru.mail.fedka2005.objects.ControllerWrapper;
 public class Controller {
 
 	private ControllerWrapperGUI gui = null;	//gui
-	private ControllerWrapper instance = null;	//business-logic
+	public ControllerWrapper instance = null;	//business-logic
 	
 	private Process poxProcess = null;
 	private String poxPath = null;
@@ -68,6 +68,7 @@ public class Controller {
 		long dec_seconds = ((time_m / 10) % 100);
 		instance.logger.info("POX stopped : " + hours + ":" + minutes + 
 				":" + seconds + ":" + dec_seconds);	//write time to log-file
+		instance.logger.info("Full time:" + time_m);
 		instance.stopClient();
 	}
 	/**
@@ -98,6 +99,7 @@ public class Controller {
 	public void startPOX() {
 		ArrayList<String> cmdList = new ArrayList<String>();
 		cmdList.add("python"); cmdList.add("pox.py");
+		cmdList.add("timer");	//for tests only
 		if (gui.poxComponentsSelected != null) {
 			cmdList.addAll(gui.poxComponentsSelected);
 		}
@@ -140,8 +142,8 @@ public class Controller {
 	 */
 	public void refreshNodes() {
 		try {
-			instance.refreshInfo();
-		} catch (RefreshException e) {
+			instance.updateNodeInfo();
+		} catch (UpdateInfoException e) {
 			forwardException(e);			
 		}
 	}

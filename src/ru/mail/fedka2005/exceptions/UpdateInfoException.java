@@ -6,10 +6,10 @@ package ru.mail.fedka2005.exceptions;
  *
  */
 @SuppressWarnings("serial")
-public class GenerateMappingException extends Exception {
-	public GenerateMappingException() {}
+public class UpdateInfoException extends Exception {
+	public UpdateInfoException() {}
 	
-	public GenerateMappingException(String message) {
+	public UpdateInfoException(String message) {
 		super(message);
 	}
 }

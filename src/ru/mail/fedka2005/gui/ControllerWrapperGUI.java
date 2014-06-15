@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  * Graphical user interface, includes cpu-load plot of the master, list of cluster-members
@@ -77,7 +78,7 @@ public class ControllerWrapperGUI extends JFrame {
 					String poxPath = poxPathTextField.getText();
 					String address = addressTextField.getText();
 					String cpuThreshold = cpuThresholdTextField.getText();
-					if (nodeName.length() == 0 || groupName.length() == 0 || 
+					/*if (nodeName.length() == 0 || groupName.length() == 0 || //for tests only
 							poxPath.length() == 0 || address.length() == 0 ||
 							cpuThreshold.length() == 0) {
 						JOptionPane.showMessageDialog(ControllerWrapperGUI.this,
@@ -85,13 +86,17 @@ public class ControllerWrapperGUI extends JFrame {
 								"Empty Input",
 								JOptionPane.WARNING_MESSAGE);
 						return;
-					}
+					}*/
 					btnStartClient.setEnabled(false);
 					textFieldsEnable(false);
 					btnPOXConfiguration.setEnabled(false);
 					clearTable(membersTable);
 					clearTable(messageTable);
 					
+					poxPath = "/home/fedor/Desktop/SDN/pox";
+					address = "192.168.1.4";
+					groupName = "cluster";
+					cpuThreshold = "0.9";
 					controller.startClient(nodeName, groupName, 
 										   poxPath, address, 
 										   Double.valueOf(cpuThreshold));
@@ -129,6 +134,7 @@ public class ControllerWrapperGUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				controller.stopClient();
+				controller.instance.logger.info("shutdown of the master");
 				stopGUI();
 			}
 		});
@@ -333,9 +339,11 @@ public class ControllerWrapperGUI extends JFrame {
 			clearTable(messageTable);
 		}
 		DefaultTableModel model = (DefaultTableModel)messageTable.getModel();
-		model.addRow(new Object[]{msg.getSrc(),
-				(msg.getDest() == null ? "all" : msg.getDest()),
-				msg.getObject()});
+		Vector<String> row = new Vector<String>();
+		row.addElement(msg.getSrc().toString());
+		row.addElement((msg.getDest() == null ? "all" : msg.getDest().toString()));
+		row.addElement(msg.getObject().toString());
+		model.addRow(row);
 		double cpu_usage = RecvMessageHandler.getCPULoad(msg).getCPULoad();
 		masterCPUUsage.add(Double.valueOf(cpu_usage));
 		if (masterCPUUsage.size() > 100) {
@@ -366,16 +374,20 @@ public class ControllerWrapperGUI extends JFrame {
 	 * NodeInfoResponse - message class, containing id, name, master
 	 */
 	public void updateNodeInfo(Map<Address, NodeInfoResponse> content) {
-		clearTable(membersTable);	
-		DefaultTableModel model = (DefaultTableModel)membersTable.getModel();
-		for (NodeInfoResponse node_info : content.values()) {
-			model.addRow(new Object[]{node_info.name,
-									  node_info.address,
-									  node_info.id,
-									  node_info.master
-			});
+		if (content != null) {
+			clearTable(membersTable);	
+			DefaultTableModel model = (DefaultTableModel)membersTable.getModel();
+			for (NodeInfoResponse node_info : content.values()) {
+				Vector<String> row = new Vector<String>();
+				row.addElement(node_info.name);
+				row.addElement(node_info.address);
+				row.addElement(Integer.toString(node_info.id));
+				row.addElement(Boolean.toString(node_info.master));
+
+				model.addRow(row);
+			}
+			membersTable.setModel(model);
 		}
-		membersTable.setModel(model);
 	}
 	/**
 	 * Pop-up exceptions, generated from business-logic
@@ -410,7 +422,6 @@ public class ControllerWrapperGUI extends JFrame {
 			try {
 				model.removeRow(i);
 			} catch (ArrayIndexOutOfBoundsException e) {
-				System.out.println("Exception");
 			}
 		}
 		table.setModel(model);

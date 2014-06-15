@@ -21,10 +21,9 @@ import org.jgroups.util.RspList;
 import ru.mail.fedka2005.exceptions.ClientConstructorException;
 import ru.mail.fedka2005.exceptions.ClientStartException;
 import ru.mail.fedka2005.exceptions.DetachNodeException;
-import ru.mail.fedka2005.exceptions.GenerateMappingException;
+import ru.mail.fedka2005.exceptions.UpdateInfoException;
 import ru.mail.fedka2005.exceptions.JGroupsException;
 import ru.mail.fedka2005.exceptions.MasterReplaceException;
-import ru.mail.fedka2005.exceptions.RefreshException;
 import ru.mail.fedka2005.main.Controller;
 import ru.mail.fedka2005.messages.*;
 
@@ -89,9 +88,7 @@ public class ControllerWrapper implements Runnable {
 			channel.setProtocolStack(stack);
 			
 			stack.addProtocol(new UDP().setValue("bind_addr", InetAddress.getByName(groupAddress))
-									   .setValue("ip_ttl", 8)
-									   .setValue("mcast_send_buf_size", 32000)
-									   .setValue("ucast_recv_buf_size", 64000))
+									   .setValue("ip_ttl", 8))
 						.addProtocol(new PING())	//broadcast udp	
 						.addProtocol(new MERGE2())	//merge protocol
 						.addProtocol(new MERGE3())	//another merging layer for safety
@@ -111,7 +108,7 @@ public class ControllerWrapper implements Runnable {
 						.addProtocol(new CENTRAL_LOCK());
 			stack.init();
 			
-			logger.info("Protocol stack initialized, bind address:" + groupAddress);
+			logger.info(pName + "Protocol stack initialized, bind address:" + groupAddress);
 			
 			channel.setName(pName);
 			syncService = new CounterService(channel);	//master id atomic service
@@ -173,7 +170,7 @@ public class ControllerWrapper implements Runnable {
 				
 					@Override
 						public void suspect(Address addr) {
-						logger.info("Node:" + addr.toString() + " may have crushed.");
+						logger.info(ControllerWrapper.this.pName + "Node:" + addr + " may have crushed.");
 						//do nothing here
 					}
 				
@@ -192,8 +189,6 @@ public class ControllerWrapper implements Runnable {
 					public Object handle(Message msg) throws Exception {
 						if (msg.getObject() instanceof RequestCPULoadMessage)
 							return new CPULoadMessage();
-						if (msg.getObject() instanceof IDRequestMessage)
-							return new IDResponseMessage(ControllerWrapper.this.id);	//buggy line
 						if (msg.getObject() instanceof NodeInfoRequest)
 							return new NodeInfoResponse(ControllerWrapper.this.id, 
 														ControllerWrapper.this.pName, 
@@ -202,9 +197,10 @@ public class ControllerWrapper implements Runnable {
 						return null;	//should never get here
 					}
 			});
-			logger.info("JGroups message dispatcher and counter initialized");
+			logger.info(pName + "JGroups message dispatcher and counter initialized");
 		} catch (Exception e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
+			e.printStackTrace();
+			logger.error(pName + ExceptionUtils.getStackTrace(e));
 			throw new ClientConstructorException("Exception:client constructor failed, " +
 					"message: " + e.getMessage());
 		}
@@ -215,26 +211,27 @@ public class ControllerWrapper implements Runnable {
 	 * @throws Exception
 	 */
 	public void start() throws ClientStartException, JGroupsException {
-		logger.info("Client process started.");
+		logger.info(pName + "Client process started.");
 		try {
 			channel.connect(groupName);
 		} catch (Exception e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
+			logger.error(pName + ExceptionUtils.getStackTrace(e));
 			channel.close();
-			throw new ClientStartException("Exception: controller start method failed, " +
+			e.printStackTrace();
+			throw new ClientStartException("Exception: channel connection failed, " +
 						"message:" + e.getMessage());
 		}
 		try {
 			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
 			masterID = syncService.getOrCreateCounter(master_counter, id);
 			if (cl_mapping_update) {
-				cluster_mapping = generateMapping();			//Map<id,Address>	//private method
-				info_mapping = refreshInfo();					//Map<Address, General info>
+				updateNodeInfo();					//Map<Address, General info>
 				cl_mapping_update = false;
 			}
 			eventLoop();
 		} catch (Exception e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
+			e.printStackTrace();
+			logger.error(pName + ExceptionUtils.getStackTrace(e));
 			throw new ClientStartException("Exception: controller start method failed, " +
 					"message:\n" + e.getMessage());
 		} finally {
@@ -246,17 +243,15 @@ public class ControllerWrapper implements Runnable {
 	 */
 	private void eventLoop() throws MasterReplaceException, 
 									InterruptedException, 
-									GenerateMappingException,
-									RefreshException,
+									UpdateInfoException,
 									JGroupsException {
 		boolean rewrite = false;			//to switch: ovs-vsctl set-controller (me)
 		while (isActive) {
 			rewrite = false;
-			info_mapping = refreshInfo();
+			updateNodeInfo();
 			while (isActive && masterID.get() == id) {	//cpu-load notification for the cluster
 				if (cl_mapping_update) {
-					cluster_mapping = generateMapping();
-					info_mapping = refreshInfo();
+					updateNodeInfo();
 					cl_mapping_update = false;
 				}
 				if (!rewrite) {
@@ -271,21 +266,21 @@ public class ControllerWrapper implements Runnable {
 				try {
 					channel.send(new Message(null, new CPULoadMessage()));
 				} catch (Exception e) {
-					logger.error(ExceptionUtils.getStackTrace(e));
+					e.printStackTrace();
+					logger.error(pName + ExceptionUtils.getStackTrace(e));
 					throw new JGroupsException("Exception: channel send message failed, " +
 							"message" + e.getMessage());
 				}
 				TimeUnit.SECONDS.sleep(SEND_DELAY);
 			}
+			logger.info(pName + "Not a master.");
 			controller.stopPOXController();		//stop controller if it was running
-			info_mapping = refreshInfo();
-			logger.info("Not a master any more, controller stopped.");
+			updateNodeInfo();
 			boolean wait_stack = true;			//wait one iteration to get notification from master controller
 			int local_master;
 			while (isActive && (local_master = (int)masterID.get()) != id) {
 				if (cl_mapping_update) {
-					cluster_mapping = generateMapping();
-					info_mapping = refreshInfo();
+					updateNodeInfo();
 					cl_mapping_update = false;
 				}
 				if (!mNotifications.empty()) {
@@ -293,7 +288,7 @@ public class ControllerWrapper implements Runnable {
 					if (cluster_mapping.get(record.getAddress()) != null &&
 							cluster_mapping.get(record.getAddress()) == local_master && 
 							record.getCPULoad() > cpuThreshold) {	//cpu-load exceeds the threshold -> replace master
-						logger.info("invoking master replacement process");
+						logger.info(pName + "invoking master replacement process");
 						replaceMaster(CPU_LOAD, local_master);
 						wait_stack = true;
 					} else {
@@ -345,10 +340,11 @@ public class ControllerWrapper implements Runnable {
 				rsp_list.addRsp(channel.getAddress(), new CPULoadMessage());
 				Address new_master = chooseMaster(rsp_list);
 				masterID.set(cluster_mapping.get(new_master));
-				logger.info("New master selected:" + cluster_mapping.get(new_master));
+				logger.info(pName + "New master selected:" + cluster_mapping.get(new_master));
 			}
 		} catch (Exception e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
+			e.printStackTrace();
+			logger.error(pName + ExceptionUtils.getStackTrace(e));
 			throw new MasterReplaceException("Exception: master replacement failed, " +
 					"message:\n" + e.getMessage());	//failed to send cpu-load request 
 		} finally {
@@ -358,25 +354,36 @@ public class ControllerWrapper implements Runnable {
 	/**
 	 * blocks current thread and asks other members for their ID and JGroups.Address
 	 * @return HashMap<Integer,Address> 
-	 * @throws GenerateMappingException
+	 * @throws UpdateInfoException
 	 */
-	private Map<Address, Integer> generateMapping() throws GenerateMappingException {
+	public void updateNodeInfo() throws UpdateInfoException {
 		try {
-			RspList<IDResponseMessage> id_rsp = msg_disp.castMessage(null, //request all for id's
-					new Message(null, new IDRequestMessage()), 
+			RspList<NodeInfoResponse> id_rsp = msg_disp.castMessage(null, //request all for id's
+					new Message(null, new NodeInfoRequest()), 
 					new RequestOptions(ResponseMode.GET_ALL, 0));
-			Map<Address, Integer> output = new HashMap<Address, Integer>();
-			for (Address address : id_rsp.keySet()) {
-				output.put(
-						address,
-						((IDResponseMessage)id_rsp.getValue(address)).id
-						);
+			if (id_rsp != null) {
+				Map<Address, NodeInfoResponse> info_output = new HashMap<Address, NodeInfoResponse>();
+				Map<Address, Integer> map_output = new HashMap<Address, Integer>();
+				for (Address address : id_rsp.keySet()) {
+					map_output.put(
+							address,
+							((NodeInfoResponse)id_rsp.getValue(address)).id
+							);
+					info_output.put(
+							address, 
+							((NodeInfoResponse)id_rsp.getValue(address))
+							);
+				}
+				//TODO
+				//put own address
+				info_mapping = info_output;
+				controller.printConnectedNodes(info_mapping);
+				cluster_mapping = map_output;
 			}
-			output.put(channel.getAddress(), id);	//put own address
-			return output;
 		} catch (Exception e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
-			throw new GenerateMappingException("Exception : generateMapping() : failed to generate mapping:\n" +
+			e.printStackTrace();
+			logger.error(pName + ExceptionUtils.getStackTrace(e));
+			throw new UpdateInfoException("Exception : generateMapping() : failed to generate mapping:\n" +
 					e.toString());
 		}
 	}
@@ -414,7 +421,6 @@ public class ControllerWrapper implements Runnable {
 	private Counter masterID = null;			//atomic service for managing master-id
 	private Integer id;							//node id
 	private Map<Address, Integer> cluster_mapping = null;
-	@SuppressWarnings("unused")
 	private Map<Address, NodeInfoResponse> info_mapping = null;
 	private Stack<CPULoadRecord> mNotifications = null;
 	private LockService lock_service = null;
@@ -458,42 +464,14 @@ public class ControllerWrapper implements Runnable {
 				try {
 					channel.send(new Message(null, new ClientStopMessage(id)));
 				} catch (Exception e) {
-					logger.error(ExceptionUtils.getStackTrace(e));
+					e.printStackTrace();
+					logger.error(pName + ExceptionUtils.getStackTrace(e));
 					throw new DetachNodeException("Exception: detaching client failed, message" +
 							e.getMessage());
 				}
 			}
 		}
 	}
-	/**
-	 * Send a broad cast message to all members, to update their personal info. Called when view 
-	 * has changed to update the data;
-	 * 
-	 * @throws RefreshException - thrown when node failed to send broadcast request or
-	 * handle some answers
-	 */
-	public Map<Address, NodeInfoResponse> refreshInfo() throws RefreshException {
-		try {
-			RspList<NodeInfoResponse> info_rsp = msg_disp.castMessage(null, //request all for id's
-					new Message(null, new NodeInfoRequest()), 
-					new RequestOptions(ResponseMode.GET_ALL, 0));
-			
-			Map<Address, NodeInfoResponse> output = new HashMap<Address, NodeInfoResponse>();
-			for (Address address : info_rsp.keySet()) {
-				output.put(
-						address,
-						((NodeInfoResponse)(info_rsp.getValue(address)))
-						);
-			}
-			controller.printConnectedNodes(output);	
-			return output;
-		} catch (Exception e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
-			throw new RefreshException("Exception : refreshInfo() : failed to refresh cluster state," +
-					"message:\n" + e.toString());
-		}
-	}
-	
 	@Override
 	public void run() {
 		try {
