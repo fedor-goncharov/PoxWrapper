@@ -78,7 +78,7 @@ public class ControllerWrapper implements Runnable {
 			this.groupAddress = groupAddress;
 			this.pName = pName;
 			this.logger = Logger.getLogger(ControllerWrapper.class);	//create logger
-			
+			cl_update = true;	//update mapping in the beginning
 			this.mNotifications = new Stack<CPULoadRecord>();
 			ControllerWrapper.cpuThreshold = cpuThreshold;
 			
@@ -87,13 +87,12 @@ public class ControllerWrapper implements Runnable {
 			ProtocolStack stack = new ProtocolStack();
 			channel.setProtocolStack(stack);
 			
-			stack.addProtocol(new UDP().setValue("bind_addr", InetAddress.getByName(groupAddress))
-									   .setValue("ip_ttl", 8))
+			stack.addProtocol(new UDP().setValue("bind_addr", InetAddress.getByName(groupAddress)))
 						.addProtocol(new PING())	//broadcast udp	
 						.addProtocol(new MERGE2())	//merge protocol
 						.addProtocol(new MERGE3())	//another merging layer for safety
 						.addProtocol(new FD_SOCK())
-						.addProtocol(new FD_ALL().setValue("timeout",12000)
+						.addProtocol(new FD_ALL().setValue("timeout",10000)
 												 .setValue("interval",3000))	//heartbeat protocol, failure detection
 						.addProtocol(new VERIFY_SUSPECT())
 						.addProtocol(new BARRIER())
@@ -104,11 +103,11 @@ public class ControllerWrapper implements Runnable {
 						.addProtocol(new UFC())
 						.addProtocol(new MFC())
 						.addProtocol(new FRAG2())
-						.addProtocol(new COUNTER())
-						.addProtocol(new CENTRAL_LOCK());
+						.addProtocol(new CENTRAL_LOCK())
+						.addProtocol(new COUNTER());
 			stack.init();
 			
-			logger.info(pName + "Protocol stack initialized, bind address:" + groupAddress);
+			logger.info(pName + ":protocol stack initialized, bind address:" + groupAddress);
 			
 			channel.setName(pName);
 			syncService = new CounterService(channel);	//master id atomic service
@@ -137,9 +136,9 @@ public class ControllerWrapper implements Runnable {
 								sendStopGUI();
 							}
 							break;
-						}
+					}
 					case RecvMessageHandler.UNKNOWN : {
-							System.out.println("[INFO]: Unknown message type, " +
+							logger.info(ControllerWrapper.this.pName + ": Unknown message type, " +
 									"message:" + msg.toString());
 							break;
 						}
@@ -155,11 +154,14 @@ public class ControllerWrapper implements Runnable {
 					@Override
 					public void viewAccepted(View newView) {
 						clView = newView;
+						//TODO
+						//buggy place here
 						if (firstConnect) {
 							id = newView.size();
+							master_id = syncService.getOrCreateCounter(master_counter_name, id);
 							firstConnect = false;
 						}
-						cl_mapping_update = true;
+						cl_update = true;
 					}
 				
 					@Override
@@ -189,15 +191,19 @@ public class ControllerWrapper implements Runnable {
 					public Object handle(Message msg) throws Exception {
 						if (msg.getObject() instanceof RequestCPULoadMessage)
 							return new CPULoadMessage();
-						if (msg.getObject() instanceof NodeInfoRequest)
+						if (msg.getObject() instanceof NodeInfoRequest) {
+							//TODO
+							//buggy place here, master id may be undefined or id undefined
+							//nullpointer exception somewhere here
 							return new NodeInfoResponse(ControllerWrapper.this.id, 
 														ControllerWrapper.this.pName, 
 														ControllerWrapper.this.groupAddress, 
-														masterID.get() == ControllerWrapper.this.id ? true : false);
+														master_id.get() == ControllerWrapper.this.id ? true : false);
+						}
 						return null;	//should never get here
 					}
 			});
-			logger.info(pName + "JGroups message dispatcher and counter initialized");
+			logger.info(pName + ":JGroups message dispatcher and counter initialized");
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(pName + ExceptionUtils.getStackTrace(e));
@@ -211,22 +217,22 @@ public class ControllerWrapper implements Runnable {
 	 * @throws Exception
 	 */
 	public void start() throws ClientStartException, JGroupsException {
-		logger.info(pName + "Client process started.");
+		logger.info(pName + ":process started.");
 		try {
 			channel.connect(groupName);
 		} catch (Exception e) {
-			logger.error(pName + ExceptionUtils.getStackTrace(e));
+			logger.error(pName + ":" + ExceptionUtils.getStackTrace(e));
 			channel.close();
 			e.printStackTrace();
 			throw new ClientStartException("Exception: channel connection failed, " +
 						"message:" + e.getMessage());
 		}
 		try {
-			masterLock = lock_service.getLock(master_lock); //init lock - for atomic best master selection
-			masterID = syncService.getOrCreateCounter(master_counter, id);
-			if (cl_mapping_update) {
+			master_lock = lock_service.getLock(master_lock_name); //init lock - for atomic best master selection
+			master_id = syncService.getOrCreateCounter(master_counter_name, id);
+			if (cl_update) {
 				updateNodeInfo();					//Map<Address, General info>
-				cl_mapping_update = false;
+				cl_update = false;
 			}
 			eventLoop();
 		} catch (Exception e) {
@@ -245,23 +251,22 @@ public class ControllerWrapper implements Runnable {
 									InterruptedException, 
 									UpdateInfoException,
 									JGroupsException {
-		boolean rewrite = false;			//to switch: ovs-vsctl set-controller (me)
+		boolean controller_on = false;			//should we start controller, maybe the old one is still connected
 		while (isActive) {
-			rewrite = false;
-			updateNodeInfo();
-			while (isActive && masterID.get() == id) {	//cpu-load notification for the cluster
-				if (cl_mapping_update) {
+			controller_on = false;
+			while (isActive && id == master_id.get()) {	//cpu-load notification for the cluster
+				if (cl_update) {
 					updateNodeInfo();
-					cl_mapping_update = false;
+					cl_update = false;
 				}
-				if (!rewrite) {
+				if (!controller_on) {
 					try {						//handling deadlocking-exception event
-						masterLock.lock();		//concurrent rewriting excluded
-							if (masterID.get() == id) {
-								controller.startPOX();	//master starts pox controller in a seperate process
-								rewrite = true;
-							}
-					} finally {	masterLock.unlock(); }
+						master_lock.lock();		//concurrent rewriting excluded
+						if (master_id.get() == id) {
+							controller.startPOX();	//master starts pox controller in a seperate process
+							controller_on = true;
+						}
+					} finally {	master_lock.unlock(); }
 				}
 				try {
 					channel.send(new Message(null, new CPULoadMessage()));
@@ -271,34 +276,34 @@ public class ControllerWrapper implements Runnable {
 					throw new JGroupsException("Exception: channel send message failed, " +
 							"message" + e.getMessage());
 				}
-				TimeUnit.SECONDS.sleep(SEND_DELAY);
+				TimeUnit.SECONDS.sleep(SEND_DELAY);	//interval between message sendings
 			}
-			logger.info(pName + "Not a master.");
+			logger.info(pName + ":not a master.");
 			controller.stopPOXController();		//stop controller if it was running
-			updateNodeInfo();
 			boolean wait_stack = true;			//wait one iteration to get notification from master controller
 			int local_master;
-			while (isActive && (local_master = (int)masterID.get()) != id) {
-				if (cl_mapping_update) {
+			while (isActive && (local_master = (int)master_id.get()) != id) {
+				if (cl_update) {
 					updateNodeInfo();
-					cl_mapping_update = false;
+					cl_update = false;
 				}
 				if (!mNotifications.empty()) {
 					CPULoadRecord record = mNotifications.pop();
-					if (cluster_mapping.get(record.getAddress()) != null &&
-							cluster_mapping.get(record.getAddress()) == local_master && 
-							record.getCPULoad() > cpuThreshold) {	//cpu-load exceeds the threshold -> replace master
-						logger.info(pName + "invoking master replacement process");
+					if (map_id.get(record.getAddress()) != null &&	
+														map_id.get(record.getAddress()) == local_master && 
+														record.getCPULoad() > cpuThreshold) {
+						logger.info(pName + ":invoking master replacement process");
 						replaceMaster(CPU_LOAD, local_master);
 						wait_stack = true;
 					} else {
 						mNotifications.clear();
+						wait_stack = true;
 						TimeUnit.SECONDS.sleep(RECV_DELAY);
 					}
 				} else {
-					if (wait_stack) {
-						TimeUnit.SECONDS.sleep(RECV_DELAY);
+					if (wait_stack) {		//wait for message once more time
 						wait_stack = false;
+						TimeUnit.SECONDS.sleep(RECV_DELAY);
 					} else {
 						replaceMaster(EXCEEDTIME, local_master);
 					}
@@ -314,13 +319,13 @@ public class ControllerWrapper implements Runnable {
 	 * @param master_id who is the master at the moment, when called this method
 	 * @throws MasterReplaceException
 	 */
-	private void replaceMaster(int code, int master_id) throws MasterReplaceException {
+	private void replaceMaster(int code, int tmp_master_id) throws MasterReplaceException {
 		try {
-			masterLock.lock();	//lock access, write controller addr - synchronized event
-			if (master_id == masterID.get()) {	//synchronized event
+			master_lock.lock();	//lock access, write controller addr - synchronized event
+			if (tmp_master_id == master_id.get()) {	//synchronized event
 				Address master = null;
-				for (Map.Entry<Address, Integer> entry : cluster_mapping.entrySet()) {
-					if (master_id == entry.getValue()) {
+				for (Map.Entry<Address, Integer> entry : map_id.entrySet()) {
+					if (tmp_master_id == entry.getValue()) {
 						master = entry.getKey();
 						break;
 					}
@@ -330,29 +335,30 @@ public class ControllerWrapper implements Runnable {
 					rsp_list = msg_disp.castMessage(null,	//request cpu-load from nodes
 							new Message(null, null, new RequestCPULoadMessage()),
 							new RequestOptions(ResponseMode.GET_ALL, 0).setExclusionList(master)
-							);
+					);
 				} else {
 					rsp_list = msg_disp.castMessage(null,	//request cpu-load from nodes
 							new Message(null, null, new RequestCPULoadMessage()),
 							new RequestOptions(ResponseMode.GET_ALL, 0)
-							);
+					);
 				}
-				rsp_list.addRsp(channel.getAddress(), new CPULoadMessage());
 				Address new_master = chooseMaster(rsp_list);
-				masterID.set(cluster_mapping.get(new_master));
-				logger.info(pName + "New master selected:" + cluster_mapping.get(new_master));
+				master_id.set(map_id.get(new_master));
+				//TODO
+				//add notification that new master selected
+				logger.info(pName + ":new master selected:" + map_id.get(new_master));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error(pName + ExceptionUtils.getStackTrace(e));
+			logger.error(pName + ":" + ExceptionUtils.getStackTrace(e));
 			throw new MasterReplaceException("Exception: master replacement failed, " +
 					"message:\n" + e.getMessage());	//failed to send cpu-load request 
 		} finally {
-			masterLock.unlock();
+			master_lock.unlock();	//always unlock
 		}
 	}
 	/**
-	 * blocks current thread and asks other members for their ID and JGroups.Address
+	 * blocks current thread and asks other members for their ID, name and other data.
 	 * @return HashMap<Integer,Address> 
 	 * @throws UpdateInfoException
 	 */
@@ -374,11 +380,9 @@ public class ControllerWrapper implements Runnable {
 							((NodeInfoResponse)id_rsp.getValue(address))
 							);
 				}
-				//TODO
-				//put own address
 				info_mapping = info_output;
+				map_id = map_output;
 				controller.printConnectedNodes(info_mapping);
-				cluster_mapping = map_output;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -418,15 +422,15 @@ public class ControllerWrapper implements Runnable {
 	private View clView;						//(currentView) will be required later
 	
 	private CounterService syncService = null;
-	private Counter masterID = null;			//atomic service for managing master-id
-	private Integer id;							//node id
-	private Map<Address, Integer> cluster_mapping = null;
+	private Counter master_id = null;			//atomic service for managing master-id
+	private Integer id = null;							//node id
+	private Map<Address, Integer> map_id = null;
 	private Map<Address, NodeInfoResponse> info_mapping = null;
 	private Stack<CPULoadRecord> mNotifications = null;
 	private LockService lock_service = null;
-	private Lock masterLock = null;				//lock when change controller
+	private Lock master_lock = null;				//lock when change controller
 	private MessageDispatcher msg_disp = null;	//synchrounous req-response cpu-load
-	private boolean cl_mapping_update = true;	//cluster mapping shoudl be updated(yes/no?)
+	private boolean cl_update = true;	//cluster mapping shoudl be updated(yes/no?)
 	
 	//config
 	private String groupAddress;				//cluster absolute address
@@ -435,8 +439,8 @@ public class ControllerWrapper implements Runnable {
 	private boolean isActive = true;			//node works
 	private boolean firstConnect = true;
 	public Logger logger = null;				//logger
-	private static final String master_lock = "MASTER_LOCK";
-	private static final String master_counter = "MASTER";
+	private static final String master_lock_name = "MASTER_LOCK";
+	private static final String master_counter_name = "MASTER_COUNTER";
 	public static final int SEND_DELAY = 1;	//send delay in SECONDS between CPU-LOAD notifications
 	public static final int RECV_DELAY = 2; //recieve delay SECONDS between CPU-LOAD notifications
 	
@@ -458,8 +462,8 @@ public class ControllerWrapper implements Runnable {
 	 * @param id
 	 */
 	public void detachClient(int id) throws DetachNodeException {
-		for (Address address : cluster_mapping.keySet()) {
-			Integer client_id = cluster_mapping.get(address);
+		for (Address address : map_id.keySet()) {
+			Integer client_id = map_id.get(address);
 			if (id == client_id) {
 				try {
 					channel.send(new Message(null, new ClientStopMessage(id)));

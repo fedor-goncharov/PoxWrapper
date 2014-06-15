@@ -78,7 +78,7 @@ public class ControllerWrapperGUI extends JFrame {
 					String poxPath = poxPathTextField.getText();
 					String address = addressTextField.getText();
 					String cpuThreshold = cpuThresholdTextField.getText();
-					/*if (nodeName.length() == 0 || groupName.length() == 0 || //for tests only
+					if (nodeName.length() == 0 || groupName.length() == 0 || //for tests only
 							poxPath.length() == 0 || address.length() == 0 ||
 							cpuThreshold.length() == 0) {
 						JOptionPane.showMessageDialog(ControllerWrapperGUI.this,
@@ -86,17 +86,18 @@ public class ControllerWrapperGUI extends JFrame {
 								"Empty Input",
 								JOptionPane.WARNING_MESSAGE);
 						return;
-					}*/
+					}
 					btnStartClient.setEnabled(false);
 					textFieldsEnable(false);
 					btnPOXConfiguration.setEnabled(false);
 					clearTable(membersTable);
 					clearTable(messageTable);
-					
+					/*
 					poxPath = "/home/fedor/Desktop/SDN/pox";
 					address = "192.168.1.4";
 					groupName = "cluster";
 					cpuThreshold = "0.9";
+					*/
 					controller.startClient(nodeName, groupName, 
 										   poxPath, address, 
 										   Double.valueOf(cpuThreshold));

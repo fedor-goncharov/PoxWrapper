@@ -1,11 +1,1133 @@
-[15 Jun 2014 14:50:50,167]:(requester=fedich5, local_addr=fedich2) fedich2 not found in retransmission table
-[15 Jun 2014 14:50:50,171]:multicast socket closed
-[15 Jun 2014 14:50:50,171]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[15 Jun 2014 14:50:50,171]:multicast receiver thread terminated
-[15 Jun 2014 14:50:50,171]:receiver socket is closed, exception=java.net.SocketException: Socket closed
-[15 Jun 2014 14:50:50,171]:unicast receiver thread terminated
-[15 Jun 2014 14:50:50,175]:fedich2: merge leader fedich2 did not get responses from all 3 partition coordinators; missing responses from 2 members, removing them from the merge
-[15 Jun 2014 14:50:50,176]:fedich2: installing merge view [fedich2|14] (3 members) in 1 coords
-[15 Jun 2014 14:50:50,176]:fedich2: merge fedich2::3 took 1010 ms
-[15 Jun 2014 14:50:50,473]:closing sockets and stopping threads
-[15 Jun 2014 14:50:50,473]:socket to fedich5 was closed gracefully
+[15 Jun 2014 21:23:47,742]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:23:47,744]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:23:47,777]:1:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:23:47,786]:1:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:23:47,787]:1:process started.
+[15 Jun 2014 21:23:47,805]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:23:47,814]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:45610, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:23:50,842]:
+[1 setDigest()]
+existing digest:  []
+new digest:       1: [0 (0)]
+resulting digest: 1: [0 (0)]
+[15 Jun 2014 21:23:50,843]:1: installing view [1|0] (1) [1]
+[15 Jun 2014 21:23:50,844]:resuming message garbage collection
+[15 Jun 2014 21:23:50,846]:VIEW_CHANGE received: [1]
+[15 Jun 2014 21:23:50,851]:view=[1|0] (1) [1]
+[15 Jun 2014 21:23:50,851]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:23:50,851]:view=[1|0] (1) [1]
+[15 Jun 2014 21:23:50,886]:resuming message garbage collection
+[15 Jun 2014 21:23:50,886]:created cluster (first member). My view is [1|0], impl is org.jgroups.protocols.pbcast.CoordGmsImpl
+[15 Jun 2014 21:23:56,441]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:23:56,443]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:23:56,476]:2:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:23:56,485]:2:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:23:56,485]:2:process started.
+[15 Jun 2014 21:23:56,508]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:23:56,515]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:59412, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:23:56,534]:2: sending JOIN(2) to 1
+[15 Jun 2014 21:23:56,594]:suspending message garbage collection
+[15 Jun 2014 21:23:56,596]:1: resume task started, max_suspend_time=33000
+[15 Jun 2014 21:23:56,601]:1: installing view [1|1] (2) [1, 2]
+[15 Jun 2014 21:23:56,604]:VIEW_CHANGE received: [1, 2]
+[15 Jun 2014 21:23:56,606]:ping_dest is 2, pingable_mbrs=[1, 2]
+[15 Jun 2014 21:23:56,612]:view=[1|1] (2) [1, 2]
+[15 Jun 2014 21:23:56,613]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:23:56,613]:view=[1|1] (2) [1, 2]
+[15 Jun 2014 21:23:56,687]:
+[2 setDigest()]
+existing digest:  []
+new digest:       1: [7 (7)], 2: [0 (0)]
+resulting digest: 1: [7 (7)], 2: [0 (0)]
+[15 Jun 2014 21:23:56,688]:2: installing view [1|1] (2) [1, 2]
+[15 Jun 2014 21:23:56,689]:VIEW_CHANGE received: [1, 2]
+[15 Jun 2014 21:23:56,693]:ping_dest is 1, pingable_mbrs=[1, 2]
+[15 Jun 2014 21:23:56,696]:view=[1|1] (2) [1, 2]
+[15 Jun 2014 21:23:56,696]:local_addr=2, coord=1, is_coord=false
+[15 Jun 2014 21:23:56,696]:view=[1|1] (2) [1, 2]
+[15 Jun 2014 21:23:56,726]:resuming message garbage collection
+[15 Jun 2014 21:23:56,764]:2:not a master.
+[15 Jun 2014 21:24:03,991]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:24:03,993]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:24:04,030]:3:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:24:04,039]:3:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:24:04,039]:3:process started.
+[15 Jun 2014 21:24:04,066]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:24:04,073]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:50583, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:24:04,093]:3: sending JOIN(3) to 1
+[15 Jun 2014 21:24:04,149]:suspending message garbage collection
+[15 Jun 2014 21:24:04,150]:1: resume task started, max_suspend_time=33000
+[15 Jun 2014 21:24:04,153]:1: installing view [1|2] (3) [1, 2, 3]
+[15 Jun 2014 21:24:04,154]:VIEW_CHANGE received: [1, 2, 3]
+[15 Jun 2014 21:24:04,154]:2: installing view [1|2] (3) [1, 2, 3]
+[15 Jun 2014 21:24:04,155]:VIEW_CHANGE received: [1, 2, 3]
+[15 Jun 2014 21:24:04,155]:view=[1|2] (3) [1, 2, 3]
+[15 Jun 2014 21:24:04,155]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:24:04,155]:view=[1|2] (3) [1, 2, 3]
+[15 Jun 2014 21:24:04,156]:socket to 1 was closed gracefully
+[15 Jun 2014 21:24:04,156]:ping_dest is 3, pingable_mbrs=[1, 2, 3]
+[15 Jun 2014 21:24:04,156]:view=[1|2] (3) [1, 2, 3]
+[15 Jun 2014 21:24:04,156]:local_addr=2, coord=1, is_coord=false
+[15 Jun 2014 21:24:04,156]:view=[1|2] (3) [1, 2, 3]
+[15 Jun 2014 21:24:04,186]:
+[3 setDigest()]
+existing digest:  []
+new digest:       1: [17 (17)], 2: [1 (1)], 3: [0 (0)]
+resulting digest: 1: [17 (17)], 2: [1 (1)], 3: [0 (0)]
+[15 Jun 2014 21:24:04,187]:3: installing view [1|2] (3) [1, 2, 3]
+[15 Jun 2014 21:24:04,189]:VIEW_CHANGE received: [1, 2, 3]
+[15 Jun 2014 21:24:04,228]:ping_dest is 1, pingable_mbrs=[1, 2, 3]
+[15 Jun 2014 21:24:04,228]:view=[1|2] (3) [1, 2, 3]
+[15 Jun 2014 21:24:04,229]:local_addr=3, coord=1, is_coord=false
+[15 Jun 2014 21:24:04,229]:view=[1|2] (3) [1, 2, 3]
+[15 Jun 2014 21:24:04,246]:resuming message garbage collection
+[15 Jun 2014 21:24:04,293]:3:not a master.
+[15 Jun 2014 21:24:10,278]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:24:10,280]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:24:10,313]:4:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:24:10,322]:4:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:24:10,322]:4:process started.
+[15 Jun 2014 21:24:10,342]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:24:10,350]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:55460, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:24:10,370]:4: sending JOIN(4) to 1
+[15 Jun 2014 21:24:10,431]:suspending message garbage collection
+[15 Jun 2014 21:24:10,432]:1: resume task started, max_suspend_time=33000
+[15 Jun 2014 21:24:10,433]:1: installing view [1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,434]:2: installing view [1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,435]:VIEW_CHANGE received: [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,435]:3: installing view [1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,436]:VIEW_CHANGE received: [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,436]:VIEW_CHANGE received: [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,437]:view=[1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,438]:local_addr=2, coord=1, is_coord=false
+[15 Jun 2014 21:24:10,438]:view=[1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,438]:socket to 1 was closed gracefully
+[15 Jun 2014 21:24:10,437]:view=[1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,438]:ping_dest is 4, pingable_mbrs=[1, 2, 3, 4]
+[15 Jun 2014 21:24:10,439]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:24:10,439]:view=[1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,439]:view=[1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,440]:local_addr=3, coord=1, is_coord=false
+[15 Jun 2014 21:24:10,440]:view=[1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,487]:
+[4 setDigest()]
+existing digest:  []
+new digest:       1: [25 (25)], 2: [2 (2)], 3: [1 (1)], 4: [0 (0)]
+resulting digest: 1: [25 (25)], 2: [2 (2)], 3: [1 (1)], 4: [0 (0)]
+[15 Jun 2014 21:24:10,488]:4: installing view [1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,489]:VIEW_CHANGE received: [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,491]:ping_dest is 1, pingable_mbrs=[1, 2, 3, 4]
+[15 Jun 2014 21:24:10,500]:view=[1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,500]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:24:10,500]:view=[1|3] (4) [1, 2, 3, 4]
+[15 Jun 2014 21:24:10,521]:resuming message garbage collection
+[15 Jun 2014 21:24:10,554]:4:not a master.
+[15 Jun 2014 21:24:17,139]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:24:17,140]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:24:17,174]:5:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:24:17,183]:5:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:24:17,184]:5:process started.
+[15 Jun 2014 21:24:17,205]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:24:17,212]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:47563, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:24:17,230]:5: sending JOIN(5) to 1
+[15 Jun 2014 21:24:17,286]:suspending message garbage collection
+[15 Jun 2014 21:24:17,286]:1: resume task started, max_suspend_time=33000
+[15 Jun 2014 21:24:17,287]:1: installing view [1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,288]:VIEW_CHANGE received: [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,288]:4: installing view [1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,288]:2: installing view [1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,289]:VIEW_CHANGE received: [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,289]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,289]:VIEW_CHANGE received: [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,289]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:24:17,289]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,290]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,290]:local_addr=2, coord=1, is_coord=false
+[15 Jun 2014 21:24:17,290]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,290]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,290]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:24:17,290]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,290]:3: installing view [1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,291]:VIEW_CHANGE received: [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,291]:socket to 1 was closed gracefully
+[15 Jun 2014 21:24:17,291]:ping_dest is 5, pingable_mbrs=[1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,292]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,292]:local_addr=3, coord=1, is_coord=false
+[15 Jun 2014 21:24:17,292]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,329]:
+[5 setDigest()]
+existing digest:  []
+new digest:       1: [34 (34)], 2: [3 (3)], 3: [2 (2)], 4: [1 (1)], 5: [0 (0)]
+resulting digest: 1: [34 (34)], 2: [3 (3)], 3: [2 (2)], 4: [1 (1)], 5: [0 (0)]
+[15 Jun 2014 21:24:17,329]:5: installing view [1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,331]:VIEW_CHANGE received: [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,335]:ping_dest is 1, pingable_mbrs=[1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,336]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,337]:local_addr=5, coord=1, is_coord=false
+[15 Jun 2014 21:24:17,337]:view=[1|4] (5) [1, 2, 3, 4, 5]
+[15 Jun 2014 21:24:17,353]:resuming message garbage collection
+[15 Jun 2014 21:24:17,399]:5:not a master.
+[15 Jun 2014 21:24:24,089]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:24:24,091]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:24:24,126]:6:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:24:24,135]:6:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:24:24,136]:6:process started.
+[15 Jun 2014 21:24:24,157]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:24:24,166]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:39093, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:24:24,186]:6: sending JOIN(6) to 1
+[15 Jun 2014 21:24:24,242]:suspending message garbage collection
+[15 Jun 2014 21:24:24,242]:1: resume task started, max_suspend_time=33000
+[15 Jun 2014 21:24:24,243]:1: installing view [1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,244]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,244]:4: installing view [1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,244]:5: installing view [1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,244]:2: installing view [1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,244]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,244]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,245]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,245]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,245]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:24:24,245]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,245]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,245]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:24:24,246]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,246]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,246]:local_addr=2, coord=1, is_coord=false
+[15 Jun 2014 21:24:24,246]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,246]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,246]:local_addr=5, coord=1, is_coord=false
+[15 Jun 2014 21:24:24,246]:socket to 1 was closed gracefully
+[15 Jun 2014 21:24:24,246]:ping_dest is 6, pingable_mbrs=[1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,247]:3: installing view [1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,248]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,246]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,250]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,250]:local_addr=3, coord=1, is_coord=false
+[15 Jun 2014 21:24:24,251]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,273]:
+[6 setDigest()]
+existing digest:  []
+new digest:       1: [43 (43)], 2: [4 (4)], 3: [3 (3)], 4: [2 (2)], 5: [1 (1)], 6: [0 (0)]
+resulting digest: 1: [43 (43)], 2: [4 (4)], 3: [3 (3)], 4: [2 (2)], 5: [1 (1)], 6: [0 (0)]
+[15 Jun 2014 21:24:24,274]:6: installing view [1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,275]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,297]:ping_dest is 1, pingable_mbrs=[1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,299]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,300]:local_addr=6, coord=1, is_coord=false
+[15 Jun 2014 21:24:24,300]:view=[1|5] (6) [1, 2, 3, 4, 5, 6]
+[15 Jun 2014 21:24:24,316]:resuming message garbage collection
+[15 Jun 2014 21:24:24,380]:6:not a master.
+[15 Jun 2014 21:24:33,300]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:24:33,302]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:24:33,336]:7:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:24:33,346]:7:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:24:33,347]:7:process started.
+[15 Jun 2014 21:24:33,369]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:24:33,377]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:51832, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:24:33,396]:7: sending JOIN(7) to 1
+[15 Jun 2014 21:24:33,455]:suspending message garbage collection
+[15 Jun 2014 21:24:33,455]:1: resume task started, max_suspend_time=33000
+[15 Jun 2014 21:24:33,457]:1: installing view [1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,457]:4: installing view [1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,457]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,457]:6: installing view [1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,457]:3: installing view [1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,458]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,458]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,458]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,459]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:24:33,459]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,459]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,459]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:24:33,459]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,460]:2: installing view [1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,460]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,460]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,460]:local_addr=3, coord=1, is_coord=false
+[15 Jun 2014 21:24:33,460]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,460]:5: installing view [1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,461]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,461]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,461]:local_addr=2, coord=1, is_coord=false
+[15 Jun 2014 21:24:33,462]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,462]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,463]:socket to 1 was closed gracefully
+[15 Jun 2014 21:24:33,464]:ping_dest is 7, pingable_mbrs=[1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,463]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,464]:local_addr=5, coord=1, is_coord=false
+[15 Jun 2014 21:24:33,465]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,465]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,465]:local_addr=6, coord=1, is_coord=false
+[15 Jun 2014 21:24:33,465]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,509]:
+[7 setDigest()]
+existing digest:  []
+new digest:       1: [54 (54)], 2: [5 (5)], 3: [4 (4)], 4: [3 (3)], 5: [2 (2)], 6: [1 (1)], 7: [0 (0)]
+resulting digest: 1: [54 (54)], 2: [5 (5)], 3: [4 (4)], 4: [3 (3)], 5: [2 (2)], 6: [1 (1)], 7: [0 (0)]
+[15 Jun 2014 21:24:33,510]:7: installing view [1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,512]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,515]:ping_dest is 1, pingable_mbrs=[1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,520]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,520]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:24:33,521]:view=[1|6] (7) [1, 2, 3, 4, 5, 6, 7]
+[15 Jun 2014 21:24:33,535]:resuming message garbage collection
+[15 Jun 2014 21:24:33,584]:7:not a master.
+[15 Jun 2014 21:24:40,781]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:24:40,782]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:24:40,814]:8:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:24:40,823]:8:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:24:40,824]:8:process started.
+[15 Jun 2014 21:24:40,844]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:24:40,851]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:47970, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:24:40,872]:8: sending JOIN(8) to 1
+[15 Jun 2014 21:24:40,930]:suspending message garbage collection
+[15 Jun 2014 21:24:40,931]:1: resume task started, max_suspend_time=33000
+[15 Jun 2014 21:24:40,932]:1: installing view [1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,932]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,932]:5: installing view [1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,933]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,933]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,933]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:24:40,933]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,934]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,934]:local_addr=5, coord=1, is_coord=false
+[15 Jun 2014 21:24:40,934]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,935]:6: installing view [1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,935]:2: installing view [1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,935]:3: installing view [1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,936]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,936]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,936]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,937]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,937]:local_addr=6, coord=1, is_coord=false
+[15 Jun 2014 21:24:40,937]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,937]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,937]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,937]:local_addr=3, coord=1, is_coord=false
+[15 Jun 2014 21:24:40,937]:local_addr=2, coord=1, is_coord=false
+[15 Jun 2014 21:24:40,937]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,938]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,935]:4: installing view [1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,939]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,939]:7: installing view [1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,940]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,940]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:24:40,940]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,940]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,942]:socket to 1 was closed gracefully
+[15 Jun 2014 21:24:40,942]:ping_dest is 8, pingable_mbrs=[1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,943]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,943]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:24:40,944]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:40,996]:
+[8 setDigest()]
+existing digest:  []
+new digest:       1: [63 (63)], 2: [6 (6)], 3: [5 (5)], 4: [4 (4)], 5: [3 (3)], 6: [2 (2)], 7: [1 (1)], 8: [0 (0)]
+resulting digest: 1: [63 (63)], 2: [6 (6)], 3: [5 (5)], 4: [4 (4)], 5: [3 (3)], 6: [2 (2)], 7: [1 (1)], 8: [0 (0)]
+[15 Jun 2014 21:24:40,997]:8: installing view [1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:41,001]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:41,010]:ping_dest is 1, pingable_mbrs=[1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:41,010]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:41,010]:local_addr=8, coord=1, is_coord=false
+[15 Jun 2014 21:24:41,010]:view=[1|7] (8) [1, 2, 3, 4, 5, 6, 7, 8]
+[15 Jun 2014 21:24:41,025]:resuming message garbage collection
+[15 Jun 2014 21:24:41,074]:8:not a master.
+[15 Jun 2014 21:24:49,160]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:24:49,162]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:24:49,209]:9:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:24:49,221]:9:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:24:49,222]:9:process started.
+[15 Jun 2014 21:24:49,242]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:24:49,252]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:60629, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:24:49,278]:9: sending JOIN(9) to 1
+[15 Jun 2014 21:24:49,336]:suspending message garbage collection
+[15 Jun 2014 21:24:49,336]:1: resume task started, max_suspend_time=33000
+[15 Jun 2014 21:24:49,338]:1: installing view [1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,338]:3: installing view [1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,338]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,338]:7: installing view [1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,339]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,339]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,340]:6: installing view [1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,340]:8: installing view [1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,342]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,342]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,342]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:24:49,343]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,343]:2: installing view [1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,344]:5: installing view [1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,342]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,345]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,345]:local_addr=3, coord=1, is_coord=false
+[15 Jun 2014 21:24:49,345]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,342]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,346]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,347]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,347]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:24:49,347]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,347]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,348]:local_addr=5, coord=1, is_coord=false
+[15 Jun 2014 21:24:49,348]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,349]:socket to 1 was closed gracefully
+[15 Jun 2014 21:24:49,349]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,349]:ping_dest is 9, pingable_mbrs=[1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,349]:local_addr=2, coord=1, is_coord=false
+[15 Jun 2014 21:24:49,349]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,349]:4: installing view [1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,350]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,350]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,350]:local_addr=6, coord=1, is_coord=false
+[15 Jun 2014 21:24:49,351]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,351]:local_addr=8, coord=1, is_coord=false
+[15 Jun 2014 21:24:49,350]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,351]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,352]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,352]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:24:49,352]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,369]:
+[9 setDigest()]
+existing digest:  []
+new digest:       1: [74 (74)], 2: [7 (7)], 3: [6 (6)], 4: [5 (5)], 5: [4 (4)], 6: [3 (3)], 7: [2 (2)], 8: [1 (1)], 9: [0 (0)]
+resulting digest: 1: [74 (74)], 2: [7 (7)], 3: [6 (6)], 4: [5 (5)], 5: [4 (4)], 6: [3 (3)], 7: [2 (2)], 8: [1 (1)], 9: [0 (0)]
+[15 Jun 2014 21:24:49,370]:9: installing view [1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,371]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,397]:ping_dest is 1, pingable_mbrs=[1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,398]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,398]:local_addr=9, coord=1, is_coord=false
+[15 Jun 2014 21:24:49,399]:view=[1|8] (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:24:49,413]:resuming message garbage collection
+[15 Jun 2014 21:24:49,450]:9:not a master.
+[15 Jun 2014 21:24:58,523]:set property UDP.mcast_group_addr to default value /228.8.8.8
+[15 Jun 2014 21:24:58,525]:set property UDP.diagnostics_addr to default value /224.0.75.75
+[15 Jun 2014 21:24:58,557]:10:protocol stack initialized, bind address:192.168.1.4
+[15 Jun 2014 21:24:58,566]:10:JGroups message dispatcher and counter initialized
+[15 Jun 2014 21:24:58,567]:10:process started.
+[15 Jun 2014 21:24:58,587]:sockets will use interface 192.168.1.4
+[15 Jun 2014 21:24:58,594]:socket information:
+mcast_addr=228.8.8.8:7600, bind_addr=/192.168.1.4, ttl=8
+sock: bound to 192.168.1.4:38710, receive buffer size=64000, send buffer size=100000
+mcast_sock: bound to 192.168.1.4:7600, send buffer size=100000, receive buffer size=500000
+[15 Jun 2014 21:24:58,615]:10: sending JOIN(10) to 1
+[15 Jun 2014 21:24:58,672]:suspending message garbage collection
+[15 Jun 2014 21:24:58,673]:1: resume task started, max_suspend_time=33000
+[15 Jun 2014 21:24:58,675]:1: installing view [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,676]:4: installing view [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,677]:8: installing view [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,677]:7: installing view [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,678]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,678]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,679]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,679]:6: installing view [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,680]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,680]:9: installing view [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,681]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,681]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,681]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:24:58,682]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,684]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,684]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,684]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:24:58,684]:local_addr=8, coord=1, is_coord=false
+[15 Jun 2014 21:24:58,684]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,685]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,685]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,685]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:24:58,685]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,685]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,686]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,686]:local_addr=6, coord=1, is_coord=false
+[15 Jun 2014 21:24:58,686]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,687]:socket to 1 was closed gracefully
+[15 Jun 2014 21:24:58,687]:ping_dest is 10, pingable_mbrs=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,688]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:24:58,688]:local_addr=9, coord=1, is_coord=false
+[15 Jun 2014 21:24:58,688]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:00,675]:1: failed to collect all ACKs (expected=9) for view [1|9] after 2000ms, missing 3 ACKs from 2, 3, 5
+[15 Jun 2014 21:25:00,713]:
+[10 setDigest()]
+existing digest:  []
+new digest:       1: [85 (85)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [3 (3)], 8: [2 (2)], 9: [1 (1)], 10: [0 (0)]
+resulting digest: 1: [85 (85)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [3 (3)], 8: [2 (2)], 9: [1 (1)], 10: [0 (0)]
+[15 Jun 2014 21:25:00,714]:10: installing view [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:00,715]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:00,717]:ping_dest is 1, pingable_mbrs=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:00,722]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:00,722]:local_addr=10, coord=1, is_coord=false
+[15 Jun 2014 21:25:00,723]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:00,739]:resuming message garbage collection
+[15 Jun 2014 21:25:05,744]:1: dropping MERGE for inconsistent views [1|8], [1|9] as inconsistent view threshold (1) has not yet been reached (0)
+[15 Jun 2014 21:25:14,715]:I (1) will be the merge leader
+[15 Jun 2014 21:25:14,720]:1: I will be the leader. Starting the merge task for 1 coords
+[15 Jun 2014 21:25:14,740]:suspending message garbage collection
+[15 Jun 2014 21:25:14,741]:1: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,742]:1: merge task 1::1 started with 1 coords
+[15 Jun 2014 21:25:14,748]:suspending message garbage collection
+[15 Jun 2014 21:25:14,749]:10: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,750]:suspending message garbage collection
+[15 Jun 2014 21:25:14,751]:suspending message garbage collection
+[15 Jun 2014 21:25:14,751]:suspending message garbage collection
+[15 Jun 2014 21:25:14,752]:suspending message garbage collection
+[15 Jun 2014 21:25:14,752]:7: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,752]:suspending message garbage collection
+[15 Jun 2014 21:25:14,753]:8: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,754]:6: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,756]:4: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,756]:9: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,756]:suspending message garbage collection
+[15 Jun 2014 21:25:14,757]:3: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,758]:suspending message garbage collection
+[15 Jun 2014 21:25:14,759]:suspending message garbage collection
+[15 Jun 2014 21:25:14,760]:2: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,760]:5: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:14,763]:1: installing merge view [1|10] (10 members) in 1 coords
+[15 Jun 2014 21:25:14,764]:1: merge 1::1 took 41 ms
+[15 Jun 2014 21:25:14,766]:
+[4 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [89 (89)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [87 (88)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [89 (89)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:14,766]:
+[6 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [89 (89)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [87 (88)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [89 (89)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:14,766]:4: installing view MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,767]:6: installing view MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,766]:
+[7 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [89 (89)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [87 (88)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [89 (89)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:14,767]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,767]:7: installing view MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,767]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,768]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,768]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,768]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:25:14,768]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,769]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,769]:resuming message garbage collection
+[15 Jun 2014 21:25:14,769]:local_addr=6, coord=1, is_coord=false
+[15 Jun 2014 21:25:14,769]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,769]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,769]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:25:14,769]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,770]:resuming message garbage collection
+[15 Jun 2014 21:25:14,772]:
+[8 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [89 (89)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [87 (88)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [89 (89)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:14,773]:8: installing view MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,773]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,770]:resuming message garbage collection
+[15 Jun 2014 21:25:14,774]:
+[9 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [89 (89)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [87 (88)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [89 (89)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:14,765]:
+[1 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [89 (89)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [87 (88)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [89 (89)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:14,774]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,775]:9: installing view MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,775]:local_addr=8, coord=1, is_coord=false
+[15 Jun 2014 21:25:14,775]:1: installing view MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,775]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,775]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,775]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,775]:resuming message garbage collection
+[15 Jun 2014 21:25:14,776]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,776]:local_addr=9, coord=1, is_coord=false
+[15 Jun 2014 21:25:14,776]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,776]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,776]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:25:14,777]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:14,777]:resuming message garbage collection
+[15 Jun 2014 21:25:14,777]:resuming message garbage collection
+[15 Jun 2014 21:25:16,765]:1: failed to collect all ACKs (expected=10) for view [1|10] after 2000ms, missing 4 ACKs from 2, 3, 5, 10
+[15 Jun 2014 21:25:24,750]:resuming message garbage collection
+[15 Jun 2014 21:25:24,759]:resuming message garbage collection
+[15 Jun 2014 21:25:24,761]:resuming message garbage collection
+[15 Jun 2014 21:25:24,762]:resuming message garbage collection
+[15 Jun 2014 21:25:30,696]:1: dropping MERGE for inconsistent views [1|8], [1|10], [1|9] as inconsistent view threshold (1) has not yet been reached (0)
+[15 Jun 2014 21:25:30,776]:I (1) will be the merge leader
+[15 Jun 2014 21:25:30,782]:1: I will be the leader. Starting the merge task for 1 coords
+[15 Jun 2014 21:25:30,783]:suspending message garbage collection
+[15 Jun 2014 21:25:30,784]:1: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,784]:1: merge task 1::2 started with 1 coords
+[15 Jun 2014 21:25:30,786]:suspending message garbage collection
+[15 Jun 2014 21:25:30,786]:suspending message garbage collection
+[15 Jun 2014 21:25:30,787]:suspending message garbage collection
+[15 Jun 2014 21:25:30,787]:4: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,787]:2: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,787]:5: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,788]:suspending message garbage collection
+[15 Jun 2014 21:25:30,788]:suspending message garbage collection
+[15 Jun 2014 21:25:30,788]:3: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,789]:6: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,786]:suspending message garbage collection
+[15 Jun 2014 21:25:30,790]:suspending message garbage collection
+[15 Jun 2014 21:25:30,790]:8: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,790]:suspending message garbage collection
+[15 Jun 2014 21:25:30,790]:7: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,791]:9: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,794]:suspending message garbage collection
+[15 Jun 2014 21:25:30,795]:10: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:30,798]:1: installing merge view [1|11] (10 members) in 1 coords
+[15 Jun 2014 21:25:30,798]:1: merge 1::2 took 15 ms
+[15 Jun 2014 21:25:30,801]:
+[1 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [91 (91)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [89 (90)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [91 (91)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:30,802]:1: installing view MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,802]:
+[6 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [91 (91)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [89 (90)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [91 (91)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:30,803]:
+[9 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [91 (91)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [89 (90)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [91 (91)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:30,803]:6: installing view MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,803]:
+[7 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [91 (91)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [89 (90)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [91 (91)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:30,804]:9: installing view MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,804]:7: installing view MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,804]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,805]:
+[8 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [91 (91)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [89 (90)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [91 (91)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:30,805]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,806]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,806]:8: installing view MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,803]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,808]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,808]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:25:30,808]:
+[4 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [91 (91)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [89 (90)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [91 (91)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:30,808]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,808]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,808]:local_addr=9, coord=1, is_coord=false
+[15 Jun 2014 21:25:30,808]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,808]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:25:30,808]:4: installing view MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,808]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,809]:resuming message garbage collection
+[15 Jun 2014 21:25:30,809]:resuming message garbage collection
+[15 Jun 2014 21:25:30,809]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,810]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,810]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,810]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:25:30,810]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,810]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,811]:local_addr=6, coord=1, is_coord=false
+[15 Jun 2014 21:25:30,811]:resuming message garbage collection
+[15 Jun 2014 21:25:30,811]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,811]:resuming message garbage collection
+[15 Jun 2014 21:25:30,812]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,812]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,812]:resuming message garbage collection
+[15 Jun 2014 21:25:30,812]:local_addr=8, coord=1, is_coord=false
+[15 Jun 2014 21:25:30,812]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:30,813]:resuming message garbage collection
+[15 Jun 2014 21:25:32,800]:1: failed to collect all ACKs (expected=10) for view [1|11] after 2000ms, missing 4 ACKs from 2, 3, 5, 10
+[15 Jun 2014 21:25:40,788]:resuming message garbage collection
+[15 Jun 2014 21:25:40,788]:resuming message garbage collection
+[15 Jun 2014 21:25:40,789]:resuming message garbage collection
+[15 Jun 2014 21:25:40,796]:resuming message garbage collection
+[15 Jun 2014 21:25:46,808]:I (1) will be the merge leader
+[15 Jun 2014 21:25:46,811]:1: I will be the leader. Starting the merge task for 1 coords
+[15 Jun 2014 21:25:46,812]:suspending message garbage collection
+[15 Jun 2014 21:25:46,812]:1: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,813]:1: merge task 1::3 started with 1 coords
+[15 Jun 2014 21:25:46,815]:suspending message garbage collection
+[15 Jun 2014 21:25:46,815]:suspending message garbage collection
+[15 Jun 2014 21:25:46,816]:8: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,816]:suspending message garbage collection
+[15 Jun 2014 21:25:46,816]:5: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,817]:10: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,817]:suspending message garbage collection
+[15 Jun 2014 21:25:46,817]:suspending message garbage collection
+[15 Jun 2014 21:25:46,817]:suspending message garbage collection
+[15 Jun 2014 21:25:46,818]:6: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,818]:suspending message garbage collection
+[15 Jun 2014 21:25:46,818]:4: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,818]:3: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,818]:7: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,819]:suspending message garbage collection
+[15 Jun 2014 21:25:46,819]:2: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,819]:suspending message garbage collection
+[15 Jun 2014 21:25:46,820]:9: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:25:46,824]:1: installing merge view [1|12] (10 members) in 1 coords
+[15 Jun 2014 21:25:46,825]:1: merge 1::3 took 13 ms
+[15 Jun 2014 21:25:46,827]:
+[1 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [93 (93)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [91 (92)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [93 (93)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:46,828]:1: installing view MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,829]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,829]:
+[8 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [93 (93)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [91 (92)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [93 (93)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:46,829]:
+[4 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [93 (93)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [91 (92)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [93 (93)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:46,829]:
+[7 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [93 (93)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [91 (92)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [93 (93)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:46,830]:8: installing view MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,830]:4: installing view MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,831]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,831]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:25:46,831]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,832]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,832]:7: installing view MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,832]:resuming message garbage collection
+[15 Jun 2014 21:25:46,833]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,834]:
+[6 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [93 (93)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [91 (92)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [93 (93)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:46,835]:6: installing view MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,835]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,836]:local_addr=8, coord=1, is_coord=false
+[15 Jun 2014 21:25:46,836]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,836]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,836]:
+[9 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [93 (93)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [91 (92)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [93 (93)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:25:46,837]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:25:46,837]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,837]:resuming message garbage collection
+[15 Jun 2014 21:25:46,837]:9: installing view MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,838]:resuming message garbage collection
+[15 Jun 2014 21:25:46,839]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,839]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,840]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,840]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,841]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,841]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:25:46,841]:local_addr=9, coord=1, is_coord=false
+[15 Jun 2014 21:25:46,841]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,841]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,841]:local_addr=6, coord=1, is_coord=false
+[15 Jun 2014 21:25:46,841]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,841]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:46,841]:resuming message garbage collection
+[15 Jun 2014 21:25:46,842]:resuming message garbage collection
+[15 Jun 2014 21:25:46,843]:resuming message garbage collection
+[15 Jun 2014 21:25:48,826]:1: failed to collect all ACKs (expected=10) for view [1|12] after 2000ms, missing 4 ACKs from 2, 3, 5, 10
+[15 Jun 2014 21:25:50,556]:6java.lang.NullPointerException
+	at ru.mail.fedka2005.objects.ControllerWrapper.updateNodeInfo(ControllerWrapper.java:373)
+	at ru.mail.fedka2005.objects.ControllerWrapper.eventLoop(ControllerWrapper.java:284)
+	at ru.mail.fedka2005.objects.ControllerWrapper.start(ControllerWrapper.java:234)
+	at ru.mail.fedka2005.objects.ControllerWrapper.run(ControllerWrapper.java:479)
+	at java.lang.Thread.run(Thread.java:744)
+
+[15 Jun 2014 21:25:50,557]:6ru.mail.fedka2005.exceptions.UpdateInfoException: Exception : generateMapping() : failed to generate mapping:
+java.lang.NullPointerException
+	at ru.mail.fedka2005.objects.ControllerWrapper.updateNodeInfo(ControllerWrapper.java:387)
+	at ru.mail.fedka2005.objects.ControllerWrapper.eventLoop(ControllerWrapper.java:284)
+	at ru.mail.fedka2005.objects.ControllerWrapper.start(ControllerWrapper.java:234)
+	at ru.mail.fedka2005.objects.ControllerWrapper.run(ControllerWrapper.java:479)
+	at java.lang.Thread.run(Thread.java:744)
+
+[15 Jun 2014 21:25:50,559]:6: sending LEAVE request to 1
+[15 Jun 2014 21:25:50,560]:2: installing view [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,561]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,562]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,562]:local_addr=2, coord=1, is_coord=false
+[15 Jun 2014 21:25:50,562]:view=[1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,611]:1: installing view [1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,612]:1: removed 6 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:50,612]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,613]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,613]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:25:50,613]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,613]:9: installing view [1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,614]:4: installing view [1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,614]:8: installing view [1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,615]:9: removed 6 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:50,615]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,615]:8: removed 6 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:50,616]:4: removed 6 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:50,616]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,616]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,617]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,617]:local_addr=9, coord=1, is_coord=false
+[15 Jun 2014 21:25:50,617]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,617]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,617]:local_addr=8, coord=1, is_coord=false
+[15 Jun 2014 21:25:50,617]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,617]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,618]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:25:50,618]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,618]:7: installing view [1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,620]:multicast socket closed
+[15 Jun 2014 21:25:50,620]:peer 6 closed socket gracefully
+[15 Jun 2014 21:25:50,620]:ping_dest is 7, pingable_mbrs=[1, 2, 3, 4, 5, 7, 8, 9]
+[15 Jun 2014 21:25:50,620]:7: removed 6 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:50,621]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,622]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,622]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:25:50,622]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:25:50,621]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[15 Jun 2014 21:25:50,622]:multicast receiver thread terminated
+[15 Jun 2014 21:25:50,623]:unicast receiver thread terminated
+[15 Jun 2014 21:25:50,925]:closing sockets and stopping threads
+[15 Jun 2014 21:25:50,925]:socket to 7 was closed gracefully
+[15 Jun 2014 21:25:51,553]:5org.jgroups.TimeoutException: TimeoutException
+	at org.jgroups.util.Promise._getResultWithTimeout(Promise.java:145)
+	at org.jgroups.util.Promise.getResultWithTimeout(Promise.java:40)
+	at org.jgroups.protocols.COUNTER$CounterImpl.addAndGet(COUNTER.java:717)
+	at org.jgroups.protocols.COUNTER$CounterImpl.get(COUNTER.java:641)
+	at ru.mail.fedka2005.objects.ControllerWrapper.eventLoop(ControllerWrapper.java:282)
+	at ru.mail.fedka2005.objects.ControllerWrapper.start(ControllerWrapper.java:234)
+	at ru.mail.fedka2005.objects.ControllerWrapper.run(ControllerWrapper.java:479)
+	at java.lang.Thread.run(Thread.java:744)
+
+[15 Jun 2014 21:25:51,554]:5: sending LEAVE request to 1
+[15 Jun 2014 21:25:52,555]:5: sending LEAVE request to 1
+[15 Jun 2014 21:25:52,612]:1: failed to collect all ACKs (expected=9) for view [1|13] after 2000ms, missing 4 ACKs from 2, 3, 5, 10
+[15 Jun 2014 21:25:52,663]:1: installing view [1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,664]:1: removed 5 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:52,664]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,664]:8: installing view [1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,664]:7: installing view [1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,665]:8: removed 5 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:52,665]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,665]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:25:52,665]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,665]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,665]:7: removed 5 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:52,665]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,666]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,666]:local_addr=8, coord=1, is_coord=false
+[15 Jun 2014 21:25:52,666]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,666]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,666]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:25:52,666]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,667]:4: installing view [1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,668]:multicast socket closed
+[15 Jun 2014 21:25:52,668]:4: removed 5 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:52,668]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,668]:9: installing view [1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,669]:9: removed 5 from xmit_table (not member anymore)
+[15 Jun 2014 21:25:52,670]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,671]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,671]:peer 5 closed socket gracefully
+[15 Jun 2014 21:25:52,672]:ping_dest is 7, pingable_mbrs=[1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,675]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,675]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:25:52,671]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[15 Jun 2014 21:25:52,676]:multicast receiver thread terminated
+[15 Jun 2014 21:25:52,676]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,678]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[15 Jun 2014 21:25:52,678]:unicast receiver thread terminated
+[15 Jun 2014 21:25:52,679]:local_addr=9, coord=1, is_coord=false
+[15 Jun 2014 21:25:52,679]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:25:52,981]:socket to 7 was closed gracefully
+[15 Jun 2014 21:25:52,981]:closing sockets and stopping threads
+[15 Jun 2014 21:25:54,663]:1: failed to collect all ACKs (expected=8) for view [1|14] after 2000ms, missing 3 ACKs from 2, 3, 10
+[15 Jun 2014 21:25:56,817]:resuming message garbage collection
+[15 Jun 2014 21:25:56,819]:resuming message garbage collection
+[15 Jun 2014 21:25:56,820]:resuming message garbage collection
+[15 Jun 2014 21:25:58,731]:haven't received a heartbeat from 6 for 10438 ms, adding it to suspect list
+[15 Jun 2014 21:26:00,214]:haven't received a heartbeat from 6 for 11922 ms, adding it to suspect list
+[15 Jun 2014 21:26:00,714]:haven't received a heartbeat from 6 for 10152 ms, adding it to suspect list
+[15 Jun 2014 21:26:00,715]:haven't received a heartbeat from 5 for 10152 ms, adding it to suspect list
+[15 Jun 2014 21:26:00,731]:haven't received a heartbeat from 6 for 12439 ms, adding it to suspect list
+[15 Jun 2014 21:26:00,732]:haven't received a heartbeat from 5 for 10382 ms, adding it to suspect list
+[15 Jun 2014 21:26:00,751]:10org.jgroups.TimeoutException: TimeoutException
+	at org.jgroups.util.Promise._getResultWithTimeout(Promise.java:145)
+	at org.jgroups.util.Promise.getResultWithTimeout(Promise.java:40)
+	at org.jgroups.protocols.COUNTER.getOrCreateCounter(COUNTER.java:143)
+	at org.jgroups.blocks.atomic.CounterService.getOrCreateCounter(CounterService.java:34)
+	at ru.mail.fedka2005.objects.ControllerWrapper.start(ControllerWrapper.java:229)
+	at ru.mail.fedka2005.objects.ControllerWrapper.run(ControllerWrapper.java:479)
+	at java.lang.Thread.run(Thread.java:744)
+
+[15 Jun 2014 21:26:00,752]:10: sending LEAVE request to 1
+[15 Jun 2014 21:26:00,772]:
+[10 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [90 (92)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [87 (88)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [90 (92)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:26:00,775]:10: installing view MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,777]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,784]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,785]:local_addr=10, coord=1, is_coord=false
+[15 Jun 2014 21:26:00,785]:view=MergeView::[1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|9] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,787]:
+[10 mergeDigest()]
+existing digest:  2: [7 (7)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [92 (92)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [89 (90)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [92 (92)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:26:00,787]:10: installing view MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,788]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,789]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,789]:local_addr=10, coord=1, is_coord=false
+[15 Jun 2014 21:26:00,790]:view=MergeView::[1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|10] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,791]:
+[10 mergeDigest()]
+existing digest:  2: [8 (8)], 8: [2 (2)], 6: [4 (4)], 7: [4 (4)], 9: [2 (2)], 4: [6 (6)], 1: [93 (93)], 10: [0 (0)], 5: [5 (5)], 3: [7 (7)]
+new digest:       1: [91 (92)], 2: [7 (7)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+resulting digest: 1: [93 (93)], 2: [8 (8)], 3: [7 (7)], 4: [6 (6)], 5: [5 (5)], 6: [4 (4)], 7: [4 (4)], 8: [2 (2)], 9: [2 (2)], 10: [0 (0)]
+[15 Jun 2014 21:26:00,792]:10: installing view MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,792]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,793]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,793]:local_addr=10, coord=1, is_coord=false
+[15 Jun 2014 21:26:00,793]:view=MergeView::[1|12] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1 subgroups: [1|11] (10) [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,794]:10: installing view [1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,795]:10: removed 6 from xmit_table (not member anymore)
+[15 Jun 2014 21:26:00,795]:VIEW_CHANGE received: [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,796]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,796]:local_addr=10, coord=1, is_coord=false
+[15 Jun 2014 21:26:00,797]:view=[1|13] (9) [1, 2, 3, 4, 5, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,798]:10: installing view [1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,798]:10: removed 5 from xmit_table (not member anymore)
+[15 Jun 2014 21:26:00,799]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,800]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,800]:local_addr=10, coord=1, is_coord=false
+[15 Jun 2014 21:26:00,800]:view=[1|14] (8) [1, 2, 3, 4, 7, 8, 9, 10]
+[15 Jun 2014 21:26:00,801]:response for 10::29 didn't have an entry
+[15 Jun 2014 21:26:00,806]:1: installing view [1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,806]:1: removed 10 from xmit_table (not member anymore)
+[15 Jun 2014 21:26:00,806]:9: installing view [1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,806]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,807]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,807]:local_addr=1, coord=1, is_coord=true
+[15 Jun 2014 21:26:00,807]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,807]:4: installing view [1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,807]:7: installing view [1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,808]:4: removed 10 from xmit_table (not member anymore)
+[15 Jun 2014 21:26:00,808]:7: removed 10 from xmit_table (not member anymore)
+[15 Jun 2014 21:26:00,808]:9: removed 10 from xmit_table (not member anymore)
+[15 Jun 2014 21:26:00,808]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,808]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,808]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,809]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,809]:local_addr=4, coord=1, is_coord=false
+[15 Jun 2014 21:26:00,809]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,809]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,809]:local_addr=7, coord=1, is_coord=false
+[15 Jun 2014 21:26:00,809]:multicast socket closed
+[15 Jun 2014 21:26:00,810]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,810]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,810]:local_addr=9, coord=1, is_coord=false
+[15 Jun 2014 21:26:00,810]:peer 10 closed socket gracefully
+[15 Jun 2014 21:26:00,810]:ping_dest is 1, pingable_mbrs=[1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,811]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,807]:8: installing view [1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,811]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[15 Jun 2014 21:26:00,811]:multicast receiver thread terminated
+[15 Jun 2014 21:26:00,812]:8: removed 10 from xmit_table (not member anymore)
+[15 Jun 2014 21:26:00,812]:receiver socket is closed, exception=java.net.SocketException: Socket closed
+[15 Jun 2014 21:26:00,812]:unicast receiver thread terminated
+[15 Jun 2014 21:26:00,812]:VIEW_CHANGE received: [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,813]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:00,813]:local_addr=8, coord=1, is_coord=false
+[15 Jun 2014 21:26:00,813]:view=[1|15] (7) [1, 2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:01,114]:closing sockets and stopping threads
+[15 Jun 2014 21:26:01,114]:socket to 1 was closed gracefully
+[15 Jun 2014 21:26:02,214]:haven't received a heartbeat from 6 for 13922 ms, adding it to suspect list
+[15 Jun 2014 21:26:02,215]:haven't received a heartbeat from 5 for 11865 ms, adding it to suspect list
+[15 Jun 2014 21:26:02,715]:haven't received a heartbeat from 6 for 12153 ms, adding it to suspect list
+[15 Jun 2014 21:26:02,716]:haven't received a heartbeat from 5 for 12153 ms, adding it to suspect list
+[15 Jun 2014 21:26:02,806]:1: failed to collect all ACKs (expected=7) for view [1|15] after 2000ms, missing 2 ACKs from 2, 3
+[15 Jun 2014 21:26:04,215]:haven't received a heartbeat from 6 for 15923 ms, adding it to suspect list
+[15 Jun 2014 21:26:04,216]:haven't received a heartbeat from 5 for 13866 ms, adding it to suspect list
+[15 Jun 2014 21:26:04,716]:haven't received a heartbeat from 6 for 14154 ms, adding it to suspect list
+[15 Jun 2014 21:26:04,717]:haven't received a heartbeat from 5 for 14154 ms, adding it to suspect list
+[15 Jun 2014 21:26:06,216]:haven't received a heartbeat from 6 for 17924 ms, adding it to suspect list
+[15 Jun 2014 21:26:06,216]:haven't received a heartbeat from 5 for 15867 ms, adding it to suspect list
+[15 Jun 2014 21:26:06,717]:haven't received a heartbeat from 6 for 16155 ms, adding it to suspect list
+[15 Jun 2014 21:26:06,718]:haven't received a heartbeat from 5 for 16155 ms, adding it to suspect list
+[15 Jun 2014 21:26:08,217]:haven't received a heartbeat from 6 for 19925 ms, adding it to suspect list
+[15 Jun 2014 21:26:08,217]:haven't received a heartbeat from 5 for 17868 ms, adding it to suspect list
+[15 Jun 2014 21:26:08,718]:haven't received a heartbeat from 6 for 18156 ms, adding it to suspect list
+[15 Jun 2014 21:26:08,718]:haven't received a heartbeat from 5 for 18156 ms, adding it to suspect list
+[15 Jun 2014 21:26:09,946]:peer 4 closed socket (eof)
+[15 Jun 2014 21:26:09,946]:suspecting 4 (own address is 3)
+[15 Jun 2014 21:26:09,946]:ping_dest is 5, pingable_mbrs=[1, 2, 3, 5, 6, 7, 8, 9]
+[15 Jun 2014 21:26:09,948]:suspecting [4]
+[15 Jun 2014 21:26:09,948]:3: creating the client socket failed: java.net.ConnectException: Connection refused
+[15 Jun 2014 21:26:09,949]:3: could not create socket to 5 (pinger thread is running)
+[15 Jun 2014 21:26:09,949]:suspecting 5 (own address is 3)
+[15 Jun 2014 21:26:09,949]:ping_dest is 6, pingable_mbrs=[1, 2, 3, 6, 7, 8, 9]
+[15 Jun 2014 21:26:09,950]:3: creating the client socket failed: java.net.ConnectException: Connection refused
+[15 Jun 2014 21:26:09,950]:suspecting [4, 5]
+[15 Jun 2014 21:26:09,950]:3: could not create socket to 6 (pinger thread is running)
+[15 Jun 2014 21:26:09,951]:suspecting 6 (own address is 3)
+[15 Jun 2014 21:26:09,951]:ping_dest is 7, pingable_mbrs=[1, 2, 3, 7, 8, 9]
+[15 Jun 2014 21:26:09,952]:suspecting [4, 5, 6]
+[15 Jun 2014 21:26:10,218]:haven't received a heartbeat from 6 for 21926 ms, adding it to suspect list
+[15 Jun 2014 21:26:10,218]:haven't received a heartbeat from 5 for 19869 ms, adding it to suspect list
+[15 Jun 2014 21:26:10,433]:1 found different views : [1|9], [1|15], [1|8]; sending up MERGE event with merge participants [6, 10, 1, 5].
+Discovery results:
+[3]: coord=1
+[2]: coord=1
+[1]: coord=1
+
+[15 Jun 2014 21:26:10,434]:1: I will be the leader. Starting the merge task for 4 coords
+[15 Jun 2014 21:26:10,436]:suspending message garbage collection
+[15 Jun 2014 21:26:10,436]:1: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:26:10,436]:1: merge task 1::4 started with 4 coords
+[15 Jun 2014 21:26:10,439]:suspending message garbage collection
+[15 Jun 2014 21:26:10,439]:suspending message garbage collection
+[15 Jun 2014 21:26:10,439]:suspending message garbage collection
+[15 Jun 2014 21:26:10,439]:7: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:26:10,439]:8: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:26:10,439]:9: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:26:10,440]:suspending message garbage collection
+[15 Jun 2014 21:26:10,440]:suspending message garbage collection
+[15 Jun 2014 21:26:10,440]:3: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:26:10,440]:2: resume task started, max_suspend_time=220000
+[15 Jun 2014 21:26:10,719]:haven't received a heartbeat from 6 for 20157 ms, adding it to suspect list
+[15 Jun 2014 21:26:10,719]:haven't received a heartbeat from 5 for 20157 ms, adding it to suspect list
+[15 Jun 2014 21:26:11,950]:suspect=4
+[15 Jun 2014 21:26:11,950]:1Node:4 may have crushed.
+[15 Jun 2014 21:26:11,950]:suspect=5
+[15 Jun 2014 21:26:11,950]:1Node:5 may have crushed.
+[15 Jun 2014 21:26:11,952]:suspect=6
+[15 Jun 2014 21:26:11,952]:1Node:6 may have crushed.
+[15 Jun 2014 21:26:12,219]:haven't received a heartbeat from 6 for 23927 ms, adding it to suspect list
+[15 Jun 2014 21:26:12,219]:haven't received a heartbeat from 5 for 21870 ms, adding it to suspect list
+[15 Jun 2014 21:26:12,219]:haven't received a heartbeat from 10 for 11490 ms, adding it to suspect list
+[15 Jun 2014 21:26:12,689]:peer 7 closed socket (eof)
+[15 Jun 2014 21:26:12,689]:suspecting 7 (own address is 3)
+[15 Jun 2014 21:26:12,690]:ping_dest is 8, pingable_mbrs=[1, 2, 3, 8, 9]
+[15 Jun 2014 21:26:12,691]:suspecting [4, 5, 6, 7]
+[15 Jun 2014 21:26:12,720]:haven't received a heartbeat from 6 for 22158 ms, adding it to suspect list
+[15 Jun 2014 21:26:12,720]:haven't received a heartbeat from 5 for 22158 ms, adding it to suspect list
+[15 Jun 2014 21:26:12,720]:haven't received a heartbeat from 10 for 11991 ms, adding it to suspect list
+[15 Jun 2014 21:26:14,220]:haven't received a heartbeat from 6 for 25927 ms, adding it to suspect list
+[15 Jun 2014 21:26:14,220]:haven't received a heartbeat from 5 for 23870 ms, adding it to suspect list
+[15 Jun 2014 21:26:14,220]:haven't received a heartbeat from 10 for 13490 ms, adding it to suspect list
+[15 Jun 2014 21:26:14,691]:suspect=7
+[15 Jun 2014 21:26:14,692]:1Node:7 may have crushed.
+[15 Jun 2014 21:26:14,721]:haven't received a heartbeat from 6 for 24158 ms, adding it to suspect list
+[15 Jun 2014 21:26:14,721]:haven't received a heartbeat from 5 for 24158 ms, adding it to suspect list
+[15 Jun 2014 21:26:14,721]:haven't received a heartbeat from 10 for 13991 ms, adding it to suspect list
+[15 Jun 2014 21:26:15,227]:peer 1 closed socket (eof)
+[15 Jun 2014 21:26:15,228]:suspecting 1 (own address is 9)
+[15 Jun 2014 21:26:15,228]:ping_dest is 2, pingable_mbrs=[2, 3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:15,229]:suspecting [4, 5, 6, 7, 1]
+[15 Jun 2014 21:26:16,221]:haven't received a heartbeat from 6 for 27928 ms, adding it to suspect list
+[15 Jun 2014 21:26:16,221]:haven't received a heartbeat from 5 for 25871 ms, adding it to suspect list
+[15 Jun 2014 21:26:16,221]:haven't received a heartbeat from 10 for 15491 ms, adding it to suspect list
+[15 Jun 2014 21:26:16,722]:haven't received a heartbeat from 6 for 26160 ms, adding it to suspect list
+[15 Jun 2014 21:26:16,722]:haven't received a heartbeat from 5 for 26160 ms, adding it to suspect list
+[15 Jun 2014 21:26:16,722]:haven't received a heartbeat from 10 for 15993 ms, adding it to suspect list
+[15 Jun 2014 21:26:17,265]:peer 2 closed socket (eof)
+[15 Jun 2014 21:26:17,266]:suspecting 2 (own address is 9)
+[15 Jun 2014 21:26:17,266]:ping_dest is 3, pingable_mbrs=[3, 4, 7, 8, 9]
+[15 Jun 2014 21:26:17,267]:suspecting [4, 5, 6, 7, 1, 2]
+[15 Jun 2014 21:26:18,221]:haven't received a heartbeat from 6 for 29929 ms, adding it to suspect list
+[15 Jun 2014 21:26:18,222]:haven't received a heartbeat from 5 for 27872 ms, adding it to suspect list
+[15 Jun 2014 21:26:18,222]:haven't received a heartbeat from 10 for 17492 ms, adding it to suspect list
+[15 Jun 2014 21:26:18,222]:haven't received a heartbeat from 4 for 10708 ms, adding it to suspect list
+[15 Jun 2014 21:26:19,027]:haven't received a heartbeat from 4 for 11513 ms, adding it to suspect list
+[15 Jun 2014 21:26:19,270]:suspect=2
+[15 Jun 2014 21:26:19,270]:3Node:2 may have crushed.
+[15 Jun 2014 21:26:19,418]:haven't received a heartbeat from 4 for 11905 ms, adding it to suspect list
+[15 Jun 2014 21:26:19,948]:suspecting [4, 5, 6, 7, 1, 2]
+[15 Jun 2014 21:26:20,223]:haven't received a heartbeat from 6 for 31931 ms, adding it to suspect list
+[15 Jun 2014 21:26:20,223]:haven't received a heartbeat from 5 for 29874 ms, adding it to suspect list
+[15 Jun 2014 21:26:20,223]:haven't received a heartbeat from 10 for 19494 ms, adding it to suspect list
+[15 Jun 2014 21:26:20,224]:haven't received a heartbeat from 7 for 10689 ms, adding it to suspect list
+[15 Jun 2014 21:26:20,224]:haven't received a heartbeat from 4 for 12710 ms, adding it to suspect list
+[15 Jun 2014 21:26:20,230]:suspecting [4, 5, 6, 7, 1, 2]
+[15 Jun 2014 21:26:20,440]:resuming message garbage collection
+[15 Jun 2014 21:26:20,440]:resuming message garbage collection
+[15 Jun 2014 21:26:20,441]:resuming message garbage collection
+[15 Jun 2014 21:26:20,984]:peer 3 closed socket (eof)
+[15 Jun 2014 21:26:20,984]:suspecting 3 (own address is 9)
+[15 Jun 2014 21:26:20,984]:ping_dest is 4, pingable_mbrs=[4, 7, 8, 9]
+[15 Jun 2014 21:26:20,985]:9: creating the client socket failed: java.net.ConnectException: Connection refused
+[15 Jun 2014 21:26:20,986]:9: could not create socket to 4 (pinger thread is running)
+[15 Jun 2014 21:26:20,986]:suspecting 4 (own address is 9)
+[15 Jun 2014 21:26:20,986]:suspecting [4, 5, 6, 7, 1, 2, 3]
+[15 Jun 2014 21:26:20,986]:suspecting [4, 5, 6, 7, 1, 2, 3]
+[15 Jun 2014 21:26:20,988]:ping_dest is 7, pingable_mbrs=[7, 8, 9]
+[15 Jun 2014 21:26:20,989]:9: creating the client socket failed: java.net.ConnectException: Connection refused
+[15 Jun 2014 21:26:20,989]:9: could not create socket to 7 (pinger thread is running)
+[15 Jun 2014 21:26:20,989]:suspecting 7 (own address is 9)
+[15 Jun 2014 21:26:20,990]:ping_dest is 8, pingable_mbrs=[8, 9]
+[15 Jun 2014 21:26:20,992]:suspecting [4, 5, 6, 7, 1, 2, 3]
+[15 Jun 2014 21:26:21,027]:haven't received a heartbeat from 7 for 11493 ms, adding it to suspect list
+[15 Jun 2014 21:26:21,028]:haven't received a heartbeat from 4 for 13514 ms, adding it to suspect list
+[15 Jun 2014 21:26:21,419]:haven't received a heartbeat from 7 for 11885 ms, adding it to suspect list
+[15 Jun 2014 21:26:21,419]:haven't received a heartbeat from 4 for 13906 ms, adding it to suspect list
+[15 Jun 2014 21:26:22,988]:suspect=3
+[15 Jun 2014 21:26:22,988]:8Node:3 may have crushed.
+[15 Jun 2014 21:26:22,992]:suspect=4
+[15 Jun 2014 21:26:22,992]:8Node:4 may have crushed.
+[15 Jun 2014 21:26:22,994]:suspect=7
+[15 Jun 2014 21:26:22,994]:8Node:7 may have crushed.
+[15 Jun 2014 21:26:23,028]:haven't received a heartbeat from 7 for 13494 ms, adding it to suspect list
+[15 Jun 2014 21:26:23,028]:haven't received a heartbeat from 4 for 15515 ms, adding it to suspect list
+[15 Jun 2014 21:26:23,420]:haven't received a heartbeat from 7 for 13886 ms, adding it to suspect list
+[15 Jun 2014 21:26:23,421]:haven't received a heartbeat from 4 for 15907 ms, adding it to suspect list
+[15 Jun 2014 21:26:24,269]:peer 8 closed socket (eof)
+[15 Jun 2014 21:26:24,270]:suspecting 8 (own address is 9)
+[15 Jun 2014 21:26:24,270]:ping_dest is null, pingable_mbrs=[9]
+[15 Jun 2014 21:26:24,271]:suspecting [4, 5, 6, 7, 1, 2, 3, 8]
+[15 Jun 2014 21:26:25,229]:suspecting [4, 5, 6, 7, 1, 2, 3, 8]
+[15 Jun 2014 21:26:25,421]:haven't received a heartbeat from 7 for 15887 ms, adding it to suspect list
+[15 Jun 2014 21:26:25,422]:haven't received a heartbeat from 1 for 10788 ms, adding it to suspect list
+[15 Jun 2014 21:26:25,422]:haven't received a heartbeat from 2 for 10706 ms, adding it to suspect list
+[15 Jun 2014 21:26:25,422]:haven't received a heartbeat from 4 for 17908 ms, adding it to suspect list
+[15 Jun 2014 21:26:26,273]:suspect=8
+[15 Jun 2014 21:26:26,273]:9Node:8 may have crushed.
